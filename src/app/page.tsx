@@ -1,69 +1,193 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { ScrollTracker } from "@/components/layout/ScrollTracker";
+
+import { HeroSection } from "@/components/sections/01_Hero";
+import { HumanStorySection } from "@/components/sections/02_HumanStory";
+import { ProstheticsSection } from "@/components/sections/03_Prosthetics";
+import { DesignedAroundYouSection } from "@/components/sections/04_DesignedAroundYou";
+import { TechnologySection } from "@/components/sections/04_Technology";
+import { OrthoticsSection } from "@/components/sections/05_Orthotics";
+import { ScoliosisSection } from "@/components/sections/06_Scoliosis";
+import { OsteonKidsSection } from "@/components/sections/07_OsteonKids";
+import { PatientJourneySection } from "@/components/sections/08_PatientJourney";
+import { PatientStoriesSection } from "@/components/sections/09_PatientStories";
+import { TrustCredibilitySection } from "@/components/sections/10_TrustCredibility";
+import { FinalCTASection } from "@/components/sections/11_FinalCTA";
+
+import { ConsultationModal } from "@/components/modals/ConsultationModal";
+import { VideoStoryModal } from "@/components/modals/VideoStoryModal";
+import { ProductDetailModal } from "@/components/modals/ProductDetailModal";
+import { ProstheticCategory } from "@/lib/data";
 
 export default function Home() {
+  const [consultationOpen, setConsultationOpen] = useState(false);
+  const [videoStoryOpen, setVideoStoryOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<ProstheticCategory | null>(null);
+  const [selectedService, setSelectedService] = useState<string>("Prosthetics");
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(1);
+  const [activeSectionId, setActiveSectionId] = useState("hero");
+
+  useEffect(() => {
+    const sectionIds = [
+      "hero",
+      "human-story",
+      "prosthetics",
+      "designed-around-you",
+      "technology",
+      "orthotics",
+      "scoliosis",
+      "kids",
+      "journey",
+      "stories",
+      "trust",
+      "final-cta",
+    ];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -40% 0px",
+      threshold: 0.1,
+    };
+
+    const handleIntersect: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          setActiveSectionId(id);
+          const index = sectionIds.indexOf(id);
+          if (index !== -1) {
+            setCurrentSectionIndex(index + 1);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const openConsultation = (serviceName: string = "Lower Extremity Prosthetics") => {
+    setSelectedService(serviceName);
+    setConsultationOpen(true);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <SmoothScroll>
+      <main className="relative bg-[#050607] text-[#F1EFE8] min-h-screen overflow-x-hidden selection:bg-[#00E5D0] selection:text-[#050607]">
+        {/* Top Minimal Navbar */}
+        <Navbar
+          onOpenConsultation={() => openConsultation("General Consultation")}
+          activeSection={activeSectionId}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+        {/* Right Side Vertical Scroll Progress */}
+        <ScrollTracker
+          currentSectionIndex={currentSectionIndex}
+          totalSections={12}
+          sectionName={activeSectionId.toUpperCase()}
+        />
+
+        {/* 01 — HERO (Cinematic fullscreen video + oversized typography) */}
+        <HeroSection
+          onOpenConsultation={() => openConsultation("Prosthetics & Orthotics")}
+          onOpenVideoStory={() => setVideoStoryOpen(true)}
+        />
+
+        {/* 02 — SECTION 01: INTRODUCTION / HUMAN STORY */}
+        <HumanStorySection
+          onOpenConsultation={() => openConsultation("Clinical Evaluation")}
+        />
+
+        {/* 03 — SECTION 02: PROSTHETICS (Interactive luxury showcase) */}
+        <ProstheticsSection
+          onSelectProduct={(prod) => setSelectedProduct(prod)}
+          onOpenConsultation={() => openConsultation("Prosthetics Fitting")}
+        />
+
+        {/* 04 — SECTION 03: DESIGNED AROUND YOU (Anatomical technical annotations) */}
+        <DesignedAroundYouSection />
+
+        {/* 05 — SECTION 04: TECHNOLOGY (Engineering architecture & composite matrix) */}
+        <TechnologySection
+          onOpenConsultation={() => openConsultation("Technology Consultation")}
+        />
+
+        {/* 06 — SECTION 05: ORTHOTICS (Horizontal image gallery system) */}
+        <OrthoticsSection
+          onOpenConsultation={() => openConsultation("Dynamic Orthotics")}
+        />
+
+        {/* 07 — SECTION 06: SCOLIOSIS CARE (Quiet, trustworthy clinical precision) */}
+        <ScoliosisSection
+          onOpenConsultation={() => openConsultation("Scoliosis 3D Care")}
+        />
+
+        {/* 08 — SECTION 07: OSTEON FOR KIDS (Sophisticated pediatric care) */}
+        <OsteonKidsSection
+          onOpenConsultation={() => openConsultation("Osteon Pediatric Care")}
+        />
+
+        {/* 09 — SECTION 08: PATIENT JOURNEY (5-stage progression timeline) */}
+        <PatientJourneySection
+          onOpenConsultation={() => openConsultation("Initial Consultation")}
+        />
+
+        {/* 10 — SECTION 09: PATIENT STORIES (Editorial portrait spread) */}
+        <PatientStoriesSection
+          onOpenConsultation={() => openConsultation("Patient Care Consultation")}
+        />
+
+        {/* 11 — SECTION 10: TRUST & STANDARDS (Typography & spacing driven) */}
+        <TrustCredibilitySection
+          onOpenConsultation={() => openConsultation("Clinical Consultation")}
+        />
+
+        {/* 12 — SECTION 11: FINAL CTA (Cinematic dawn closure) */}
+        <FinalCTASection
+          onOpenConsultation={() => openConsultation("Full Clinical Assessment")}
+          onOpenContact={() => openConsultation("Contact Clinical Team")}
+        />
+
+        {/* FOOTER */}
+        <Footer onOpenConsultation={() => openConsultation("General Consultation")} />
+
+        {/* Interactive Modals */}
+        <ConsultationModal
+          isOpen={consultationOpen}
+          onClose={() => setConsultationOpen(false)}
+          initialService={selectedService}
+        />
+
+        <VideoStoryModal
+          isOpen={videoStoryOpen}
+          onClose={() => setVideoStoryOpen(false)}
+        />
+
+        <ProductDetailModal
+          isOpen={!!selectedProduct}
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onBookConsultation={() => {
+            if (selectedProduct) {
+              openConsultation(selectedProduct.name);
+            } else {
+              openConsultation("Prosthetics");
+            }
+          }}
+        />
       </main>
-    </div>
+    </SmoothScroll>
   );
 }
+
