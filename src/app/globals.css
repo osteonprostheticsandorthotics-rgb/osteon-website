@@ -20,8 +20,8 @@
   --color-border-medium: rgba(255, 255, 255, 0.12);
   --color-border-accent: rgba(0, 229, 208, 0.28);
 
-  --font-display: var(--font-space), "Space Grotesk", sans-serif;
-  --font-sans: var(--font-manrope), "Manrope", sans-serif;
+  --font-display: var(--font-syne), "Syne", sans-serif;
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
 }
 
 :root {
@@ -41,7 +41,7 @@
 html {
   background-color: #050607;
   color: #F1EFE8;
-  font-family: var(--font-manrope), "Manrope", sans-serif;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
   scroll-behavior: smooth;
   color-scheme: dark;
 }
@@ -90,12 +90,12 @@ body::before {
 
 /* Typography Helpers */
 .font-display {
-  font-family: var(--font-space), "Space Grotesk", sans-serif;
-  letter-spacing: -0.035em;
+  font-family: var(--font-syne), "Syne", sans-serif;
+  letter-spacing: -0.03em;
 }
 
 .font-sans {
-  font-family: var(--font-manrope), "Manrope", sans-serif;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
 }
 
 /* Restrained Atmospheric Lighting & Lines */
@@ -130,11 +130,14 @@ body::before {
   scrollbar-width: none;
 }
 
-/* Controlled image zoom on interaction */
-.image-pan {
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+/* Touch Snap Scroll Utilities */
+.snap-x-mandatory {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
-.group:hover .image-pan {
-  transform: scale(1.04);
+.snap-center-card {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 }
+
 

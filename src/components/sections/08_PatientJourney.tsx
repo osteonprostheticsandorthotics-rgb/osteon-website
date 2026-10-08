@@ -1,104 +1,402 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { CLINICAL_PROCESS_STEPS } from "@/lib/data";
+import React, { useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useMotionValueEvent,
+} from "framer-motion";
+import {
+  ArrowRight,
+  Check,
+} from "lucide-react";
 
 interface PatientJourneyProps {
   onOpenConsultation: () => void;
 }
 
-export const PatientJourneySection: React.FC<PatientJourneyProps> = ({ onOpenConsultation }) => {
+const CLINICAL_STAGES = [
+  {
+    step: "01",
+    tag: "Clinical Intake",
+    title: "Understanding & Listening",
+    description:
+      "An in-depth consultation to understand your lifestyle, physical routine, and personal mobility goals before taking any measurements.",
+    image: "/images/about-clinician-hero.jpg",
+  },
+  {
+    step: "02",
+    tag: "Biomechanics",
+    title: "Anatomical Assessment",
+    description:
+      "High-precision 3D limb capture and gait analysis to map residual anatomy, range of motion, and dynamic load tolerance.",
+    image: "/images/tech-gait-kinematics.jpg",
+  },
+  {
+    step: "03",
+    tag: "Custom Craft",
+    title: "Precision Tailoring & Design",
+    description:
+      "Sculpting custom carbon fibre sockets and articulated orthotic braces calibrated specifically to your body weight and activity level.",
+    image: "/images/socket-engineering.jpg",
+  },
+  {
+    step: "04",
+    tag: "Dynamic Fitting",
+    title: "Fitting & Gait Tuning",
+    description:
+      "Dynamic test-walking sessions to fine-tune alignment, relieve pressure hotspots, and restore a natural walking cadence.",
+    image: "/images/prosthetics-lower.jpg",
+  },
+  {
+    step: "05",
+    tag: "Lifelong Care",
+    title: "Ongoing Clinical Support",
+    description:
+      "Scheduled check-ups, socket relining, and routine adjustments to ensure lasting comfort and peak performance as your body adapts.",
+    image: "/images/about-runner-hero.jpg",
+  },
+];
+
+export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
+  onOpenConsultation,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [activeStage, setActiveStage] = useState(0);
+
+  // Scroll Progress Tracking across the vertical Zigzag container
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 65%", "end 80%"],
+  });
+
+  // Silky smooth spring for the glowing serpentine laser path
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 220,
+    damping: 28,
+    restDelta: 0.001,
+  });
+
+  // Track active checkpoint as snake progresses down the curve
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+    let stage = 0;
+    if (latest >= 0.85) {
+      stage = 4;
+    } else if (latest >= 0.65) {
+      stage = 3;
+    } else if (latest >= 0.42) {
+      stage = 2;
+    } else if (latest >= 0.18) {
+      stage = 1;
+    } else {
+      stage = 0;
+    }
+
+    if (stage !== activeStage) {
+      setActiveStage(stage);
+    }
+  });
+
+  // Programmatic scroll to specific checkpoint
+  const scrollToStage = (stageIndex: number) => {
+    const el = document.getElementById(`process-stage-${stageIndex}`);
+    if (!el) return;
+
+    const lenis = (
+      window as unknown as {
+        __lenis?: {
+          scrollTo: (
+            target: HTMLElement | string | number,
+            options?: { offset?: number }
+          ) => void;
+        };
+      }
+    ).__lenis;
+
+    if (lenis) {
+      lenis.scrollTo(el, { offset: -90 });
+    } else {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  // Continuous S-Curve Zigzag Bézier Path:
+  // Node 1: (60, 100) -> Node 2: (940, 360) -> Node 3: (60, 620) -> Node 4: (940, 880) -> Node 5: (60, 1140)
+  const zigzagSvgPath =
+    "M 60 100 C 60 230, 940 230, 940 360 C 940 490, 60 490, 60 620 C 60 750, 940 750, 940 880 C 940 1010, 60 1010, 60 1140";
 
   return (
     <section
-      id="journey"
-      className="relative w-full py-28 md:py-40 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      id="process"
+      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
     >
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
-        {/* Section Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16 lg:mb-24">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 relative z-10">
+        {/* ========================================================================= */}
+        {/* SECTION HEADER (LEFT-ALIGNED EDITORIAL GRID) */}
+        {/* ========================================================================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end mb-10 sm:mb-12">
           <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0]" />
-              <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#A5AAAB]">
-                08 / CLINICAL PROCESS
-              </span>
-            </div>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+            {/* Tag Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-bold uppercase text-[44px] sm:text-[64px] md:text-[84px] lg:text-[100px] leading-[0.92] tracking-[-0.04em] text-[#F1EFE8]"
+              className="text-xs font-mono uppercase tracking-[0.22em] text-[#8E9B9D]"
             >
-              YOUR JOURNEY
+              04 — THE PROCESS
+            </motion.div>
+
+            {/* Giant Stacked Headline */}
+            <motion.h2
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="font-sans font-extrabold uppercase text-[38px] sm:text-[50px] md:text-[62px] lg:text-[72px] leading-[0.95] tracking-[-0.03em] text-[#F1EFE8]"
+            >
+              DESIGNED
               <br />
-              WITH <span className="text-[#00E5D0]">OSTEON.</span>
+              AROUND <span className="text-[#00E5D0]">YOU.</span>
             </motion.h2>
           </div>
 
-          <div className="lg:col-span-5 space-y-4">
-            <p className="text-base sm:text-lg text-[#A5AAAB] leading-relaxed font-normal">
-              At Osteon, trust is built through understanding, listening, and ongoing support. We take the time to know each patient&apos;s challenges, goals, and daily realities before designing a solution.
-            </p>
+          <div className="lg:col-span-5">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="text-sm sm:text-base text-[#A5AAAB] leading-relaxed font-normal max-w-xl"
+            >
+              A 5-step clinical journey from initial intake to lifelong care —
+              engineered to restore natural movement, confidence, and lasting comfort.
+            </motion.p>
           </div>
         </div>
 
-        {/* Desktop Connected 5-Stage Horizontal Progression */}
-        <div className="hidden lg:block relative mb-16">
-          {/* Thin Hairline Connecting Line */}
-          <div className="absolute top-12 inset-x-10 h-px bg-white/[0.12] z-0">
+        {/* ========================================================================= */}
+        {/* SERPENTINE ZIGZAG TIMELINE CONTAINER */}
+        {/* ========================================================================= */}
+        <div
+          ref={containerRef}
+          className="relative max-w-[1100px] mx-auto py-4"
+        >
+          {/* DESKTOP CURVED ZIGZAG SVG OVERLAY (Hidden on mobile) */}
+          <div className="hidden lg:block absolute inset-0 pointer-events-none z-0">
+            <svg
+              viewBox="0 0 1000 1240"
+              fill="none"
+              preserveAspectRatio="none"
+              className="w-full h-full"
+            >
+              {/* Filter for subtle neon laser glow */}
+              <defs>
+                <filter
+                  id="snakeGlow"
+                  x="-20%"
+                  y="-20%"
+                  width="140%"
+                  height="140%"
+                >
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* Background Hairline Track */}
+              <path
+                d={zigzagSvgPath}
+                stroke="rgba(255, 255, 255, 0.09)"
+                strokeWidth="1.75"
+                strokeDasharray="4 6"
+                fill="none"
+              />
+
+              {/* Glowing Neon Cyan Laser Snake */}
+              <motion.path
+                d={zigzagSvgPath}
+                stroke="#00E5D0"
+                strokeWidth="2.25"
+                fill="none"
+                strokeLinecap="round"
+                style={{
+                  pathLength: smoothProgress,
+                  filter: "url(#snakeGlow)",
+                }}
+              />
+            </svg>
+          </div>
+
+          {/* MOBILE STRAIGHT/WAVE CONNECTING LINE (< lg) */}
+          <div className="lg:hidden absolute left-4 sm:left-6 top-6 bottom-6 w-px bg-white/[0.1] z-0">
             <motion.div
-              className="h-full bg-[#00E5D0]"
-              style={{ width: `${(activeStage / (CLINICAL_PROCESS_STEPS.length - 1)) * 100}%` }}
-              transition={{ duration: 0.4 }}
+              className="w-full bg-[#00E5D0] origin-top shadow-[0_0_12px_#00E5D0]"
+              style={{
+                scaleY: smoothProgress,
+                height: "100%",
+              }}
             />
           </div>
 
-          {/* 5 Stages Grid */}
-          <div className="grid grid-cols-5 gap-6 relative z-10">
-            {CLINICAL_PROCESS_STEPS.map((stage, idx) => {
-              const isActive = activeStage === idx;
+          {/* ========================================================================= */}
+          {/* 5 STAGES WITH ALTERNATING ZIGZAG NODES */}
+          {/* ========================================================================= */}
+          <div className="space-y-8 sm:space-y-10 lg:space-y-12 relative z-10">
+            {CLINICAL_STAGES.map((stage, idx) => {
+              const isEven = idx % 2 === 1; // 0, 2, 4 = Left node; 1, 3 = Right node
               const isPassed = activeStage >= idx;
+              const isCurrent = activeStage === idx;
+
               return (
                 <div
                   key={stage.step}
-                  onClick={() => setActiveStage(idx)}
-                  className="flex flex-col cursor-pointer group space-y-6"
+                  id={`process-stage-${idx}`}
+                  className="relative scroll-mt-24"
                 >
-                  {/* Step Indicator Node */}
-                  <div className="flex items-center">
-                    <div
-                      className={`w-9 h-9 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all duration-300 border ${
-                        isActive
-                          ? "bg-[#00E5D0] text-[#050607] border-[#00E5D0] shadow-[0_0_20px_rgba(0,229,208,0.35)] scale-110"
-                          : isPassed
-                          ? "bg-[#050607] text-[#00E5D0] border-[#00E5D0]"
-                          : "bg-[#050607] text-[#A5AAAB] border-white/[0.15] group-hover:border-white/[0.3]"
-                      }`}
-                    >
-                      {stage.step}
+                  {/* DESKTOP 2-COLUMN ALTERNATING ROW (lg and above) */}
+                  <div className="hidden lg:grid lg:grid-cols-12 lg:gap-8 items-center min-h-[190px]">
+                    {/* LEFT COLUMN */}
+                    <div className="col-span-6 flex justify-start">
+                      {!isEven ? (
+                        /* Odd Stage (0, 2, 4): Left Node + Compact Card */
+                        <div className="flex items-start gap-5 max-w-[480px] w-full">
+                          {/* Checkpoint Node */}
+                          <CheckpointNode
+                            step={stage.step}
+                            isPassed={isPassed}
+                            isCurrent={isCurrent}
+                            onClick={() => scrollToStage(idx)}
+                          />
+
+                          {/* Compact Minimal Card */}
+                          <CompactStageCard
+                            stage={stage}
+                            isPassed={isPassed}
+                            isCurrent={isCurrent}
+                            onOpenConsultation={onOpenConsultation}
+                          />
+                        </div>
+                      ) : (
+                        /* Even Stage (1, 3): Compact Image Frame on Left */
+                        <div className="w-full flex justify-end pr-8">
+                          <CompactVisualPreview
+                            stage={stage}
+                            isPassed={isPassed}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* RIGHT COLUMN */}
+                    <div className="col-span-6 flex justify-end">
+                      {isEven ? (
+                        /* Even Stage (1, 3): Right Node + Compact Card */
+                        <div className="flex flex-row-reverse items-start gap-5 max-w-[480px] w-full">
+                          {/* Checkpoint Node */}
+                          <CheckpointNode
+                            step={stage.step}
+                            isPassed={isPassed}
+                            isCurrent={isCurrent}
+                            onClick={() => scrollToStage(idx)}
+                          />
+
+                          {/* Compact Minimal Card */}
+                          <CompactStageCard
+                            stage={stage}
+                            isPassed={isPassed}
+                            isCurrent={isCurrent}
+                            onOpenConsultation={onOpenConsultation}
+                          />
+                        </div>
+                      ) : (
+                        /* Odd Stage (0, 2, 4): Compact Image Frame on Right */
+                        <div className="w-full flex justify-start pl-8">
+                          <CompactVisualPreview
+                            stage={stage}
+                            isPassed={isPassed}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Stage Details */}
-                  <div className="space-y-2 pr-4">
-                    <span className="text-[10px] font-mono text-[#00E5D0] uppercase tracking-widest block font-bold">
-                      STAGE {stage.step}
-                    </span>
-                    <h3
-                      className={`font-display text-lg font-bold uppercase transition-colors ${
-                        isActive ? "text-[#00E5D0]" : "text-[#F1EFE8] group-hover:text-[#F1EFE8]"
+                  {/* MOBILE & TABLET IMMERSIVE STORYTELLING VIEW (< lg) */}
+                  <div className="lg:hidden pl-11 sm:pl-16 relative py-6 sm:py-8">
+                    {/* Mobile Left Rail Node */}
+                    <div className="absolute left-4 sm:left-6 -translate-x-1/2 top-8 z-20">
+                      <CheckpointNode
+                        step={stage.step}
+                        isPassed={isPassed}
+                        isCurrent={isCurrent}
+                        onClick={() => scrollToStage(idx)}
+                        isMobile
+                      />
+                    </div>
+
+                    {/* Substantial Mobile Storytelling Card */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-60px" }}
+                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                      className={`rounded-2xl border transition-all duration-500 overflow-hidden space-y-4 p-5 sm:p-6 shadow-2xl ${
+                        isCurrent
+                          ? "bg-[#090C0E] border-[#00E5D0]/50 shadow-[0_10px_35px_rgba(0,229,208,0.12)]"
+                          : isPassed
+                          ? "bg-[#080A0C] border-white/[0.1]"
+                          : "bg-[#080A0C]/70 border-white/[0.06] opacity-85"
                       }`}
                     >
-                      {stage.title}
-                    </h3>
-                    <p className="text-xs text-[#A5AAAB] leading-relaxed font-normal">
-                      {stage.description}
-                    </p>
+                      {/* Top Meta Kicker */}
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#00E5D0] font-bold">
+                          STAGE {stage.step} • {stage.tag}
+                        </span>
+                        {isCurrent && (
+                          <span className="px-2 py-0.5 rounded-full bg-[#00E5D0]/20 text-[#00E5D0] text-[9px] font-mono font-bold uppercase tracking-wider">
+                            Active Step
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Stage Headline */}
+                      <h3 className="font-display font-bold uppercase text-xl sm:text-2xl text-[#F1EFE8] leading-tight">
+                        {stage.title}
+                      </h3>
+
+                      {/* Large Clinical Photography Frame */}
+                      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl overflow-hidden border border-white/[0.08] bg-[#050607]">
+                        <img
+                          src={stage.image}
+                          alt={stage.title}
+                          className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/80 via-transparent to-transparent pointer-events-none" />
+                      </div>
+
+                      {/* Narrative Description */}
+                      <p className="text-xs sm:text-sm text-[#A5AAAB] leading-relaxed font-normal">
+                        {stage.description}
+                      </p>
+
+                      {/* Action CTA */}
+                      <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between">
+                        <button
+                          onClick={onOpenConsultation}
+                          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#00E5D0] hover:text-[#00E5D0]/80 transition-colors min-h-[44px] cursor-pointer"
+                        >
+                          <span>Consult specialist</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                        <span className="text-[10px] font-mono text-[#60686B]">
+                          0{stage.step} / 05
+                        </span>
+                      </div>
+                    </motion.div>
                   </div>
                 </div>
               );
@@ -106,82 +404,194 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({ onOpenCon
           </div>
         </div>
 
-        {/* Selected Stage Focus Banner on Desktop */}
-        <div className="hidden lg:block">
-          <motion.div
-            key={activeStage}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="p-8 rounded-2xl bg-[#0A0D0F] border border-white/[0.08] flex items-center justify-between gap-8"
-          >
-            <div className="space-y-1.5 max-w-2xl">
-              <span className="text-xs font-mono uppercase tracking-widest text-[#00E5D0] font-bold">
-                STAGE {CLINICAL_PROCESS_STEPS[activeStage].step} • {CLINICAL_PROCESS_STEPS[activeStage].title}
-              </span>
-              <h4 className="font-display text-2xl font-bold uppercase text-[#F1EFE8]">
-                {CLINICAL_PROCESS_STEPS[activeStage].subtitle}
-              </h4>
+        {/* ========================================================================= */}
+        {/* COMPACT BOTTOM CONSULTATION TOUCHPOINT */}
+        {/* ========================================================================= */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-10 sm:mt-14 p-6 sm:p-8 rounded-2xl bg-[#080B0D] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-6 max-w-3xl mx-auto text-center sm:text-left"
+        >
+          <div className="space-y-1">
+            <div className="text-[10px] font-mono text-[#00E5D0] uppercase tracking-wider font-semibold">
+              BEGIN YOUR JOURNEY
             </div>
-
-            <button
-              onClick={onOpenConsultation}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#00E5D0] text-[#050607] text-xs font-bold uppercase tracking-[0.16em] hover:bg-[#00E5D0]/90 transition-all shrink-0 shadow-[0_0_20px_rgba(0,229,208,0.2)] min-h-[48px]"
-            >
-              <span>Begin With Stage 01</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </motion.div>
-        </div>
-
-        {/* Dedicated Mobile Vertical Timeline (Visible only on mobile/tablet < lg) */}
-        <div className="lg:hidden relative pl-6 border-l border-white/[0.12] ml-4 space-y-8">
-          {CLINICAL_PROCESS_STEPS.map((stage, idx) => (
-            <motion.div
-              key={stage.step}
-              initial={{ opacity: 0, x: -15 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="relative space-y-3"
-            >
-              {/* Bullet Node */}
-              <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-[#050607] border-2 border-[#00E5D0] flex items-center justify-center">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0]" />
-              </div>
-
-              <div className="p-5 rounded-2xl bg-[#0A0D0F] border border-white/[0.08] space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-[#00E5D0] uppercase font-bold">
-                    STAGE {stage.step}
-                  </span>
-                  <span className="text-[10px] font-mono text-[#A5AAAB]">
-                    OSTEON CARE
-                  </span>
-                </div>
-                <h4 className="font-display text-lg font-bold uppercase text-[#F1EFE8]">
-                  {stage.title}
-                </h4>
-                <p className="text-xs text-[#00E5D0] font-medium font-sans">{stage.subtitle}</p>
-                <p className="text-xs text-[#A5AAAB] leading-relaxed pt-2 border-t border-white/[0.06] font-normal">
-                  {stage.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-
-          <div className="pt-4">
-            <button
-              onClick={onOpenConsultation}
-              className="w-full py-4 rounded-full bg-[#00E5D0] text-[#050607] font-bold text-xs uppercase tracking-[0.16em] flex items-center justify-center gap-2 min-h-[48px]"
-            >
-              <span>Schedule Initial Consultation</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <h3 className="font-display font-bold uppercase text-lg sm:text-xl text-[#F1EFE8]">
+              Book an Initial Clinical Evaluation
+            </h3>
+            <p className="text-xs text-[#A5AAAB] max-w-md font-normal">
+              Meet with our prosthetic and orthotic specialists to map your personalized care pathway.
+            </p>
           </div>
-        </div>
+
+          <button
+            onClick={onOpenConsultation}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#00E5D0] text-[#050607] text-xs font-bold uppercase tracking-wider hover:bg-[#00E5D0]/90 transition-all shadow-[0_0_20px_rgba(0,229,208,0.2)] shrink-0 cursor-pointer min-h-[42px]"
+          >
+            <span>Start Consultation</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </motion.div>
       </div>
     </section>
   );
 };
 
+// =========================================================================
+// SUB-COMPONENT: CHECKPOINT NODE
+// =========================================================================
+interface CheckpointNodeProps {
+  step: string;
+  isPassed: boolean;
+  isCurrent: boolean;
+  onClick: () => void;
+  isMobile?: boolean;
+}
+
+const CheckpointNode: React.FC<CheckpointNodeProps> = ({
+  step,
+  isPassed,
+  isCurrent,
+  onClick,
+  isMobile = false,
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className="relative shrink-0 focus:outline-none group cursor-pointer"
+      aria-label={`Jump to stage ${step}`}
+    >
+      {/* Active Pulse Ring */}
+      {isCurrent && (
+        <span className="absolute inset-0 rounded-full bg-[#00E5D0]/30 blur-sm animate-ping" />
+      )}
+
+      <motion.div
+        animate={{
+          scale: isCurrent ? 1.12 : 1.0,
+          backgroundColor: isCurrent
+            ? "#00E5D0"
+            : isPassed
+            ? "#071c19"
+            : "#0A0D0F",
+          borderColor: isPassed ? "#00E5D0" : "rgba(255, 255, 255, 0.16)",
+          color: isCurrent ? "#050607" : isPassed ? "#00E5D0" : "#7A8387",
+        }}
+        transition={{ duration: 0.25 }}
+        className={`rounded-full flex items-center justify-center font-mono font-bold border transition-shadow duration-300 ${
+          isMobile ? "w-8 h-8 text-[11px]" : "w-10 h-10 text-xs"
+        } ${
+          isCurrent
+            ? "shadow-[0_0_20px_rgba(0,229,208,0.6)]"
+            : isPassed
+            ? "shadow-[0_0_10px_rgba(0,229,208,0.25)]"
+            : "group-hover:border-white/40"
+        }`}
+      >
+        {isPassed && !isCurrent ? (
+          <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+        ) : (
+          step
+        )}
+      </motion.div>
+    </button>
+  );
+};
+
+// =========================================================================
+// SUB-COMPONENT: COMPACT STAGE CARD (MINIMAL & UNCLUTTERED)
+// =========================================================================
+interface CompactStageCardProps {
+  stage: (typeof CLINICAL_STAGES)[0];
+  isPassed: boolean;
+  isCurrent: boolean;
+  onOpenConsultation: () => void;
+}
+
+const CompactStageCard: React.FC<CompactStageCardProps> = ({
+  stage,
+  isPassed,
+  isCurrent,
+  onOpenConsultation,
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className={`w-full p-5 sm:p-6 rounded-2xl border transition-all duration-300 space-y-2.5 ${
+        isCurrent
+          ? "bg-[#090C0E] border-[#00E5D0]/40 shadow-[0_8px_25px_rgba(0,229,208,0.1)]"
+          : isPassed
+          ? "bg-[#080A0C] border-white/[0.1]"
+          : "bg-[#080A0C]/70 border-white/[0.06] opacity-80"
+      }`}
+    >
+      {/* Step Tag */}
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[11px] uppercase tracking-wider text-[#00E5D0] font-semibold">
+          {stage.step} / {stage.tag}
+        </span>
+      </div>
+
+      {/* Title */}
+      <h4 className="font-display font-bold uppercase text-base sm:text-lg text-[#F1EFE8] leading-tight tracking-tight">
+        {stage.title}
+      </h4>
+
+      {/* Clean 1-2 sentence description */}
+      <p className="text-xs text-[#A5AAAB] leading-relaxed font-normal">
+        {stage.description}
+      </p>
+
+      {/* Minimal Action Link */}
+      <div className="pt-1.5">
+        <button
+          onClick={onOpenConsultation}
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#00E5D0] hover:text-[#0AE3D6] transition-colors cursor-pointer group"
+        >
+          <span>Schedule consultation</span>
+          <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+// =========================================================================
+// SUB-COMPONENT: COMPACT VISUAL PREVIEW (EDITORIAL CROP)
+// =========================================================================
+interface CompactVisualPreviewProps {
+  stage: (typeof CLINICAL_STAGES)[0];
+  isPassed: boolean;
+}
+
+const CompactVisualPreview: React.FC<CompactVisualPreviewProps> = ({
+  stage,
+  isPassed,
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="max-w-[320px] w-full aspect-[16/10] rounded-xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-lg group relative"
+    >
+      <img
+        src={stage.image}
+        alt={stage.title}
+        className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.05] group-hover:scale-105 transition-transform duration-500 ease-out"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/80 via-transparent to-transparent pointer-events-none" />
+
+      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-[#A5AAAB]">
+        <span className="text-[#00E5D0] font-semibold">{stage.tag}</span>
+        <span>STAGE 0{stage.step}</span>
+      </div>
+    </motion.div>
+  );
+};

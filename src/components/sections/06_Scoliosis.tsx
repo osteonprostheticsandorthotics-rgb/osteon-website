@@ -19,12 +19,6 @@ export const ScoliosisSection: React.FC<ScoliosisProps> = ({ onOpenConsultation 
         {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16 lg:mb-20">
           <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0]" />
-              <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#A5AAAB]">
-                06 / SPECIALIZED CARE
-              </span>
-            </div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -70,16 +64,6 @@ export const ScoliosisSection: React.FC<ScoliosisProps> = ({ onOpenConsultation 
               alt="Anatomical spinal alignment visualization and 3D derotation map"
               className="w-full h-full object-cover object-center filter brightness-[0.95] contrast-[1.05]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/80 via-transparent to-transparent pointer-events-none" />
-
-            <div className="absolute bottom-6 left-6 right-6 sm:right-auto p-5 rounded-xl bg-[#050607]/85 backdrop-blur-md border border-white/[0.08] max-w-sm">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] font-bold block mb-1">
-                3D CAD DEROTATION SCULPTING
-              </span>
-              <p className="text-xs text-[#F1EFE8] leading-relaxed">
-                Asymmetric expansion chambers applying corrective forces during natural adolescent growth spurts.
-              </p>
-            </div>
           </motion.div>
 
           {/* Right Column: Restrained Clinical Features */}
@@ -88,7 +72,7 @@ export const ScoliosisSection: React.FC<ScoliosisProps> = ({ onOpenConsultation 
             <div className="p-6 rounded-2xl bg-[#0A0D0F] border border-white/[0.08] flex gap-5 items-center group">
               <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#111518] shrink-0 border border-white/[0.06]">
                 <img
-                  src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80"
+                  src="/images/boston-brace-scoliosis.jpg"
                   alt="Boston Brace 3D thermoformed orthosis"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -110,9 +94,9 @@ export const ScoliosisSection: React.FC<ScoliosisProps> = ({ onOpenConsultation 
             <div className="p-6 rounded-2xl bg-[#0A0D0F] border border-white/[0.08] flex gap-5 items-center group">
               <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#111518] shrink-0 border border-white/[0.06]">
                 <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
-                  alt="Student wearing brace discreetly under clothing"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  src="/images/brochure/page_17_img_1_52.jpeg"
+                  alt="Clinical Boston Brace alignment and discreet under-clothing fit"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="space-y-1">

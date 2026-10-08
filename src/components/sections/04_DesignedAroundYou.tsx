@@ -4,27 +4,42 @@ import React from "react";
 import { motion } from "framer-motion";
 
 export const DesignedAroundYouSection: React.FC = () => {
+  const designPillars = [
+    {
+      number: "01",
+      title: "Custom-Molded Carbon Fibre Socket",
+      description:
+        "Sculpted directly to the residual limb to distribute pressure evenly, eliminate focal points, and establish a stable anatomical foundation.",
+    },
+    {
+      number: "02",
+      title: "Load-Bearing Pylon & Alignment",
+      description:
+        "Rigid structural shaft connecting the socket to the foot, calibrated to absorb dynamic impact forces and support a natural, balanced gait cycle.",
+    },
+    {
+      number: "03",
+      title: "Intimate Protective Liner",
+      description:
+        "Medical-grade washable interface that cushions sensitive tissue, reduces friction, and protects skin integrity during all-day wear.",
+    },
+  ];
+
   return (
     <section
       id="designed-around-you"
-      className="relative w-full py-28 md:py-40 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      className="relative w-full py-28 md:py-36 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
     >
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
         {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16 lg:mb-20">
           <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0]" />
-              <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#A5AAAB]">
-                03 / ANATOMICAL HARMONY
-              </span>
-            </div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-bold uppercase text-[44px] sm:text-[64px] md:text-[84px] lg:text-[100px] leading-[0.92] tracking-[-0.04em] text-[#F1EFE8]"
+              className="font-display font-bold uppercase text-[44px] sm:text-[64px] md:text-[84px] lg:text-[96px] leading-[0.92] tracking-[-0.04em] text-[#F1EFE8]"
             >
               DESIGNED
               <br />
@@ -36,114 +51,58 @@ export const DesignedAroundYouSection: React.FC = () => {
 
           <div className="lg:col-span-5">
             <p className="text-base sm:text-lg text-[#A5AAAB] leading-relaxed font-normal">
-              By combining medical expertise with innovative technology, we design prosthetic solutions that feel natural, comfortable, and precisely tailored to each individual.
+              Prosthetic fitting is an intimate craft. By combining medical precision with lightweight composite engineering, every device is shaped for natural biomechanics, stability, and enduring daily comfort.
             </p>
           </div>
         </div>
 
-        {/* Visual Composition with Technical Annotations and Hairline Lines */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Main Fitting Visual Composition */}
+        {/* Clean Editorial Split Composition */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          {/* Main Visual Frame */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-8 relative aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl"
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 relative aspect-[4/3] sm:aspect-[16/11] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group"
           >
             <img
               src="/images/socket-engineering.jpg"
-              alt="Close-up custom prosthetic socket engineering and titanium interface"
-              className="w-full h-full object-cover filter brightness-[0.88] contrast-[1.08]"
+              alt="Custom carbon fibre socket sculpting, pylon alignment, and precision prosthetic fabrication"
+              className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05] group-hover:scale-105 transition-transform duration-1000 ease-out"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/80 via-transparent to-transparent pointer-events-none" />
-
-            {/* Desktop Hairline Technical Overlay Points */}
-            <div className="hidden lg:block absolute inset-0 pointer-events-none">
-              {/* Point 01: FIT */}
-              <div className="absolute top-[22%] left-[28%] flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full border border-[#00E5D0] flex items-center justify-center bg-[#050607]">
-                  <span className="w-1 h-1 rounded-full bg-[#00E5D0]" />
-                </div>
-                <div className="h-px w-20 bg-gradient-to-r from-[#00E5D0]/80 to-transparent" />
-                <div className="px-3 py-1 rounded bg-[#050607]/90 border border-white/[0.08] backdrop-blur-md">
-                  <span className="text-[10px] font-mono text-[#00E5D0] font-bold">01 / FIT</span>
-                  <span className="text-[10px] font-mono text-[#A5AAAB] ml-2">CARBON FIBRE SOCKET</span>
-                </div>
-              </div>
-
-              {/* Point 02: FUNCTION */}
-              <div className="absolute top-[52%] right-[18%] flex items-center flex-row-reverse gap-3">
-                <div className="w-3 h-3 rounded-full border border-[#00E5D0] flex items-center justify-center bg-[#050607]">
-                  <span className="w-1 h-1 rounded-full bg-[#00E5D0]" />
-                </div>
-                <div className="h-px w-20 bg-gradient-to-l from-[#00E5D0]/80 to-transparent" />
-                <div className="px-3 py-1 rounded bg-[#050607]/90 border border-white/[0.08] backdrop-blur-md text-right">
-                  <span className="text-[10px] font-mono text-[#00E5D0] font-bold">02 / FUNCTION</span>
-                  <span className="text-[10px] font-mono text-[#A5AAAB] ml-2">LOAD-BEARING PYLON</span>
-                </div>
-              </div>
-
-              {/* Point 03: COMFORT */}
-              <div className="absolute bottom-[20%] left-[34%] flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full border border-[#00E5D0] flex items-center justify-center bg-[#050607]">
-                  <span className="w-1 h-1 rounded-full bg-[#00E5D0]" />
-                </div>
-                <div className="h-px w-20 bg-gradient-to-r from-[#00E5D0]/80 to-transparent" />
-                <div className="px-3 py-1 rounded bg-[#050607]/90 border border-white/[0.08] backdrop-blur-md">
-                  <span className="text-[10px] font-mono text-[#00E5D0] font-bold">03 / COMFORT</span>
-                  <span className="text-[10px] font-mono text-[#A5AAAB] ml-2">PROTECTIVE LINER</span>
-                </div>
-              </div>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/40 via-transparent to-transparent pointer-events-none" />
           </motion.div>
 
-          {/* Technical Annotations Stack (Side on Desktop, Stack on Mobile) */}
-          <div className="lg:col-span-4 space-y-6">
-            {/* 01 FIT */}
-            <div className="border-l border-white/[0.12] pl-5 space-y-2 hover:border-[#00E5D0] transition-colors group">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-[#00E5D0] font-bold">
-                01 / FIT
-              </span>
-              <h4 className="font-display text-xl font-bold uppercase text-[#F1EFE8]">
-                Custom-Made Carbon Fibre Socket
-              </h4>
-              <p className="text-xs sm:text-sm text-[#A5AAAB] leading-relaxed">
-                Grips the residual limb, redistributes load, and provides a secure base for component attachment.
-              </p>
-            </div>
-
-            {/* 02 FUNCTION */}
-            <div className="border-l border-white/[0.12] pl-5 space-y-2 hover:border-[#00E5D0] transition-colors group">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-[#00E5D0] font-bold">
-                02 / FUNCTION
-              </span>
-              <h4 className="font-display text-xl font-bold uppercase text-[#F1EFE8]">
-                Load-Bearing Pylon & Adaptors
-              </h4>
-              <p className="text-xs sm:text-sm text-[#A5AAAB] leading-relaxed">
-                Acts as a rigid, load-bearing shaft between the socket and the foot to absorb shock and support walking.
-              </p>
-            </div>
-
-            {/* 03 COMFORT */}
-            <div className="border-l border-white/[0.12] pl-5 space-y-2 hover:border-[#00E5D0] transition-colors group">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-[#00E5D0] font-bold">
-                03 / COMFORT
-              </span>
-              <h4 className="font-display text-xl font-bold uppercase text-[#F1EFE8]">
-                Removable, Washable Inner Liner
-              </h4>
-              <p className="text-xs sm:text-sm text-[#A5AAAB] leading-relaxed">
-                Acts as an intimate interface and protects the residual limb and skin for long-term daily wear.
-              </p>
-            </div>
+          {/* Minimalist 3-Pillar Breakdown */}
+          <div className="lg:col-span-5 flex flex-col justify-center divide-y divide-white/[0.08]">
+            {designPillars.map((pillar, idx) => (
+              <motion.div
+                key={pillar.number}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="py-6 sm:py-7 first:pt-0 last:pb-0 space-y-2 group"
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="font-mono text-xs text-[#00E5D0] tracking-wider font-semibold">
+                    {pillar.number}
+                  </span>
+                  <h3 className="font-display text-lg sm:text-xl font-bold uppercase text-[#F1EFE8] group-hover:text-[#00E5D0] transition-colors">
+                    {pillar.title}
+                  </h3>
+                </div>
+                <p className="text-sm text-[#A5AAAB] leading-relaxed pl-8 font-normal">
+                  {pillar.description}
+                </p>
+              </motion.div>
+            ))}
           </div>
-
         </div>
       </div>
     </section>
   );
 };
+
 

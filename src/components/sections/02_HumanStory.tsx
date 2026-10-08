@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 interface HumanStoryProps {
   onOpenConsultation: () => void;
@@ -11,103 +11,217 @@ interface HumanStoryProps {
 export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultation }) => {
   return (
     <section
-      id="human-story"
-      className="relative w-full py-28 md:py-40 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      id="about"
+      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
     >
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
-        {/* Asymmetrical 12-Column Editorial Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
-          {/* Left Column: Micro-Label & Massive Typographic Statement */}
-          <div className="lg:col-span-6 space-y-8">
+        {/* Asymmetrical 12-Column Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+          {/* Left Column: Headline & Story */}
+          <div className="lg:col-span-5 space-y-6 sm:space-y-8">
+            {/* Section Tag */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex items-center gap-3"
+              className="text-xs font-mono uppercase tracking-[0.22em] text-[#8E9B9D]"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0]" />
-              <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#A5AAAB]">
-                01 / ABOUT OSTEON
-              </span>
+              01 — ABOUT OSTEON
             </motion.div>
 
+            {/* Giant Stacked Headline */}
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-bold uppercase text-[44px] sm:text-[64px] md:text-[82px] lg:text-[96px] leading-[0.92] tracking-[-0.04em] text-[#F1EFE8]"
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="font-sans font-extrabold uppercase text-[38px] sm:text-[50px] md:text-[62px] lg:text-[72px] leading-[0.95] tracking-[-0.03em] text-[#F1EFE8]"
             >
-              EVERY BODY
+              HUMAN
               <br />
-              MOVES
+              POTENTIAL
               <br />
-              <span className="text-[#00E5D0]">DIFFERENTLY.</span>
+              IN <span className="text-[#00E5D0]">MOTION.</span>
             </motion.h2>
 
+            {/* Narrative & Action */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="space-y-6 pt-4 max-w-lg"
+              className="space-y-6 sm:space-y-8"
             >
-              <p className="text-base sm:text-lg text-[#A5AAAB] leading-relaxed font-normal">
-                Osteon is a trusted provider of advanced prosthetic and orthotic care, dedicated to restoring mobility, independence, and quality of life. By combining medical expertise with innovative technology, we design solutions that feel natural, comfortable, and precisely tailored to each individual.
+              <p className="text-sm sm:text-base text-[#A5AAAB] leading-relaxed font-normal max-w-xl">
+                We create personalized prosthetic and orthotic solutions that combine clinical expertise, advanced materials, and a deep understanding of human movement — helping people of all ages live with greater confidence, comfort, and independence.
               </p>
 
-              <p className="text-sm text-[#A5AAAB]/80 leading-relaxed font-normal">
-                We support people of all ages, from children with congenital conditions to adults recovering from trauma or managing complex medical challenges. At every stage, our team offers personalized guidance, compassionate, patient-centered care, and unwavering support.
-              </p>
-
-              <div className="pt-2">
+              <div>
                 <button
+                  type="button"
                   onClick={onOpenConsultation}
-                  className="inline-flex items-center gap-3 text-xs font-mono uppercase tracking-[0.2em] text-[#F1EFE8] hover:text-[#00E5D0] group transition-colors"
+                  className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full border border-[#00E5D0] text-[#00E5D0] bg-transparent hover:bg-[#00E5D0] hover:text-[#050607] text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 group shadow-[0_0_20px_rgba(0,229,208,0.12)] hover:shadow-[0_0_25px_rgba(0,229,208,0.3)] min-h-[44px]"
                 >
-                  <span>Learn More About Our Clinical Care</span>
-                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-2 text-[#00E5D0]" />
+                  <span>Learn more</span>
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
               </div>
             </motion.div>
           </div>
 
-          {/* Right Column: Large Framed Visual Composition */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-6 relative mt-4 lg:mt-0"
-          >
-            <div className="relative aspect-[4/5] sm:aspect-[4/3] lg:aspect-[10/11] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1600&q=85"
-                alt="Osteon patient care"
-                className="w-full h-full object-cover object-top filter brightness-[0.88] contrast-[1.06] hover:scale-105 transition-transform duration-1000 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/90 via-[#050607]/20 to-transparent" />
+          {/* Right Column: Editorial Spread (Mobile: Magazine Layering, Desktop: 3-Image Staggered Mosaic) */}
+          <div className="lg:col-span-7 relative pt-4 sm:pt-6 lg:pt-0">
+            {/* MOBILE EDITORIAL LAYERED SPREAD (< lg) */}
+            <div className="block lg:hidden relative pb-4">
+              {/* Primary Dominant Clinical Portrait */}
+              <motion.div
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="w-[88vw] max-w-md aspect-[4/5] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl relative"
+              >
+                <img
+                  src="/images/about-clinician-hero.jpg"
+                  alt="Osteon clinician with precision prosthetic device"
+                  className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#050607]/80 backdrop-blur-md text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] border border-white/[0.08]">
+                  Precision Craftsmanship
+                </span>
+              </motion.div>
 
-              {/* Minimal Metadata Annotation on image */}
-              <div className="absolute bottom-6 left-6 right-6 p-6 rounded-xl bg-[#0A0D0F]/85 backdrop-blur-md border border-white/[0.08] max-w-md">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] font-bold">
-                    01.1 / OUR MISSION
-                  </span>
-                  <span className="text-[10px] font-mono text-[#A5AAAB]">PATIENT-CENTERED</span>
+              {/* Overlapping Secondary Movement Image & Texture Strip */}
+              <div className="flex items-end justify-between -mt-16 sm:-mt-20 relative z-10 pl-4">
+                {/* Rotating Circular Stamp Badge */}
+                <div className="relative w-18 h-18 sm:w-20 sm:h-20 flex items-center justify-center select-none bg-[#050607]/90 rounded-full border border-white/[0.1] shadow-2xl p-1">
+                  <motion.svg
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    viewBox="0 0 100 100"
+                    className="w-full h-full"
+                  >
+                    <defs>
+                      <path
+                        id="circleStampPathMobile"
+                        d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
+                      />
+                    </defs>
+                    <text className="text-[9px] font-mono uppercase tracking-[0.24em] fill-[#8E9B9D]">
+                      <textPath href="#circleStampPathMobile" startOffset="0%">
+                        OSTEON • PRECISION • MOTION •
+                      </textPath>
+                    </text>
+                  </motion.svg>
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <ArrowUpRight className="w-4 h-4 text-[#00E5D0]" />
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-[#F1EFE8] font-normal leading-snug">
-                  &ldquo;Mobility challenges should never limit human potential. We believe in dignity, confidence, and freedom of movement.&rdquo;
-                </p>
+
+                {/* Overlapping Athlete in Motion Photo */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-[50vw] max-w-[210px] aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.12] bg-[#0A0D0F] shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+                >
+                  <img
+                    src="/images/about-runner-hero.jpg"
+                    alt="Human potential in motion - athlete with prosthetic limb"
+                    className="w-full h-full object-cover object-center filter brightness-[0.96] contrast-[1.05]"
+                  />
+                </motion.div>
               </div>
             </div>
-          </motion.div>
 
+            {/* DESKTOP 3-IMAGE ASYMMETRICAL MOSAIC (>= lg) */}
+            <div className="hidden lg:flex items-end gap-3.5 sm:gap-4 md:gap-5">
+              {/* Image 1: Left staggered portrait */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="w-[33%] self-end translate-y-12"
+              >
+                <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group">
+                  <img
+                    src="/images/about-runner-hero.jpg"
+                    alt="Human potential in motion - athlete with prosthetic limb walking on street"
+                    className="w-full h-full object-cover object-center filter brightness-[0.96] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
+                </div>
+              </motion.div>
+
+              {/* Image 2: Center Main Hero */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="w-[45%] self-start"
+              >
+                <div className="relative aspect-[4/4.9] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group">
+                  <img
+                    src="/images/about-clinician-hero.jpg"
+                    alt="Osteon clinician in workshop fitting precision prosthetic device"
+                    className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
+                </div>
+              </motion.div>
+
+              {/* Image 3 & Circular Stamp: Right narrow sliver */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="w-[22%] self-start flex flex-col justify-between gap-4"
+              >
+                <div className="relative aspect-[9/19] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group">
+                  <img
+                    src="/images/about-carbon-hero.jpg"
+                    alt="Carbon fiber matrix composite weave engineering"
+                    className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.1] group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 pointer-events-none" />
+                </div>
+
+                {/* Floating Circular Badge Stamp */}
+                <div className="pt-4 flex justify-center items-center">
+                  <div className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center select-none">
+                    <motion.svg
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                      viewBox="0 0 100 100"
+                      className="w-full h-full"
+                    >
+                      <defs>
+                        <path
+                          id="circleStampPath"
+                          d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
+                        />
+                      </defs>
+                      <text className="text-[9px] font-mono uppercase tracking-[0.24em] fill-[#8E9B9D]">
+                        <textPath href="#circleStampPath" startOffset="0%">
+                          OSTEON • PRECISION • MOTION •
+                        </textPath>
+                      </text>
+                    </motion.svg>
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <ArrowUpRight className="w-5 h-5 text-[#00E5D0]" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 };
-

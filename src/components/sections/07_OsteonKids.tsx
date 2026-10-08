@@ -19,12 +19,6 @@ export const OsteonKidsSection: React.FC<OsteonKidsProps> = ({ onOpenConsultatio
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 lg:mb-16">
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0]" />
-              <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#A5AAAB]">
-                07 / PEDIATRIC SOLUTIONS
-              </span>
-            </div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

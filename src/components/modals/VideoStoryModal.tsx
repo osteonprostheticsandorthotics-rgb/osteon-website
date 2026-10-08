@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Pause, Volume2, VolumeX, Maximize2, Sparkles, CheckCircle2 } from "lucide-react";
+import { X, Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface VideoStoryModalProps {
   isOpen: boolean;
@@ -25,10 +25,15 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
     { time: "03:00", title: "Outdoor Freedom", desc: "Summitting Alpine ridge lines with unyielding confidence." },
   ];
 
+  const handleModalClose = () => {
+    setIsPlaying(true);
+    setActiveChapter(0);
+    onClose();
+  };
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      setIsPlaying(true);
     } else {
       document.body.style.overflow = "unset";
     }
@@ -47,7 +52,7 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
+          onClick={handleModalClose}
           className="fixed inset-0 bg-black/92 backdrop-blur-2xl"
         />
 
@@ -72,7 +77,7 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
               </span>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleModalClose}
               className="p-2 text-[#8E9B9D] hover:text-[#F4F7F8] hover:bg-white/5 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="Close video player"
             >
@@ -88,7 +93,7 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
               loop
               muted={isMuted}
               playsInline
-              poster="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1800&q=85"
+              poster="/images/socket-engineering.jpg"
             >
               <source src="/osteon-video.mp4" type="video/mp4" />
               <source src="/media/osteon-video.mp4" type="video/mp4" />

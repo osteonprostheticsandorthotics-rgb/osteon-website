@@ -134,7 +134,7 @@ export const PROSTHETIC_CATEGORIES: ProstheticCategory[] = [
     name: "UPPER EXTREMITY",
     subType: "Transradial (TR) & Transhumeral (TH)",
     tagline: "Below-Elbow & Above-Elbow Prosthetic Systems",
-    heroImage: "https://images.unsplash.com/photo-1617791160505-6f00504e3519?auto=format&fit=crop&w=1600&q=85",
+    heroImage: "/images/bionic-arm-prosthesis.jpg",
     description:
       "Upper extremity prosthetic solutions ranging from myoelectric below-elbow devices to coordinated above-elbow bionic systems equipped with muscle-signal electrodes, electric motors, friction wrists, and functional grasping terminal devices.",
     components: [
@@ -186,7 +186,7 @@ export const PROSTHETIC_CATEGORIES: ProstheticCategory[] = [
     name: "SILICONE PROSTHETICS",
     subType: "Aesthetic & Anatomical Restoration",
     tagline: "Lifelike Facial & Extremity Restorations",
-    heroImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=1600&q=85",
+    heroImage: "/images/silicone-restorations.jpg",
     description:
       "Custom-made medical silicone restorations meticulously crafted to match natural skin tone, facial harmony, and anatomical contours for the nose, ear, arm, feet, and fingers.",
     components: [
@@ -246,7 +246,7 @@ export const ORTHOTIC_CATEGORIES: OrthoticCategory[] = [
     title: "PREMIUM CARBON FIBRE ORTHOTICS",
     category: "CARBON FIBRE",
     tag: "01 / SOLUTIONS",
-    image: "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=900&q=80",
+    image: "/images/carbon-fibre-afo.jpg",
     description:
       "Premium carbon fibre orthotics engineered with high-performance carbon fibre, providing superior strength, elasticity, and energy return. They enhance stability, alignment, and overall mobility with a dynamic response that aids natural movement patterns.",
     items: [
@@ -270,7 +270,7 @@ export const ORTHOTIC_CATEGORIES: OrthoticCategory[] = [
     title: "LOWER EXTREMITY ORTHOTICS & SUPPORTS",
     category: "LOWER LIMB",
     tag: "02 / SOLUTIONS",
-    image: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=900&q=80",
+    image: "/images/lower-extremity-kafo.jpg",
     description:
       "Supportive leg braces designed to provide stability and proper alignment, helping people move safely, making walking and standing more comfortable, and giving greater confidence.",
     items: [
@@ -298,7 +298,7 @@ export const ORTHOTIC_CATEGORIES: OrthoticCategory[] = [
     title: "FOOT & ANKLE ORTHOTICS",
     category: "FOOT & ANKLE",
     tag: "03 / SOLUTIONS",
-    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80",
+    image: "/images/foot-ankle-crow-walker.jpg",
     description:
       "Foot and ankle orthotics designed to improve support, alignment, and stability during walking and standing, reducing pain and making daily movement more comfortable.",
     items: [
@@ -326,7 +326,7 @@ export const ORTHOTIC_CATEGORIES: OrthoticCategory[] = [
     title: "KNEE BRACES & UNLOADER ONE",
     category: "KNEE",
     tag: "04 / SOLUTIONS",
-    image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=900&q=80",
+    image: "/images/unloader-knee-brace.jpg",
     description:
       "Comprehensive knee solutions including the clinically proven Unloader One OA knee brace using dual Dynamic Force Straps (DFS) with 3-Point Leverage System, ACL/PCL ligament braces, and Össur Rebound rehabilitative braces.",
     items: [
@@ -358,7 +358,7 @@ export const ORTHOTIC_CATEGORIES: OrthoticCategory[] = [
     title: "UPPER EXTREMITY ORTHOTICS",
     category: "UPPER LIMB",
     tag: "05 / SOLUTIONS",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=900&q=80",
+    image: "/images/upper-limb-orthotics.jpg",
     description:
       "Support for hand, wrist, elbow, and shoulder to improve function, reduce pain, stabilize joints, improve movement control, and support recovery in daily activities.",
     items: [
@@ -394,7 +394,7 @@ export const ORTHOTIC_CATEGORIES: OrthoticCategory[] = [
     title: "BACK, NECK & CERVICAL SUPPORTS",
     category: "SPINE & CERVICAL",
     tag: "06 / SOLUTIONS",
-    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=900&q=80",
+    image: "/images/cervical-miami-j-tlso.jpg",
     description:
       "Advanced back, neck, and cervical support technologies including Miami J Cervical Collars, Philadelphia collars, Miami Lumbar Posteo, Miami JTO Thoracic Extensions, and Miami TLSO 456/464 systems.",
     items: [
@@ -511,7 +511,7 @@ export const PEDIATRIC_SOLUTIONS: PediatricSolution[] = [
     tagline: "Early Head Shape Guidance",
     description:
       "Custom-made helmets designed to guide head shape safely and comfortably during early development.",
-    image: "https://images.unsplash.com/photo-1544126592-807ade215a0b?auto=format&fit=crop&w=900&q=80"
+    image: "/images/pediatric-cranial-helmet.jpg"
   },
   {
     id: "pavlik-harness",
@@ -520,7 +520,7 @@ export const PEDIATRIC_SOLUTIONS: PediatricSolution[] = [
     tagline: "Infant Hip Development Support",
     description:
       "Supports proper hip positioning to aid healthy hip development in infants.",
-    image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=80"
+    image: "/images/pediatric-pavlik-harness.jpg"
   },
   {
     id: "denis-browne",
@@ -528,7 +528,7 @@ export const PEDIATRIC_SOLUTIONS: PediatricSolution[] = [
     tagline: "Foot & Leg Alignment Support",
     description:
       "Helps maintain corrected foot and leg alignment during early growth stages.",
-    image: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=900&q=80"
+    image: "/images/brochure/page_19_img_1_59.jpeg"
   },
   {
     id: "hip-abduction",
@@ -536,7 +536,7 @@ export const PEDIATRIC_SOLUTIONS: PediatricSolution[] = [
     tagline: "Stable Hip Positioning",
     description:
       "Hip abduction braces provide stable hip support for safe positioning and improved comfort.",
-    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=900&q=80"
+    image: "/images/brochure/page_19_img_1_59.jpeg"
   },
   {
     id: "night-splints",
@@ -544,7 +544,7 @@ export const PEDIATRIC_SOLUTIONS: PediatricSolution[] = [
     tagline: "Nocturnal Flexibility & Alignment",
     description:
       "Supports correct positioning during sleep to improve flexibility and alignment.",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=900&q=80"
+    image: "/images/brochure/page_19_img_1_59.jpeg"
   }
 ];
 
@@ -566,7 +566,7 @@ export const CARE_COMMITMENTS: CareCommitment[] = [
       "At Osteon, trust is built through understanding, listening, and ongoing support. We take the time to know each patient's challenges, goals, and daily realities before designing a solution.",
     description:
       "What we deliver is not just a device, but lasting comfort, reliable performance, and renewed confidence to move freely. By standing beside our patients at every step, we help them achieve independence and a better quality of life today and in the years ahead.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
+    image: "/images/brochure/page_3_img_1_24.jpeg"
   },
   {
     id: "lifelong-care",
@@ -576,7 +576,7 @@ export const CARE_COMMITMENTS: CareCommitment[] = [
       "Your needs evolve over time, and your device should evolve with you. Through regular check-ups, we fine-tune the fit, alignment, and comfort to ensure optimal performance as your body adapts.",
     description:
       "Our dedicated service team is always available to provide adjustments, upgrades, and repairs, minimizing downtime and maximizing reliability. At Osteon, our commitment goes beyond delivery. We stand by you throughout your journey, every step of the way.",
-    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
+    image: "/images/brochure/page_4_img_1_26.jpeg"
   },
   {
     id: "value-care",
@@ -586,7 +586,7 @@ export const CARE_COMMITMENTS: CareCommitment[] = [
       "We are committed to providing the right solution at the right cost without compromising quality or outcomes. Every recommendation is made with careful consideration of effectiveness, comfort, durability, and long-term sustainability.",
     description:
       "Our goal is to deliver solutions that are not only clinically sound, but also practical, affordable, and built to reliably support you for years to come.",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80"
+    image: "/images/brochure/page_5_img_1_28.jpeg"
   }
 ];
 
@@ -633,6 +633,11 @@ export interface ClinicalProcessStep {
   title: string;
   subtitle: string;
   description: string;
+  tag?: string;
+  badge?: string;
+  image?: string;
+  highlights?: string[];
+  metric?: { label: string; value: string };
 }
 
 export const CLINICAL_PROCESS_STEPS: ClinicalProcessStep[] = [
@@ -640,35 +645,80 @@ export const CLINICAL_PROCESS_STEPS: ClinicalProcessStep[] = [
     step: "01",
     title: "UNDERSTANDING & LISTENING",
     subtitle: "Care That Goes Beyond the Device",
+    tag: "Intake & Evaluation",
+    badge: "STAGE 01 • CLINICAL INTAKE",
+    image: "/images/about-clinician-hero.jpg",
     description:
-      "We take the time to know each patient's challenges, goals, and daily realities before designing a solution, offering compassionate guidance."
+      "We take the time to know each patient's challenges, goals, daily realities, and emotional journey before designing a solution, offering compassionate guidance.",
+    highlights: [
+      "In-depth lifestyle and mobility goal assessment",
+      "Compassionate patient & family counseling",
+      "Zero-rush consultation focused on your daily routine"
+    ],
+    metric: { label: "Patient Focus", value: "100% Tailored" }
   },
   {
     step: "02",
     title: "INDIVIDUAL ASSESSMENT",
     subtitle: "Medical Expertise & Evaluation",
+    tag: "Biomechanical Analysis",
+    badge: "STAGE 02 • BIOMECHANICAL EVALUATION",
+    image: "/images/tech-gait-kinematics.jpg",
     description:
-      "Evaluating individual anatomy and functional needs to plan solutions precisely tailored to each individual patient of any age."
+      "Evaluating individual anatomy, residual limb morphology, and functional needs to plan solutions precisely tailored to each individual patient of any age.",
+    highlights: [
+      "Precision 3D anatomical and residual limb mapping",
+      "Biomechanical motion and gait kinematics analysis",
+      "Custom component selection matched to mobility grade"
+    ],
+    metric: { label: "Measurement Tolerance", value: "Sub-Millimeter" }
   },
   {
     step: "03",
     title: "PRECISE TAILORING & DESIGN",
     subtitle: "Innovative Technology & Materials",
+    tag: "Custom Fabrication",
+    badge: "STAGE 03 • COMPOSITE CRAFTSMANSHIP",
+    image: "/images/socket-engineering.jpg",
     description:
-      "Crafting custom carbon fibre sockets, custom-molded interfaces, and specialized braces using high-performance, medical-grade materials."
+      "Crafting custom carbon fibre sockets, custom-molded interfaces, and specialized braces using high-performance, medical-grade materials and aerospace-grade layups.",
+    highlights: [
+      "Aerospace-grade lightweight carbon fibre socket layup",
+      "Skin-protective, washable medical liner interfaces",
+      "Dynamic pylon alignment and stress distribution"
+    ],
+    metric: { label: "Socket Material", value: "Carbon Matrix" }
   },
   {
     step: "04",
     title: "FITTING & COMFORT TUNING",
     subtitle: "Optimal Alignment & Performance",
+    tag: "Gait Alignment",
+    badge: "STAGE 04 • DYNAMIC TUNING",
+    image: "/images/prosthetics-lower.jpg",
     description:
-      "Carefully fitting each device to ensure it feels natural, provides lasting comfort, and restores freedom of movement."
+      "Carefully fitting each device to ensure it feels natural, provides lasting comfort, eliminates pressure hotspots, and restores complete freedom of movement.",
+    highlights: [
+      "Dynamic trial walking and real-time pressure relief",
+      "Micro-alignment adjustments for symmetrical gait cadence",
+      "Secure zero-slip suspension calibration"
+    ],
+    metric: { label: "Fit Precision", value: "Zero Hotspots" }
   },
   {
     step: "05",
     title: "LIFELONG SUPPORT & ONGOING CARE",
     subtitle: "Adjustments, Upgrades & Repairs",
+    tag: "Continuous Care",
+    badge: "STAGE 05 • LIFELONG PARTNERSHIP",
+    image: "/images/about-runner-hero.jpg",
     description:
-      "Regular check-ups to fine-tune fit, alignment, and comfort as your body adapts, with dedicated service minimizing downtime."
+      "Regular check-ups to fine-tune fit, alignment, and comfort as your body adapts over time, with dedicated service minimizing downtime and maximizing mobility.",
+    highlights: [
+      "Scheduled preventative bi-annual clinical check-ups",
+      "Rapid socket relining, component tune-ups & repairs",
+      "Continuous access to next-generation prosthetic upgrades"
+    ],
+    metric: { label: "Clinical Commitment", value: "Lifetime Support" }
   }
 ];

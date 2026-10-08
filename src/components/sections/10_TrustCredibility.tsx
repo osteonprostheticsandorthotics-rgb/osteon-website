@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { TRUST_PILLARS } from "@/lib/data";
 
 interface TrustCredibilityProps {
-  onOpenConsultation: () => void;
+  onOpenConsultation?: () => void;
 }
 
-export const TrustCredibilitySection: React.FC<TrustCredibilityProps> = ({ onOpenConsultation }) => {
+export const TrustCredibilitySection: React.FC<TrustCredibilityProps> = () => {
   return (
     <section
       id="trust"
@@ -18,12 +18,6 @@ export const TrustCredibilitySection: React.FC<TrustCredibilityProps> = ({ onOpe
         {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16 lg:mb-24">
           <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0]" />
-              <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#A5AAAB]">
-                10 / CLINICAL COMMITMENTS
-              </span>
-            </div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

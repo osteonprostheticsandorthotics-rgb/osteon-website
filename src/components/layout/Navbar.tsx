@@ -32,11 +32,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   const navLinks = [
-    { label: "Solutions", href: "#prosthetics", id: "prosthetics" },
-    { label: "Technology", href: "#technology", id: "technology" },
-    { label: "About", href: "#human-story", id: "human-story" },
-    { label: "Journey", href: "#journey", id: "journey" },
-    { label: "Resources", href: "#trust", id: "trust" },
+    { label: "Home", href: "#hero", id: "hero" },
+    { label: "About", href: "#about", id: "about" },
+    { label: "Solutions", href: "#solutions", id: "solutions" },
+    { label: "Prosthetics", href: "#prosthetics", id: "prosthetics" },
+    { label: "Process", href: "#process", id: "process" },
+    { label: "Specialized Care", href: "#specialized-care", id: "specialized-care" },
+    { label: "Contact", href: "#final-cta", id: "final-cta" },
   ];
 
   return (
@@ -53,14 +55,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Logo size={isScrolled ? "sm" : "md"} />
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-8 xl:gap-10">
+          <nav className="hidden lg:flex items-center gap-7 xl:gap-9">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`text-xs font-mono uppercase tracking-[0.18em] transition-all duration-300 relative py-1 group ${
+                  className={`text-xs font-sans font-medium transition-all duration-300 relative py-1 group ${
                     isActive ? "text-[#00E5D0]" : "text-[#A5AAAB] hover:text-[#F1EFE8]"
                   }`}
                 >
@@ -79,9 +81,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="hidden lg:flex items-center gap-4">
             <button
               onClick={onOpenConsultation}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#00E5D0] text-[#050607] text-xs font-bold uppercase tracking-[0.14em] hover:bg-[#00E5D0]/90 transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.2)] min-h-[44px] group"
+              className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] border border-[#00E5D0]/40 text-xs font-medium uppercase tracking-[0.14em] transition-all duration-300 min-h-[44px] group"
             >
-              <span>Book a Consultation</span>
+              <span>Get in touch</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
           </div>
@@ -92,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={onOpenConsultation}
               className="hidden sm:inline-flex px-4 py-2 rounded-full bg-[#00E5D0] text-[#050607] text-[11px] font-bold uppercase tracking-wider min-h-[44px] items-center"
             >
-              Consult
+              Get in touch
             </button>
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -109,139 +111,157 @@ export const Navbar: React.FC<NavbarProps> = ({
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 bg-[#050607] px-6 sm:px-10 py-8 flex flex-col justify-between overflow-y-auto"
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-50 bg-[#050607] px-6 sm:px-10 py-7 flex flex-col justify-between overflow-y-auto"
           >
             {/* Top Bar */}
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-5">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
               <Logo size="md" />
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-3 rounded-full bg-white/[0.05] border border-white/[0.08] text-[#F1EFE8] min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-[#F1EFE8] hover:text-[#00E5D0] min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Navigation List with Oversized Typography */}
-            <div className="py-8 space-y-4">
-              {/* SOLUTIONS */}
+            {/* Navigation List with Oversized Numbered Editorial Typography */}
+            <div className="py-6 space-y-3">
+              {/* 01 HOME */}
+              <a
+                href="#hero"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
+              >
+                <span>HOME</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">01</span>
+              </a>
+
+              {/* 02 ABOUT */}
+              <a
+                href="#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
+              >
+                <span>ABOUT OSTEON</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">02</span>
+              </a>
+
+              {/* 03 SOLUTIONS ACCORDION */}
               <div>
                 <button
                   onClick={() => setMobileSolutionsOpen(!mobileSolutionsOpen)}
-                  className="w-full flex items-center justify-between py-3 text-3xl sm:text-4xl font-display font-bold uppercase text-[#F1EFE8] border-b border-white/[0.06]"
+                  className="w-full flex items-center justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] border-b border-white/[0.05] group"
                 >
-                  <span className="hover:text-[#00E5D0] transition-colors">SOLUTIONS</span>
-                  {mobileSolutionsOpen ? (
-                    <ChevronUp className="w-6 h-6 text-[#00E5D0]" />
-                  ) : (
-                    <ChevronDown className="w-6 h-6 text-[#A5AAAB]" />
-                  )}
+                  <span className="group-hover:text-[#00E5D0] transition-colors">OUR SOLUTIONS</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-mono font-normal text-[#60686B]">03</span>
+                    {mobileSolutionsOpen ? (
+                      <ChevronUp className="w-5 h-5 text-[#00E5D0]" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-[#A5AAAB]" />
+                    )}
+                  </div>
                 </button>
                 {mobileSolutionsOpen && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className="pl-4 py-4 space-y-3 border-l border-[#00E5D0]/40 ml-2 mt-2"
+                    exit={{ opacity: 0, height: 0 }}
+                    className="pl-4 py-3 space-y-2.5 border-l border-[#00E5D0]/30 ml-2 mt-2"
                   >
                     <a
                       href="#prosthetics"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block text-sm font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0]"
+                      className="block text-xs font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0] py-1"
                     >
-                      Prosthetics (Lower & Upper)
+                      • Lower &amp; Upper Prosthetics
                     </a>
                     <a
-                      href="#orthotics"
+                      href="#solutions"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block text-sm font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0]"
+                      className="block text-xs font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0] py-1"
                     >
-                      Dynamic Orthotics & AFOs
+                      • Custom Carbon Orthotics (AFO/KAFO)
                     </a>
                     <a
-                      href="#scoliosis"
+                      href="#specialized-care"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block text-sm font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0]"
+                      className="block text-xs font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0] py-1"
                     >
-                      Scoliosis 3D Care
-                    </a>
-                    <a
-                      href="#kids"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block text-sm font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0]"
-                    >
-                      Pediatric Solutions
+                      • Scoliosis (Boston Brace) &amp; Pediatric Care
                     </a>
                   </motion.div>
                 )}
               </div>
 
-              {/* TECHNOLOGY */}
+              {/* 04 PROSTHETICS */}
               <a
-                href="#technology"
+                href="#prosthetics"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between py-3 text-3xl sm:text-4xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.06] transition-colors"
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
               >
-                <span>TECHNOLOGY</span>
+                <span>PROSTHETICS</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">04</span>
               </a>
 
-              {/* ABOUT */}
+              {/* 05 THE PROCESS */}
               <a
-                href="#human-story"
+                href="#process"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between py-3 text-3xl sm:text-4xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.06] transition-colors"
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
               >
-                <span>ABOUT</span>
+                <span>THE PROCESS</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">05</span>
               </a>
 
-              {/* OUR JOURNEY */}
+              {/* 06 SPECIALIZED CARE */}
               <a
-                href="#journey"
+                href="#specialized-care"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between py-3 text-3xl sm:text-4xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.06] transition-colors"
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
               >
-                <span>OUR JOURNEY</span>
+                <span>SPECIALIZED CARE</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">06</span>
               </a>
 
-              {/* RESOURCES */}
-              <a
-                href="#trust"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between py-3 text-3xl sm:text-4xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.06] transition-colors"
-              >
-                <span>RESOURCES</span>
-              </a>
-
-              {/* CONTACT */}
+              {/* 07 CONTACT */}
               <a
                 href="#final-cta"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between py-3 text-3xl sm:text-4xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.06] transition-colors"
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
               >
                 <span>CONTACT</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">07</span>
               </a>
             </div>
 
-            {/* Bottom Full-Width CTA */}
-            <div className="pt-6 border-t border-white/[0.08] space-y-4">
+            {/* Bottom Full-Width CTA and Phone Link */}
+            <div className="pt-4 border-t border-white/[0.08] space-y-3">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenConsultation();
                 }}
-                className="w-full py-4 rounded-full bg-[#00E5D0] text-[#050607] font-bold text-xs uppercase tracking-[0.16em] flex items-center justify-center gap-2 min-h-[48px] shadow-[0_0_25px_rgba(0,229,208,0.25)]"
+                className="w-full py-4 rounded-full bg-[#00E5D0] text-[#050607] font-bold text-xs uppercase tracking-[0.16em] flex items-center justify-center gap-2 min-h-[48px] shadow-[0_0_25px_rgba(0,229,208,0.25)] cursor-pointer"
               >
-                <span>Book a Consultation</span>
+                <span>Book Clinical Consultation</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <p className="text-center text-xs font-mono text-[#A5AAAB]">
-                Direct Care Intake: <a href="tel:+919846116481" className="text-[#00E5D0] font-semibold">+91 984 611 6481</a>
-              </p>
+              <div className="flex items-center justify-between text-xs font-mono text-[#A5AAAB] pt-1">
+                <span>Direct Helpline</span>
+                <a
+                  href="tel:+919846116481"
+                  className="text-[#00E5D0] font-semibold hover:underline"
+                >
+                  +91 984 611 6481
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

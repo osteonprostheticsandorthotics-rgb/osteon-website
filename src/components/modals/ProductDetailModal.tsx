@@ -2,8 +2,7 @@
 
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle2, Cpu, Shield, Activity, Layers, ArrowRight } from "lucide-react";
-import Image from "next/image";
+import { X, CheckCircle2, ArrowRight } from "lucide-react";
 import { ProstheticCategory } from "@/lib/data";
 
 interface ProductDetailModalProps {

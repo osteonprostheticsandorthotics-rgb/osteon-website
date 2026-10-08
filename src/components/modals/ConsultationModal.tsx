@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Calendar, Clock, MapPin, User, Mail, Phone, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { X, Check, Calendar, User, Mail, Phone, ArrowRight, ShieldCheck } from "lucide-react";
 import confetti from "canvas-confetti";
 
 interface ConsultationModalProps {
@@ -29,10 +29,14 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   });
   const [bookingRef, setBookingRef] = useState("");
 
+  const handleModalClose = () => {
+    setStep(1);
+    onClose();
+  };
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      setStep(1);
     } else {
       document.body.style.overflow = "unset";
     }
@@ -73,7 +77,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
           origin: { y: 0.6 },
           colors: ["#00E5D0", "#0AE3D6", "#F4F7F8", "#11191A"],
         });
-      } catch (e) {
+      } catch {
         // Fallback if confetti is unavailable
       }
     }
@@ -89,7 +93,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
+          onClick={handleModalClose}
           className="fixed inset-0 bg-black/85 backdrop-blur-xl"
         />
 
@@ -113,7 +117,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               </div>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleModalClose}
               className="p-2 text-[#8E9B9D] hover:text-[#F4F7F8] hover:bg-white/5 rounded-full transition-colors"
               aria-label="Close modal"
             >
@@ -366,7 +370,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={handleModalClose}
                   className="px-8 py-3.5 rounded-full bg-[#00E5D0] text-[#05090A] font-semibold text-xs tracking-wider uppercase hover:bg-[#0AE3D6] transition-all duration-300 shadow-[0_0_25px_rgba(0,229,208,0.3)]"
                 >
                   Return to Website
@@ -382,7 +386,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(step - 1)}
-                  className="px-4 py-2 text-xs uppercase tracking-wider text-[#8E9B9D] hover:text-[#F4F7F8] transition-colors"
+                  className="px-4 py-2 text-xs uppercase tracking-wider text-[#8E9B9D] hover:text-[#F4F7F8] transition-colors min-h-[44px] cursor-pointer"
                 >
                   Back
                 </button>
@@ -393,7 +397,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#00E5D0] text-[#05090A] text-xs font-semibold uppercase tracking-wider hover:bg-[#0AE3D6] transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.25)]"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#00E5D0] text-[#05090A] text-xs font-bold uppercase tracking-wider hover:bg-[#0AE3D6] transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.25)] min-h-[44px] cursor-pointer"
               >
                 <span>{step === 3 ? "Confirm Consultation" : "Continue"}</span>
                 <ArrowRight className="w-4 h-4" />
