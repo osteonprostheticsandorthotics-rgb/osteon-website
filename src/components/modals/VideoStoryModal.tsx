@@ -16,6 +16,7 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [activeChapter, setActiveChapter] = useState(0);
+  const modalVideoRef = React.useRef<HTMLVideoElement>(null);
 
   const chapters = [
     { time: "00:00", title: "Quiet Preparation", desc: "Mindful moments before the morning fit." },
@@ -34,13 +35,35 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      if (modalVideoRef.current) {
+        modalVideoRef.current.play().catch(() => {});
+      }
     } else {
       document.body.style.overflow = "unset";
+      if (modalVideoRef.current) {
+        modalVideoRef.current.pause();
+      }
     }
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (modalVideoRef.current) {
+      if (isPlaying) {
+        modalVideoRef.current.play().catch(() => {});
+      } else {
+        modalVideoRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (modalVideoRef.current) {
+      modalVideoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   if (!isOpen) return null;
 
@@ -88,18 +111,20 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
           {/* Video Display Area */}
           <div className="relative aspect-video w-full bg-black flex items-center justify-center overflow-hidden">
             <video
+              ref={modalVideoRef}
+              src="/osteonvideo1.mp4"
               className="w-full h-full object-cover"
               autoPlay
               loop
               muted={isMuted}
               playsInline
+              preload="auto"
               poster="/images/socket-engineering.jpg"
             >
               <source src="/osteonvideo1.mp4" type="video/mp4" />
               <source src="/osteonvid1.mp4" type="video/mp4" />
               <source src="/media/osteonvideo1.mp4" type="video/mp4" />
               <source src="/osteon-video.mp4" type="video/mp4" />
-              <source src="/media/osteon-video.mp4" type="video/mp4" />
             </video>
 
             {/* Dark Vignette Overlay */}

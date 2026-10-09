@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
@@ -13,6 +13,40 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenConsultation,
   onOpenVideoStory,
 }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // React/DOM hydration safety: strictly enforce muted on DOM instance before play
+    video.defaultMuted = true;
+    video.muted = true;
+
+    const startPlayback = () => {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Fallback: If browser autoplay policy or low-power mode pauses video, play on first user gesture
+          const handleFirstGesture = () => {
+            if (videoRef.current) {
+              videoRef.current.play().catch(() => {});
+            }
+            window.removeEventListener("touchstart", handleFirstGesture);
+            window.removeEventListener("click", handleFirstGesture);
+            window.removeEventListener("scroll", handleFirstGesture);
+          };
+
+          window.addEventListener("touchstart", handleFirstGesture, { passive: true, once: true });
+          window.addEventListener("click", handleFirstGesture, { once: true });
+          window.addEventListener("scroll", handleFirstGesture, { passive: true, once: true });
+        });
+      }
+    };
+
+    startPlayback();
+  }, []);
+
   return (
     <section
       id="hero"
@@ -21,10 +55,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Cinematic Fullscreen Background Video */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
         <video
+          ref={videoRef}
+          src="/osteonvideo1.mp4"
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
           poster="/images/socket-engineering.jpg"
           className="w-full h-full object-cover object-center filter brightness-[0.99] contrast-[1.08] opacity-85"
         >
