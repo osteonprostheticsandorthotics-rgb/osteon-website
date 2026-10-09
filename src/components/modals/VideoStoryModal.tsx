@@ -95,6 +95,9 @@ export const VideoStoryModal: React.FC<VideoStoryModalProps> = ({
               playsInline
               poster="/images/socket-engineering.jpg"
             >
+              <source src="/osteonvideo1.mp4" type="video/mp4" />
+              <source src="/osteonvid1.mp4" type="video/mp4" />
+              <source src="/media/osteonvideo1.mp4" type="video/mp4" />
               <source src="/osteon-video.mp4" type="video/mp4" />
               <source src="/media/osteon-video.mp4" type="video/mp4" />
             </video>

@@ -26,15 +26,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           muted
           playsInline
           poster="/images/socket-engineering.jpg"
-          className="w-full h-full object-cover object-center filter brightness-[0.75] sm:brightness-[0.85] contrast-[1.08]"
+          className="w-full h-full object-cover object-center filter brightness-[0.99] contrast-[1.08] opacity-85"
         >
+          <source src="/osteonvideo1.mp4" type="video/mp4" />
+          <source src="/osteonvid1.mp4" type="video/mp4" />
+          <source src="/media/osteonvideo1.mp4" type="video/mp4" />
           <source src="/osteon-video.mp4" type="video/mp4" />
-          <source src="/media/osteon video.mp4" type="video/mp4" />
         </video>
 
-        {/* Soft Editorial Dark Overlays for Razor-Sharp Readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050607]/95 via-[#050607]/80 to-[#050607]/40 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-transparent to-[#050607]/80 z-10" />
+        {/* Ambient Dark Scrims for Rich Contrast & Glare Reduction */}
+        <div className="absolute inset-0 bg-[#050607]/35 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050607]/85 via-[#050607]/50 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-transparent to-[#050607]/60 z-10" />
       </div>
 
       {/* Main Hero Content Composition */}
@@ -118,17 +121,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="absolute left-5 bottom-3 z-20 flex lg:hidden items-center gap-2 pointer-events-none opacity-60">
         <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0] animate-pulse" />
         <span className="font-mono text-[9px] uppercase tracking-widest text-[#A5AAAB]">Scroll to discover</span>
-      </div>
-
-      {/* Right-Side Vertical Scroll Indicator */}
-      <div className="absolute right-6 sm:right-10 bottom-12 z-20 hidden lg:flex flex-col items-center gap-2 pointer-events-none select-none">
-        <span className="[writing-mode:vertical-lr] text-[9px] font-mono uppercase tracking-[0.3em] text-[#A5AAAB]">
-          SCROLL
-        </span>
-        <span className="font-mono text-[10px] text-[#00E5D0] font-bold">
-          01 / 07
-        </span>
-        <div className="w-[1px] h-10 bg-gradient-to-b from-[#00E5D0] to-transparent animate-pulse" />
       </div>
     </section>
   );
