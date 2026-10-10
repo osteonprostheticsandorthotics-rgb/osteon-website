@@ -41,19 +41,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
           <div className="flex flex-col sm:flex-row gap-3.5 items-stretch sm:items-center">
             <button
               onClick={onOpenConsultation}
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#00E5D0] text-[#050607] text-xs font-bold uppercase tracking-[0.16em] hover:bg-[#00E5D0]/90 transition-all shadow-[0_0_25px_rgba(0,229,208,0.25)] min-h-[48px] cursor-pointer"
+              className="inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:py-4 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 min-h-[48px] group cursor-pointer active:scale-[0.98]"
             >
               <span>Book Clinical Consultation</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
-
-            <a
-              href="tel:+919846116481"
-              className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-[#F1EFE8] text-xs font-mono uppercase tracking-wider transition-colors min-h-[48px]"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#00E5D0]" />
-              <span>+91 984 611 6481</span>
-            </a>
           </div>
         </div>
 

@@ -7,12 +7,10 @@ import { ArrowRight } from "lucide-react";
 interface FinalCTAProps {
   onOpenConsultation: () => void;
   onOpenContact?: () => void;
-  onOpenVideoStory?: () => void;
 }
 
 export const FinalCTASection: React.FC<FinalCTAProps> = ({
   onOpenConsultation,
-  onOpenVideoStory,
 }) => {
   return (
     <section
@@ -68,33 +66,21 @@ export const FinalCTASection: React.FC<FinalCTAProps> = ({
             It&apos;s about confidence, independence, and a future with more possibilities. At Osteon, we&apos;re committed to walking this journey with you — at every step.
           </motion.p>
 
-          {/* Dual Action Controls */}
+          {/* Action Control */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.35 }}
-            className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-6"
+            className="pt-4"
           >
             <button
               onClick={onOpenConsultation}
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#00E5D0] text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.14em] hover:bg-[#00E5D0]/90 transition-all duration-300 shadow-[0_0_30px_rgba(0,229,208,0.25)] min-h-[48px] group cursor-pointer w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:py-4 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 min-h-[46px] sm:min-h-[48px] group cursor-pointer w-full sm:w-auto active:scale-[0.98]"
             >
               <span>Get in touch</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
-
-            {onOpenVideoStory && (
-              <button
-                onClick={onOpenVideoStory}
-                className="inline-flex items-center justify-center sm:justify-start gap-3 text-xs sm:text-sm font-medium text-[#F1EFE8] hover:text-[#00E5D0] transition-colors py-2 px-3 group min-h-[44px] cursor-pointer"
-              >
-                <span className="w-10 h-10 rounded-full bg-white/[0.06] border border-white/[0.12] flex items-center justify-center text-[#00E5D0] group-hover:bg-[#00E5D0] group-hover:text-[#050607] transition-all shrink-0">
-                  <span className="text-xs ml-0.5">▶</span>
-                </span>
-                <span className="uppercase tracking-wider text-xs font-mono">Watch our story</span>
-              </button>
-            )}
           </motion.div>
         </div>
       </div>

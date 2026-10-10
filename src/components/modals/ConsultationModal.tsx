@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Calendar, User, Mail, Phone, ArrowRight, ShieldCheck } from "lucide-react";
+import { X, Calendar, Check, ShieldCheck } from "lucide-react";
 import confetti from "canvas-confetti";
 
 interface ConsultationModalProps {
@@ -14,23 +14,20 @@ interface ConsultationModalProps {
 export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   isOpen,
   onClose,
-  initialService = "Prosthetics",
 }) => {
-  const [step, setStep] = useState(1);
-  const [selectedService, setSelectedService] = useState(initialService);
-  const [selectedGoal, setSelectedGoal] = useState("High-Activity Mobility & Upgrade");
-  const [consultationType, setConsultationType] = useState("In-Clinic Precision Evaluation");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
-    notes: "",
+    email: "",
     preferredDate: "2026-10-15",
+    note: "",
   });
   const [bookingRef, setBookingRef] = useState("");
 
   const handleModalClose = () => {
-    setStep(1);
+    setIsSubmitted(false);
     onClose();
   };
 
@@ -45,41 +42,20 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
     };
   }, [isOpen]);
 
-  const services = [
-    { id: "prosthetics-lower", label: "Lower Extremity Prosthetics", desc: "Custom carbon fibre sockets, pylons, knees & prosthetic feet" },
-    { id: "prosthetics-upper", label: "Upper Extremity Prosthetics", desc: "Myoelectric electrode sensors & bionic hands" },
-    { id: "orthotics-lower", label: "Carbon Fibre & Dynamic Orthotics", desc: "AFOs, KAFOs, dynamic braces & spinal stabilization" },
-    { id: "scoliosis-care", label: "Boston Brace Scoliosis Care", desc: "Custom-made spinal orthosis for curve control & stabilization" },
-    { id: "pediatric-care", label: "Pediatric Orthotics & Care", desc: "Cranial orthoses, Pavlik harness, Denis Browne & night splints" },
-    { id: "silicone-restoration", label: "Silicone Prosthetics", desc: "Lifelike custom facial and extremity restorations" },
-  ];
-
-  const goals = [
-    "First-Time Device Evaluation",
-    "Fit & Alignment Fine-Tuning",
-    "Socket Comfort & Pressure Adjustment",
-    "Pediatric Growth Alignment Check",
-    "Clinical Consultation & Device Review",
-  ];
-
-  const handleNext = () => {
-    if (step < 3) {
-      setStep(step + 1);
-    } else {
-      // Complete booking
-      const ref = `OST-${Math.floor(100000 + Math.random() * 900000)}`;
-      setBookingRef(ref);
-      setStep(4);
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ["#00E5D0", "#0AE3D6", "#F4F7F8", "#11191A"],
-        });
-      } catch {
-        // Fallback if confetti is unavailable
-      }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const ref = `OST-${Math.floor(100000 + Math.random() * 900000)}`;
+    setBookingRef(ref);
+    setIsSubmitted(true);
+    try {
+      confetti({
+        particleCount: 85,
+        spread: 75,
+        origin: { y: 0.6 },
+        colors: ["#00E5D0", "#A78BFA", "#F1EFE8", "#050607"],
+      });
+    } catch {
+      // Fallback if confetti is unavailable
     }
   };
 
@@ -87,323 +63,236 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
-        {/* Backdrop */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        {/* Backdrop with Photographic Scenery & Ambient Glow */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleModalClose}
-          className="fixed inset-0 bg-black/85 backdrop-blur-xl"
-        />
-
-        {/* Modal Container */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 20 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-2xl bg-[#0B1112] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[90vh]"
+          className="fixed inset-0 z-0 bg-[#050607]/80 backdrop-blur-xl"
         >
-          {/* Header Bar */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-white/8 bg-[#11191A]/60">
-            <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#00E5D0] animate-pulse" />
-              <div>
-                <h3 className="text-sm font-semibold tracking-wider text-[#F4F7F8] uppercase">
-                  Schedule Clinical Consultation
-                </h3>
-                <p className="text-xs text-[#8E9B9D]">Step {step} of 3 • Personalized Care Planning</p>
-              </div>
-            </div>
+          {/* Subtle blurred scenic layer behind the card */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+            <img
+              src="/images/final-cta-dawn.jpg"
+              alt="Mountain golden hour backdrop"
+              className="w-full h-full object-cover filter blur-md scale-105"
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-transparent to-[#050607]/80 pointer-events-none" />
+        </motion.div>
+
+        {/* Glassmorphic Form Card with Dual-Tone Gradient Outline */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full max-w-xl my-auto p-[1px] rounded-[28px] sm:rounded-[34px] bg-gradient-to-br from-[#00E5D0]/60 via-white/15 to-[#A78BFA]/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]"
+        >
+          <div className="relative rounded-[27px] sm:rounded-[33px] bg-[#0A0D10]/85 backdrop-blur-2xl p-6 sm:p-9 md:p-10 overflow-hidden">
+            {/* Ambient Inner Lights */}
+            <div className="absolute -top-24 -left-24 w-60 h-60 bg-[#00E5D0]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-[#A78BFA]/10 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Close Button */}
             <button
               onClick={handleModalClose}
-              className="p-2 text-[#8E9B9D] hover:text-[#F4F7F8] hover:bg-white/5 rounded-full transition-colors"
+              className="absolute top-5 right-5 sm:top-7 sm:right-7 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors cursor-pointer z-20"
               aria-label="Close modal"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </button>
-          </div>
 
-          {/* Step Progress Line */}
-          {step < 4 && (
-            <div className="w-full bg-white/5 h-1">
-              <div
-                className="bg-gradient-to-r from-[#00E5D0] to-[#0AE3D6] h-full transition-all duration-500 ease-out"
-                style={{ width: `${(step / 3) * 100}%` }}
-              />
-            </div>
-          )}
-
-          {/* Modal Body */}
-          <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar flex-1">
-            {step === 1 && (
-              <motion.div
-                initial={{ opacity: 0, x: 15 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -15 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h4 className="font-display text-2xl font-bold text-[#F4F7F8]">
-                    What area of care are you seeking?
-                  </h4>
-                  <p className="text-sm text-[#8E9B9D] mt-1">
-                    Select the primary service to connect you with our specialized clinical prosthetist or orthotist.
+            {!isSubmitted ? (
+              <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
+                {/* Centered Heading */}
+                <div className="text-center space-y-1 pb-1">
+                  <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#F1EFE8] tracking-tight">
+                    Make your Booking
+                  </h3>
+                  <p className="text-xs text-[#8E9B9D] font-normal">
+                    Schedule a consultation with our clinical team in Cochin
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  {services.map((srv) => {
-                    const isSelected = selectedService === srv.label;
-                    return (
-                      <button
-                        key={srv.id}
-                        type="button"
-                        onClick={() => setSelectedService(srv.label)}
-                        className={`p-4 rounded-xl text-left border transition-all duration-300 ${
-                          isSelected
-                            ? "bg-[#00E5D0]/10 border-[#00E5D0] shadow-[0_0_20px_rgba(0,229,208,0.15)]"
-                            : "bg-[#11191A]/80 border-white/5 hover:border-white/20 hover:bg-white/5"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className={`text-sm font-semibold ${isSelected ? "text-[#00E5D0]" : "text-[#F4F7F8]"}`}>
-                            {srv.label}
-                          </span>
-                          {isSelected && <Check className="w-4 h-4 text-[#00E5D0]" />}
-                        </div>
-                        <p className="text-xs text-[#8E9B9D] mt-1.5 leading-relaxed">{srv.desc}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            )}
-
-            {step === 2 && (
-              <motion.div
-                initial={{ opacity: 0, x: 15 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -15 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h4 className="font-display text-2xl font-bold text-[#F4F7F8]">
-                    What is your primary clinical goal?
-                  </h4>
-                  <p className="text-sm text-[#8E9B9D] mt-1">
-                    Understanding your aspirations helps us prepare customized clinical guidance before you arrive.
-                  </p>
-                </div>
-
-                <div className="space-y-2.5 pt-2">
-                  {goals.map((goal) => {
-                    const isSelected = selectedGoal === goal;
-                    return (
-                      <button
-                        key={goal}
-                        type="button"
-                        onClick={() => setSelectedGoal(goal)}
-                        className={`w-full p-4 rounded-xl text-left border flex items-center justify-between transition-all duration-300 ${
-                          isSelected
-                            ? "bg-[#00E5D0]/10 border-[#00E5D0] text-[#00E5D0]"
-                            : "bg-[#11191A]/80 border-white/5 text-[#F4F7F8] hover:border-white/20 hover:bg-white/5"
-                        }`}
-                      >
-                        <span className="text-sm font-medium">{goal}</span>
-                        {isSelected && <Check className="w-4 h-4 text-[#00E5D0]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="pt-2">
-                  <label className="text-xs uppercase tracking-wider text-[#8E9B9D] font-semibold block mb-2">
-                    Consultation Format
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {["In-Clinic Consultation", "Direct Phone / Virtual Inquiry"].map((format) => (
-                      <button
-                        key={format}
-                        type="button"
-                        onClick={() => setConsultationType(format)}
-                        className={`p-3 rounded-lg border text-xs font-medium text-center transition-all ${
-                          consultationType === format
-                            ? "border-[#00E5D0] bg-[#00E5D0]/10 text-[#00E5D0]"
-                            : "border-white/10 bg-[#11191A] text-[#8E9B9D] hover:text-[#F4F7F8]"
-                        }`}
-                      >
-                        {format}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div
-                initial={{ opacity: 0, x: 15 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -15 }}
-                className="space-y-5"
-              >
-                <div>
-                  <h4 className="font-display text-2xl font-bold text-[#F4F7F8]">
-                    Your Contact & Booking Details
-                  </h4>
-                  <p className="text-sm text-[#8E9B9D] mt-1">
-                    We maintain strict confidentiality for all patient consultations.
-                  </p>
-                </div>
-
-                <div className="space-y-3.5 pt-1">
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider text-[#8E9B9D] font-semibold mb-1.5">
-                      Full Name
+                {/* Focused Input Grid (Only Name, Phone, Email, Preferred Date, and Note) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
+                  {/* Name */}
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                      Name
                     </label>
-                    <div className="relative">
-                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8E9B9D]" />
-                      <input
-                        type="text"
-                        placeholder="Enter your full name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-[#11191A] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-[#F4F7F8] placeholder-[#536062] focus:outline-none focus:border-[#00E5D0] transition-colors"
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter your name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                    />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs uppercase tracking-wider text-[#8E9B9D] font-semibold mb-1.5">
-                        Email Address
-                      </label>
-                      <div className="relative">
-                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8E9B9D]" />
-                        <input
-                          type="email"
-                          placeholder="your.email@example.com"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full bg-[#11191A] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-[#F4F7F8] placeholder-[#536062] focus:outline-none focus:border-[#00E5D0] transition-colors"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs uppercase tracking-wider text-[#8E9B9D] font-semibold mb-1.5">
-                        Phone Number
-                      </label>
-                      <div className="relative">
-                        <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8E9B9D]" />
-                        <input
-                          type="tel"
-                          placeholder="+91 984 611 6481"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full bg-[#11191A] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-[#F4F7F8] placeholder-[#536062] focus:outline-none focus:border-[#00E5D0] transition-colors"
-                        />
-                      </div>
-                    </div>
+                  {/* Phone Number */}
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="Enter phone number"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                    />
                   </div>
 
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider text-[#8E9B9D] font-semibold mb-1.5">
+                  {/* Email */}
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="Enter your Email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                    />
+                  </div>
+
+                  {/* Preferred Date */}
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-[#F1EFE8]">
                       Preferred Date
                     </label>
                     <div className="relative">
-                      <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8E9B9D]" />
                       <input
                         type="date"
+                        required
                         value={formData.preferredDate}
                         onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                        className="w-full bg-[#11191A] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-[#F4F7F8] focus:outline-none focus:border-[#00E5D0] transition-colors"
+                        className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 pr-10 text-xs sm:text-sm text-[#F1EFE8] focus:outline-none transition-all shadow-inner scheme-dark"
                       />
+                      <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" />
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
 
-            {step === 4 && (
+                  {/* Option to Add a Note (Full Width) */}
+                  <div className="space-y-1.5 sm:col-span-2">
+                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                      Add a Note
+                    </label>
+                    <textarea
+                      rows={3}
+                      placeholder="Share any specific requirements or notes (optional)..."
+                      value={formData.note}
+                      onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                      className="w-full rounded-2xl bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Terms Checkbox */}
+                <div className="pt-1">
+                  <label className="inline-flex items-center gap-2.5 cursor-pointer select-none group text-xs text-[#A5AAAB]">
+                    <input
+                      type="checkbox"
+                      required
+                      checked={acceptedTerms}
+                      onChange={(e) => setAcceptedTerms(e.target.checked)}
+                      className="sr-only"
+                    />
+                    <div
+                      className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
+                        acceptedTerms
+                          ? "bg-[#00E5D0] border-[#00E5D0]"
+                          : "border-white/30 group-hover:border-white/60 bg-white/5"
+                      }`}
+                    >
+                      {acceptedTerms && <Check className="w-3 h-3 text-[#050607] stroke-[3]" />}
+                    </div>
+                    <span>I accept all terms and conditions.</span>
+                  </label>
+                </div>
+
+                {/* Submit Action Pill Button */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-2.5 sm:py-3 rounded-full border border-white/30 hover:border-[#00E5D0] bg-white/[0.04] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.15)] hover:shadow-[0_0_25px_rgba(0,229,208,0.4)] active:scale-[0.98] cursor-pointer"
+                  >
+                    <span>Book Now</span>
+                  </button>
+                </div>
+              </form>
+            ) : (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-6 space-y-5"
+                className="text-center py-4 sm:py-6 space-y-5"
               >
-                <div className="w-16 h-16 rounded-full bg-[#00E5D0]/10 border border-[#00E5D0] flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(0,229,208,0.25)]">
+                <div className="w-16 h-16 rounded-full bg-[#00E5D0]/10 border border-[#00E5D0] flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(0,229,208,0.3)]">
                   <ShieldCheck className="w-8 h-8 text-[#00E5D0]" />
                 </div>
 
-                <div>
-                  <span className="text-xs uppercase tracking-[0.25em] text-[#00E5D0] font-semibold">
-                    Consultation Requested
+                <div className="space-y-1.5">
+                  <span className="text-xs uppercase tracking-[0.22em] text-[#00E5D0] font-mono">
+                    Consultation Confirmed
                   </span>
-                  <h4 className="font-display text-2xl sm:text-3xl font-bold text-[#F4F7F8] mt-1">
+                  <h4 className="font-display text-2xl sm:text-3xl font-bold text-[#F1EFE8]">
                     We look forward to meeting you.
                   </h4>
-                  <p className="text-sm text-[#8E9B9D] max-w-md mx-auto mt-2 leading-relaxed">
-                    Our lead clinical coordinator will review your profile and reach out within 4 business hours to confirm your appointment time and intake scan details.
+                  <p className="text-xs sm:text-sm text-[#8E9B9D] max-w-md mx-auto leading-relaxed">
+                    Our clinical team will review your details and reach out within 4 business hours to finalize your appointment schedule.
                   </p>
                 </div>
 
-                <div className="bg-[#11191A] border border-white/10 rounded-2xl p-5 text-left max-w-md mx-auto space-y-3">
-                  <div className="flex justify-between items-center text-xs pb-2 border-b border-white/5">
+                {/* Summary Pill Card */}
+                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 text-left max-w-md mx-auto space-y-2.5 text-xs">
+                  <div className="flex justify-between items-center pb-2 border-b border-white/5">
                     <span className="text-[#8E9B9D]">Booking Reference:</span>
-                    <span className="font-mono text-[#00E5D0] font-bold">{bookingRef || "OST-2026-8941"}</span>
+                    <span className="font-mono text-[#00E5D0] font-bold">{bookingRef}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-[#8E9B9D]">Service:</span>
-                    <span className="text-[#F4F7F8] font-medium">{selectedService}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#8E9B9D]">Patient Name:</span>
+                    <span className="text-[#F1EFE8] font-medium">{formData.name}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-[#8E9B9D]">Clinical Goal:</span>
-                    <span className="text-[#F4F7F8] font-medium">{selectedGoal}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#8E9B9D]">Phone Number:</span>
+                    <span className="text-[#F1EFE8] font-medium">{formData.phone}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-[#8E9B9D]">Format:</span>
-                    <span className="text-[#F4F7F8] font-medium">{consultationType}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#8E9B9D]">Email:</span>
+                    <span className="text-[#F1EFE8] font-medium">{formData.email}</span>
                   </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#8E9B9D]">Preferred Date:</span>
+                    <span className="text-[#F1EFE8] font-medium">{formData.preferredDate}</span>
+                  </div>
+                  {formData.note && (
+                    <div className="pt-2 border-t border-white/5">
+                      <span className="text-[#8E9B9D] block mb-1">Note:</span>
+                      <p className="text-[#F1EFE8] italic bg-white/[0.02] p-2 rounded-lg border border-white/5">
+                        {formData.note}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <button
                   type="button"
                   onClick={handleModalClose}
-                  className="px-8 py-3.5 rounded-full bg-[#00E5D0] text-[#05090A] font-semibold text-xs tracking-wider uppercase hover:bg-[#0AE3D6] transition-all duration-300 shadow-[0_0_25px_rgba(0,229,208,0.3)]"
+                  className="px-8 py-3 rounded-full border border-[#00E5D0] bg-[#00E5D0] text-[#050607] font-semibold text-xs tracking-wider uppercase hover:bg-[#00E5D0]/90 transition-all duration-300 shadow-[0_0_25px_rgba(0,229,208,0.35)] cursor-pointer"
                 >
                   Return to Website
                 </button>
               </motion.div>
             )}
           </div>
-
-          {/* Footer Navigation */}
-          {step < 4 && (
-            <div className="px-6 py-4 border-t border-white/8 bg-[#11191A]/60 flex items-center justify-between">
-              {step > 1 ? (
-                <button
-                  type="button"
-                  onClick={() => setStep(step - 1)}
-                  className="px-4 py-2 text-xs uppercase tracking-wider text-[#8E9B9D] hover:text-[#F4F7F8] transition-colors min-h-[44px] cursor-pointer"
-                >
-                  Back
-                </button>
-              ) : (
-                <div />
-              )}
-
-              <button
-                type="button"
-                onClick={handleNext}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#00E5D0] text-[#05090A] text-xs font-bold uppercase tracking-wider hover:bg-[#0AE3D6] transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.25)] min-h-[44px] cursor-pointer"
-              >
-                <span>{step === 3 ? "Confirm Consultation" : "Continue"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
         </motion.div>
       </div>
     </AnimatePresence>

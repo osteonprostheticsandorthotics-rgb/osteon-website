@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface SpecializedCareProps {
   onOpenConsultation: () => void;
@@ -83,9 +83,7 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
               </button>
             </div>
           </div>
-        </div>
-
-        {/* MOBILE TOUCH-FIRST HORIZONTAL SNAP CAROUSEL (< md) */}
+        </div>        {/* MOBILE TOUCH-FIRST HORIZONTAL SNAP CAROUSEL (< md) */}
         <div className="block md:hidden">
           <div className="flex overflow-x-auto snap-x-mandatory no-scrollbar gap-4 -mx-6 px-6 pb-4">
             {specializedCards.map((card, idx) => (
@@ -96,7 +94,7 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 onClick={onOpenConsultation}
-                className="w-[84vw] max-w-[330px] shrink-0 snap-center rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-6 flex flex-col justify-between min-h-[460px] shadow-2xl relative cursor-pointer active:scale-[0.99] transition-transform"
+                className="w-[72vw] max-w-[280px] shrink-0 snap-center rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-4.5 sm:p-5 flex flex-col justify-between min-h-[300px] shadow-2xl relative cursor-pointer active:scale-[0.99] transition-transform"
               >
                 {/* Background Photography */}
                 <div className="absolute inset-0 z-0 overflow-hidden">
@@ -108,35 +106,21 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-[#050607]/45 to-transparent z-10" />
                 </div>
 
-                {/* Top Badge & Counter */}
-                <div className="relative z-20 flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-full bg-[#050607]/80 backdrop-blur-md text-[10px] font-mono font-bold uppercase tracking-widest text-[#00E5D0] border border-white/[0.08]">
-                    Specialized Care
-                  </span>
-                  <span className="text-xs font-mono font-bold text-[#F1EFE8]/70">
+                {/* Top Counter */}
+                <div className="relative z-20 flex items-center justify-end">
+                  <span className="text-[11px] font-mono font-bold text-[#F1EFE8]/70">
                     0{idx + 1} / 03
                   </span>
                 </div>
 
-                {/* Bottom Meta & Action */}
-                <div className="relative z-20 space-y-4 pt-20">
-                  <div className="space-y-1.5">
-                    <h3 className="font-display font-bold uppercase text-2xl text-[#F1EFE8] tracking-tight">
-                      {card.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-[#A5AAAB] font-normal leading-relaxed">
-                      {card.subtitle}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-white/[0.08]">
-                    <span className="text-xs font-mono uppercase tracking-wider text-[#00E5D0]">
-                      Explore program
-                    </span>
-                    <div className="w-10 h-10 rounded-full bg-white/[0.08] border border-white/[0.12] text-[#00E5D0] flex items-center justify-center shadow-lg">
-                      <ArrowUpRight className="w-4 h-4" />
-                    </div>
-                  </div>
+                {/* Bottom Meta */}
+                <div className="relative z-20 space-y-1.5 pt-6">
+                  <h3 className="font-display font-bold uppercase text-lg sm:text-xl text-[#F1EFE8] tracking-tight leading-tight">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs text-[#A5AAAB] font-normal leading-relaxed line-clamp-2">
+                    {card.subtitle}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -150,7 +134,7 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
         </div>
 
         {/* DESKTOP 3-COLUMN EDITORIAL PRODUCT CARDS (>= md) */}
-        <div className="hidden md:grid grid-cols-3 gap-6 lg:gap-8">
+        <div className="hidden md:grid grid-cols-3 gap-5 lg:gap-6">
           {specializedCards.map((card, idx) => (
             <motion.div
               key={card.id}
@@ -159,7 +143,7 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: idx * 0.15 }}
               onClick={onOpenConsultation}
-              className="group relative rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-6 sm:p-8 flex flex-col justify-between min-h-[420px] sm:min-h-[460px] shadow-2xl hover:border-[#00E5D0]/40 transition-all duration-500 cursor-pointer"
+              className="group relative rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-5 sm:p-6 flex flex-col justify-between min-h-[310px] sm:min-h-[330px] shadow-2xl hover:border-[#00E5D0]/40 transition-all duration-500 cursor-pointer"
             >
               {/* Card Background Image with Subtle Vignette */}
               <div className="absolute inset-0 z-0 overflow-hidden">
@@ -171,25 +155,21 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-[#050607]/40 to-[#050607]/70 z-10" />
               </div>
 
-              {/* Top Placeholder / Spacer */}
-              <div className="relative z-20" />
+              {/* Top Counter */}
+              <div className="relative z-20 flex items-center justify-end">
+                <span className="text-[11px] font-mono font-bold text-[#F1EFE8]/70">
+                  0{idx + 1} / 03
+                </span>
+              </div>
 
-              {/* Bottom Card Meta & Action */}
-              <div className="relative z-20 space-y-4">
-                <div className="space-y-1.5">
-                  <h3 className="font-display font-bold uppercase text-xl sm:text-2xl text-[#F1EFE8] group-hover:text-[#00E5D0] transition-colors tracking-tight">
-                    {card.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[#A5AAAB] font-sans">
-                    {card.subtitle}
-                  </p>
-                </div>
-
-                <div className="flex justify-end pt-2">
-                  <div className="w-10 h-10 rounded-full bg-white/[0.06] border border-white/[0.12] group-hover:bg-[#00E5D0] text-[#00E5D0] group-hover:text-[#050607] flex items-center justify-center transition-all duration-300 shadow-[0_0_15px_rgba(0,0,0,0.3)]">
-                    <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </div>
-                </div>
+              {/* Bottom Card Meta */}
+              <div className="relative z-20 space-y-1.5 pt-6">
+                <h3 className="font-display font-bold uppercase text-lg sm:text-xl text-[#F1EFE8] group-hover:text-[#00E5D0] transition-colors tracking-tight">
+                  {card.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#A5AAAB] font-sans">
+                  {card.subtitle}
+                </p>
               </div>
             </motion.div>
           ))}

@@ -188,7 +188,7 @@ export const PROSTHETIC_CATEGORIES: ProstheticCategory[] = [
     tagline: "Lifelike Facial & Extremity Restorations",
     heroImage: "/images/silicone-restorations.jpg",
     description:
-      "Custom-made medical silicone restorations meticulously crafted to match natural skin tone, facial harmony, and anatomical contours for the nose, ear, arm, feet, and fingers.",
+      "Custom-made medical silicone restorations meticulously crafted to match natural skin tone, facial harmony, and anatomical contours for the nose, ear, arm, feet, and fingers to restore realism, comfort, and daily confidence.",
     components: [
       {
         name: "Silicone Nose",

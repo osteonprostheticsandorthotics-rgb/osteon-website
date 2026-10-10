@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 
 interface NavbarProps {
@@ -16,7 +16,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex lg:hidden items-center gap-3">
             <button
               onClick={onOpenConsultation}
-              className="hidden sm:inline-flex px-4 py-2 rounded-full bg-[#00E5D0] text-[#050607] text-[11px] font-bold uppercase tracking-wider min-h-[44px] items-center"
+              className="hidden sm:inline-flex px-5 py-2.5 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-[11px] font-bold uppercase tracking-wider min-h-[44px] items-center transition-all cursor-pointer"
             >
               Get in touch
             </button>
@@ -151,53 +150,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">02</span>
               </a>
 
-              {/* 03 SOLUTIONS ACCORDION */}
-              <div>
-                <button
-                  onClick={() => setMobileSolutionsOpen(!mobileSolutionsOpen)}
-                  className="w-full flex items-center justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] border-b border-white/[0.05] group"
-                >
-                  <span className="group-hover:text-[#00E5D0] transition-colors">OUR SOLUTIONS</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono font-normal text-[#60686B]">03</span>
-                    {mobileSolutionsOpen ? (
-                      <ChevronUp className="w-5 h-5 text-[#00E5D0]" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-[#A5AAAB]" />
-                    )}
-                  </div>
-                </button>
-                {mobileSolutionsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="pl-4 py-3 space-y-2.5 border-l border-[#00E5D0]/30 ml-2 mt-2"
-                  >
-                    <a
-                      href="#prosthetics"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block text-xs font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0] py-1"
-                    >
-                      • Lower &amp; Upper Prosthetics
-                    </a>
-                    <a
-                      href="#solutions"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block text-xs font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0] py-1"
-                    >
-                      • Custom Carbon Orthotics (AFO/KAFO)
-                    </a>
-                    <a
-                      href="#specialized-care"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block text-xs font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#00E5D0] py-1"
-                    >
-                      • Scoliosis (Boston Brace) &amp; Pediatric Care
-                    </a>
-                  </motion.div>
-                )}
-              </div>
+              {/* 03 OUR SOLUTIONS */}
+              <a
+                href="#solutions"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
+              >
+                <span>OUR SOLUTIONS</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">03</span>
+              </a>
 
               {/* 04 PROSTHETICS */}
               <a
@@ -240,28 +201,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               </a>
             </div>
 
-            {/* Bottom Full-Width CTA and Phone Link */}
-            <div className="pt-4 border-t border-white/[0.08] space-y-3">
+            {/* Bottom Full-Width CTA */}
+            <div className="pt-4 border-t border-white/[0.08]">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenConsultation();
                 }}
-                className="w-full py-4 rounded-full bg-[#00E5D0] text-[#050607] font-bold text-xs uppercase tracking-[0.16em] flex items-center justify-center gap-2 min-h-[48px] shadow-[0_0_25px_rgba(0,229,208,0.25)] cursor-pointer"
+                className="w-full py-4 rounded-full bg-[#00E5D0] text-[#050607] font-bold text-xs uppercase tracking-[0.16em] flex items-center justify-center gap-2 min-h-[48px] shadow-[0_0_25px_rgba(0,229,208,0.25)] cursor-pointer active:scale-[0.98] transition-all"
               >
                 <span>Book Clinical Consultation</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
-
-              <div className="flex items-center justify-between text-xs font-mono text-[#A5AAAB] pt-1">
-                <span>Direct Helpline</span>
-                <a
-                  href="tel:+919846116481"
-                  className="text-[#00E5D0] font-semibold hover:underline"
-                >
-                  +91 984 611 6481
-                </a>
-              </div>
             </div>
           </motion.div>
         )}

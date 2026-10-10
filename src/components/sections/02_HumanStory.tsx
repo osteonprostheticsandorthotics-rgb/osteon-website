@@ -72,14 +72,14 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
           {/* Right Column: Editorial Spread (Mobile: Magazine Layering, Desktop: 3-Image Staggered Mosaic) */}
           <div className="lg:col-span-7 relative pt-4 sm:pt-6 lg:pt-0">
             {/* MOBILE EDITORIAL LAYERED SPREAD (< lg) */}
-            <div className="block lg:hidden relative pb-4">
+            <div className="block lg:hidden relative pb-4 max-w-[280px] sm:max-w-[340px] mx-auto">
               {/* Primary Dominant Clinical Portrait */}
               <motion.div
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="w-[88vw] max-w-md aspect-[4/5] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl relative"
+                className="w-[88%] aspect-[4/5] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl relative"
               >
                 <img
                   src="/images/about-clinician-hero.jpg"
@@ -87,45 +87,36 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
                   className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#050607]/80 backdrop-blur-md text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] border border-white/[0.08]">
+                <span className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-[#050607]/80 backdrop-blur-md text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] border border-white/[0.08]">
                   Precision Craftsmanship
                 </span>
               </motion.div>
 
-              {/* Overlapping Secondary Movement Image & Texture Strip */}
-              <div className="flex items-end justify-between -mt-16 sm:-mt-20 relative z-10 pl-4">
-                {/* Rotating Circular Stamp Badge */}
-                <div className="relative w-18 h-18 sm:w-20 sm:h-20 flex items-center justify-center select-none bg-[#050607]/90 rounded-full border border-white/[0.1] shadow-2xl p-1">
-                  <motion.svg
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    viewBox="0 0 100 100"
-                    className="w-full h-full"
-                  >
-                    <defs>
-                      <path
-                        id="circleStampPathMobile"
-                        d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
-                      />
-                    </defs>
-                    <text className="text-[9px] font-mono uppercase tracking-[0.24em] fill-[#8E9B9D]">
-                      <textPath href="#circleStampPathMobile" startOffset="0%">
-                        OSTEON • PRECISION • MOTION •
-                      </textPath>
-                    </text>
-                  </motion.svg>
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <ArrowUpRight className="w-4 h-4 text-[#00E5D0]" />
-                  </div>
-                </div>
+              {/* Overlapping Secondary Images Strip */}
+              <div className="flex items-end justify-between -mt-12 sm:-mt-16 relative z-10 gap-3">
+                {/* Overlapping Carbon Fiber Matrix Photo */}
+                <motion.div
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-[40%] aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.12] bg-[#0A0D0F] shadow-2xl relative"
+                >
+                  <img
+                    src="/images/about-carbon-hero.jpg"
+                    alt="Carbon fiber matrix composite weave engineering"
+                    className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.1]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                </motion.div>
 
                 {/* Overlapping Athlete in Motion Photo */}
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-[50vw] max-w-[210px] aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.12] bg-[#0A0D0F] shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+                  transition={{ duration: 0.8, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-[54%] aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.12] bg-[#0A0D0F] shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
                 >
                   <img
                     src="/images/about-runner-hero.jpg"

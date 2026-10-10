@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import { PROSTHETIC_CATEGORIES } from "@/lib/data";
 
 interface ProstheticsSectionProps {
-  onOpenConsultation: () => void;
+  onOpenConsultation?: () => void;
 }
 
-export const ProstheticsSection: React.FC<ProstheticsSectionProps> = ({
-  onOpenConsultation,
-}) => {
+export const ProstheticsSection: React.FC<ProstheticsSectionProps> = () => {
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
   const currentCategory = PROSTHETIC_CATEGORIES[activeCategoryIndex];
+
+  // Automatically cycle to the next category every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveCategoryIndex((prev) =>
+        prev < PROSTHETIC_CATEGORIES.length - 1 ? prev + 1 : 0
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [activeCategoryIndex]);
 
   const handlePrev = () => {
     setActiveCategoryIndex((prev) => (prev > 0 ? prev - 1 : PROSTHETIC_CATEGORIES.length - 1));
@@ -67,17 +75,6 @@ export const ProstheticsSection: React.FC<ProstheticsSectionProps> = ({
             </motion.div>
           </AnimatePresence>
 
-          {/* Action CTA */}
-          <div>
-            <button
-              onClick={onOpenConsultation}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#00E5D0] text-[#050607] text-xs font-bold uppercase tracking-[0.16em] hover:bg-[#00E5D0]/90 transition-all min-h-[48px] shadow-[0_0_25px_rgba(0,229,208,0.2)] cursor-pointer"
-            >
-              <span>View solutions</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
           {/* Mobile Category Switcher Pills */}
           <div className="pt-4 border-t border-white/[0.08] space-y-2">
             <span className="text-[10px] font-mono uppercase tracking-widest text-[#60686B] block">
@@ -122,19 +119,8 @@ export const ProstheticsSection: React.FC<ProstheticsSectionProps> = ({
               {currentCategory.description}
             </p>
 
-            {/* Primary Action Button */}
-            <div className="pt-2">
-              <button
-                onClick={onOpenConsultation}
-                className="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-white/[0.04] hover:bg-[#00E5D0] border border-white/[0.1] hover:border-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs font-mono uppercase tracking-[0.16em] transition-all duration-300 min-h-[44px] group cursor-pointer"
-              >
-                <span>View solutions</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-            </div>
-
             {/* Carousel Navigation Arrows */}
-            <div className="pt-4 flex items-center gap-3">
+            <div className="pt-2 flex items-center gap-3">
               <button
                 onClick={handlePrev}
                 className="w-10 h-10 rounded-full border border-white/[0.12] hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#A5AAAB] hover:text-[#050607] flex items-center justify-center transition-all duration-300 cursor-pointer"

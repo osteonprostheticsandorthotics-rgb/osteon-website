@@ -14,11 +14,9 @@ import { SpecializedCareSection } from "@/components/sections/05_SpecializedCare
 import { FinalCTASection } from "@/components/sections/11_FinalCTA";
 
 import { ConsultationModal } from "@/components/modals/ConsultationModal";
-import { VideoStoryModal } from "@/components/modals/VideoStoryModal";
 
 export default function Home() {
   const [consultationOpen, setConsultationOpen] = useState(false);
-  const [videoStoryOpen, setVideoStoryOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<string>("Prosthetics");
   const [activeSectionId, setActiveSectionId] = useState("hero");
 
@@ -75,7 +73,6 @@ export default function Home() {
         {/* 01 — HERO (Cinematic fullscreen video + oversized typography) */}
         <HeroSection
           onOpenConsultation={() => openConsultation("Prosthetics & Orthotics")}
-          onOpenVideoStory={() => setVideoStoryOpen(true)}
         />
 
         {/* 01 — ABOUT OSTEON (Human Potential in Motion + 3-Image Mosaic) */}
@@ -107,7 +104,6 @@ export default function Home() {
         <FinalCTASection
           onOpenConsultation={() => openConsultation("Full Clinical Assessment")}
           onOpenContact={() => openConsultation("Contact Clinical Team")}
-          onOpenVideoStory={() => setVideoStoryOpen(true)}
         />
 
         {/* 07 — FOOTER (4-Column Architecture + Verified Contact + Developer Watermark) */}
@@ -118,11 +114,6 @@ export default function Home() {
           isOpen={consultationOpen}
           onClose={() => setConsultationOpen(false)}
           initialService={selectedService}
-        />
-
-        <VideoStoryModal
-          isOpen={videoStoryOpen}
-          onClose={() => setVideoStoryOpen(false)}
         />
       </main>
     </SmoothScroll>

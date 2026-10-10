@@ -2,16 +2,13 @@
 
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 interface HeroSectionProps {
   onOpenConsultation: () => void;
-  onOpenVideoStory?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenConsultation,
-  onOpenVideoStory,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -78,7 +75,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* Main Hero Content Composition */}
-      <div className="relative z-20 max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-12 w-full pt-20 sm:pt-28 md:pt-36 pb-12 sm:pb-20 flex-1 flex flex-col justify-center">
+      <div className="relative z-20 max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-12 w-full pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 flex-1 flex flex-col justify-center">
         <div className="max-w-3xl">
           {/* Subtle Category Kicker */}
           <motion.div
@@ -122,43 +119,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             Personalized prosthetic and orthotic solutions designed for real life, lasting comfort, and active movement.
           </motion.p>
 
-          {/* Dual Action Controls */}
+          {/* Action Control */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5"
+            className="mt-6 sm:mt-8 md:mt-10"
           >
-            {/* Primary Pill Button */}
+            {/* Primary Framed Outline Button */}
             <button
               onClick={onOpenConsultation}
-              className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-[#00E5D0] text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.14em] hover:bg-[#00E5D0]/90 transition-all duration-300 shadow-[0_0_25px_rgba(0,229,208,0.25)] min-h-[46px] sm:min-h-[48px] group cursor-pointer w-full sm:w-auto active:scale-[0.98]"
+              className="inline-flex items-center justify-center px-8 py-3.5 sm:py-4 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full sm:w-auto active:scale-[0.98]"
             >
               <span>Explore our solutions</span>
-              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
-
-            {/* Secondary Video Button */}
-            {onOpenVideoStory && (
-              <button
-                onClick={onOpenVideoStory}
-                className="inline-flex items-center justify-center sm:justify-start gap-2.5 text-xs sm:text-sm font-medium text-[#F1EFE8] hover:text-[#00E5D0] transition-colors py-2 px-3 group min-h-[42px] cursor-pointer"
-              >
-                <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/[0.08] border border-white/[0.14] flex items-center justify-center text-[#00E5D0] group-hover:bg-[#00E5D0] group-hover:text-[#050607] transition-all shrink-0 shadow-lg">
-                  <span className="text-[10px] sm:text-xs ml-0.5">▶</span>
-                </span>
-                <span className="uppercase tracking-wider text-xs font-mono">Watch our story</span>
-              </button>
-            )}
           </motion.div>
         </div>
       </div>
 
-      {/* Mobile Subtle Bottom Scroll Prompt */}
-      <div className="absolute left-5 bottom-3 z-20 flex lg:hidden items-center gap-2 pointer-events-none opacity-60">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#00E5D0] animate-pulse" />
-        <span className="font-mono text-[9px] uppercase tracking-widest text-[#A5AAAB]">Scroll to discover</span>
-      </div>
     </section>
   );
 };

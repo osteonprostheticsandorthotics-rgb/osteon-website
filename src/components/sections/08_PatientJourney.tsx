@@ -277,7 +277,6 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                             stage={stage}
                             isPassed={isPassed}
                             isCurrent={isCurrent}
-                            onOpenConsultation={onOpenConsultation}
                           />
                         </div>
                       ) : (
@@ -309,7 +308,6 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                             stage={stage}
                             isPassed={isPassed}
                             isCurrent={isCurrent}
-                            onOpenConsultation={onOpenConsultation}
                           />
                         </div>
                       ) : (
@@ -351,18 +349,6 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                           : "bg-[#080A0C]/70 border-white/[0.06] opacity-85"
                       }`}
                     >
-                      {/* Top Meta Kicker */}
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#00E5D0] font-bold">
-                          STAGE {stage.step} • {stage.tag}
-                        </span>
-                        {isCurrent && (
-                          <span className="px-2 py-0.5 rounded-full bg-[#00E5D0]/20 text-[#00E5D0] text-[9px] font-mono font-bold uppercase tracking-wider">
-                            Active Step
-                          </span>
-                        )}
-                      </div>
-
                       {/* Stage Headline */}
                       <h3 className="font-display font-bold uppercase text-xl sm:text-2xl text-[#F1EFE8] leading-tight">
                         {stage.title}
@@ -382,20 +368,6 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                       <p className="text-xs sm:text-sm text-[#A5AAAB] leading-relaxed font-normal">
                         {stage.description}
                       </p>
-
-                      {/* Action CTA */}
-                      <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between">
-                        <button
-                          onClick={onOpenConsultation}
-                          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#00E5D0] hover:text-[#00E5D0]/80 transition-colors min-h-[44px] cursor-pointer"
-                        >
-                          <span>Consult specialist</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-                        <span className="text-[10px] font-mono text-[#60686B]">
-                          0{stage.step} / 05
-                        </span>
-                      </div>
                     </motion.div>
                   </div>
                 </div>
@@ -428,10 +400,10 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
 
           <button
             onClick={onOpenConsultation}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#00E5D0] text-[#050607] text-xs font-bold uppercase tracking-wider hover:bg-[#00E5D0]/90 transition-all shadow-[0_0_20px_rgba(0,229,208,0.2)] shrink-0 cursor-pointer min-h-[42px]"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs font-bold uppercase tracking-[0.14em] transition-all duration-300 shrink-0 cursor-pointer min-h-[44px] group"
           >
             <span>Start Consultation</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
           </button>
         </motion.div>
       </div>
@@ -507,14 +479,12 @@ interface CompactStageCardProps {
   stage: (typeof CLINICAL_STAGES)[0];
   isPassed: boolean;
   isCurrent: boolean;
-  onOpenConsultation: () => void;
 }
 
 const CompactStageCard: React.FC<CompactStageCardProps> = ({
   stage,
   isPassed,
   isCurrent,
-  onOpenConsultation,
 }) => {
   return (
     <motion.div
@@ -530,13 +500,6 @@ const CompactStageCard: React.FC<CompactStageCardProps> = ({
           : "bg-[#080A0C]/70 border-white/[0.06] opacity-80"
       }`}
     >
-      {/* Step Tag */}
-      <div className="flex items-center justify-between">
-        <span className="font-mono text-[11px] uppercase tracking-wider text-[#00E5D0] font-semibold">
-          {stage.step} / {stage.tag}
-        </span>
-      </div>
-
       {/* Title */}
       <h4 className="font-display font-bold uppercase text-base sm:text-lg text-[#F1EFE8] leading-tight tracking-tight">
         {stage.title}
@@ -546,17 +509,6 @@ const CompactStageCard: React.FC<CompactStageCardProps> = ({
       <p className="text-xs text-[#A5AAAB] leading-relaxed font-normal">
         {stage.description}
       </p>
-
-      {/* Minimal Action Link */}
-      <div className="pt-1.5">
-        <button
-          onClick={onOpenConsultation}
-          className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#00E5D0] hover:text-[#0AE3D6] transition-colors cursor-pointer group"
-        >
-          <span>Schedule consultation</span>
-          <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
-        </button>
-      </div>
     </motion.div>
   );
 };
@@ -586,12 +538,6 @@ const CompactVisualPreview: React.FC<CompactVisualPreviewProps> = ({
         alt={stage.title}
         className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.05] group-hover:scale-105 transition-transform duration-500 ease-out"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/80 via-transparent to-transparent pointer-events-none" />
-
-      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-[#A5AAAB]">
-        <span className="text-[#00E5D0] font-semibold">{stage.tag}</span>
-        <span>STAGE 0{stage.step}</span>
-      </div>
     </motion.div>
   );
 };
