@@ -8,30 +8,73 @@ import confetti from "canvas-confetti";
 
 export default function ConsultationPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+
+  const getTomorrowDate = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+  };
+
+  const getTodayDate = () => {
+    return new Date().toISOString().split("T")[0];
+  };
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
-    preferredDate: "2026-10-15",
+    preferredDate: getTomorrowDate(),
     note: "",
   });
   const [bookingRef, setBookingRef] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const ref = `OST-${Math.floor(100000 + Math.random() * 900000)}`;
-    setBookingRef(ref);
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
     try {
-      confetti({
-        particleCount: 90,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ["#00E5D0", "#A78BFA", "#F1EFE8", "#050607"],
+      const res = await fetch("/api/consultation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          preferredDate: formData.preferredDate,
+          note: formData.note,
+          service: "Clinical Consultation",
+          hp_clinical_token: honeypot,
+        }),
       });
-    } catch {
-      // Fallback
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to schedule consultation. Please try again.");
+      }
+
+      setBookingRef(data.reference || `OST-${Math.floor(100000 + Math.random() * 900000)}`);
+      setIsSubmitted(true);
+      try {
+        confetti({
+          particleCount: 90,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ["#00E5D0", "#A78BFA", "#F1EFE8", "#050607"],
+        });
+      } catch {
+        // Fallback
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Network error. Please call our clinic.";
+      setErrorMessage(msg);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -134,6 +177,7 @@ export default function ConsultationPage() {
                     <input
                       type="date"
                       required
+                      min={getTodayDate()}
                       value={formData.preferredDate}
                       onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
                       className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 pr-10 text-xs sm:text-sm text-[#F1EFE8] focus:outline-none transition-all shadow-inner scheme-dark"
@@ -156,6 +200,27 @@ export default function ConsultationPage() {
                   />
                 </div>
               </div>
+
+              {/* Honeypot Bot Trap (Invisible to humans) */}
+              <div className="sr-only" aria-hidden="true">
+                <label htmlFor="hp_clinical_token_page">Clinical field</label>
+                <input
+                  type="text"
+                  id="hp_clinical_token_page"
+                  name="hp_clinical_token_page"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+
+              {/* Error Banner */}
+              {errorMessage && (
+                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 font-sans">
+                  {errorMessage}
+                </div>
+              )}
 
               {/* Terms Checkbox */}
               <div className="pt-1">
@@ -184,9 +249,14 @@ export default function ConsultationPage() {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-2.5 sm:py-3 rounded-full border border-white/30 hover:border-[#00E5D0] bg-white/[0.04] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.15)] hover:shadow-[0_0_25px_rgba(0,229,208,0.4)] active:scale-[0.98] cursor-pointer"
+                  disabled={!acceptedTerms || isSubmitting}
+                  className={`inline-flex items-center justify-center gap-2 px-8 py-2.5 sm:py-3 rounded-full border border-white/30 text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.15)] active:scale-[0.98] ${
+                    !acceptedTerms || isSubmitting
+                      ? "opacity-50 cursor-not-allowed bg-white/[0.04] text-[#8E9B9D]"
+                      : "hover:border-[#00E5D0] bg-white/[0.04] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] hover:shadow-[0_0_25px_rgba(0,229,208,0.4)] cursor-pointer"
+                  }`}
                 >
-                  <span>Book Now</span>
+                  <span>{isSubmitting ? "Securing Appointment..." : "Book Now"}</span>
                 </button>
               </div>
             </form>

@@ -33,8 +33,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks = [
     { label: "Home", href: "#hero", id: "hero" },
     { label: "About", href: "#about", id: "about" },
+    { label: "Team", href: "#our-team", id: "our-team" },
     { label: "Solutions", href: "#solutions", id: "solutions" },
-    { label: "Prosthetics", href: "#prosthetics", id: "prosthetics" },
     { label: "Process", href: "#process", id: "process" },
     { label: "Specialized Care", href: "#specialized-care", id: "specialized-care" },
     { label: "Contact", href: "#final-cta", id: "final-cta" },
@@ -150,23 +150,23 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">02</span>
               </a>
 
-              {/* 03 OUR SOLUTIONS */}
+              {/* 03 OUR TEAM */}
+              <a
+                href="#our-team"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
+              >
+                <span>OUR TEAM</span>
+                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">03</span>
+              </a>
+
+              {/* 04 OUR SOLUTIONS */}
               <a
                 href="#solutions"
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
               >
                 <span>OUR SOLUTIONS</span>
-                <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">03</span>
-              </a>
-
-              {/* 04 PROSTHETICS */}
-              <a
-                href="#prosthetics"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-baseline justify-between py-2.5 text-2xl sm:text-3xl font-display font-bold uppercase text-[#F1EFE8] hover:text-[#00E5D0] border-b border-white/[0.05] transition-colors group"
-              >
-                <span>PROSTHETICS</span>
                 <span className="text-xs font-mono font-normal text-[#60686B] group-hover:text-[#00E5D0]">04</span>
               </a>
 

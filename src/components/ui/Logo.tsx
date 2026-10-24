@@ -14,9 +14,10 @@ export const Logo: React.FC<LogoProps> = ({
 }) => {
   // Height definitions maintaining exact aspect ratio of the official provided logo
   const sizeStyles = {
-    sm: "h-7 sm:h-8",
-    md: "h-9 sm:h-10",
-    lg: "h-12 sm:h-14",
+    sm: "h-[38px] sm:h-[42px] md:h-[48px]",
+    md: "h-[48px] sm:h-[56px] md:h-[64px] lg:h-[72px]",
+    lg: "h-[64px] sm:h-[76px] md:h-[88px]",
+    xl: "h-[80px] sm:h-[96px] md:h-[112px]",
   };
 
   return (

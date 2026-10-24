@@ -131,7 +131,7 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
       id="process"
       className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
     >
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 xs:px-6 sm:px-10 lg:px-12 relative z-10">
         {/* ========================================================================= */}
         {/* SECTION HEADER (LEFT-ALIGNED EDITORIAL GRID) */}
         {/* ========================================================================= */}
@@ -384,26 +384,26 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mt-10 sm:mt-14 p-6 sm:p-8 rounded-2xl bg-[#080B0D] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-6 max-w-3xl mx-auto text-center sm:text-left"
+          className="mt-12 sm:mt-16 p-7 sm:p-9 md:p-10 rounded-2xl sm:rounded-3xl bg-[#080B0D] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8 max-w-3xl mx-auto text-center sm:text-left w-full shadow-2xl"
         >
-          <div className="space-y-1">
-            <div className="text-[10px] font-mono text-[#00E5D0] uppercase tracking-wider font-semibold">
+          <div className="space-y-2 sm:space-y-2.5 w-full sm:w-auto">
+            <div className="text-[11px] sm:text-xs font-mono text-[#00E5D0] uppercase tracking-[0.2em] font-semibold">
               BEGIN YOUR JOURNEY
             </div>
-            <h3 className="font-display font-bold uppercase text-lg sm:text-xl text-[#F1EFE8]">
+            <h3 className="font-display font-bold uppercase text-xl sm:text-2xl md:text-3xl text-[#F1EFE8] leading-tight tracking-tight">
               Book an Initial Clinical Evaluation
             </h3>
-            <p className="text-xs text-[#A5AAAB] max-w-md font-normal">
+            <p className="text-sm sm:text-base text-[#CBD5E1] max-w-lg font-normal leading-relaxed mx-auto sm:mx-0">
               Meet with our prosthetic and orthotic specialists to map your personalized care pathway.
             </p>
           </div>
 
           <button
             onClick={onOpenConsultation}
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs font-bold uppercase tracking-[0.14em] transition-all duration-300 shrink-0 cursor-pointer min-h-[44px] group"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-3.5 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 shrink-0 cursor-pointer min-h-[50px] group shadow-sm hover:shadow-[0_0_20px_rgba(0,229,208,0.3)]"
           >
             <span>Start Consultation</span>
-            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
           </button>
         </motion.div>
       </div>

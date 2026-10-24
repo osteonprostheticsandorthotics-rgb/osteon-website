@@ -5,10 +5,14 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 interface SolutionsOverviewProps {
-  onOpenConsultation?: () => void;
+  onOpenConsultation?: (service?: string) => void;
+  onOpenSolution?: (type: "prosthetics" | "orthotics") => void;
 }
 
-export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = () => {
+export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = ({
+  onOpenConsultation,
+  onOpenSolution,
+}) => {
   return (
     <section
       id="solutions"
@@ -50,7 +54,7 @@ export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = () => 
               transition={{ duration: 0.8, delay: 0.15 }}
               className="text-sm sm:text-base text-[#A5AAAB] leading-relaxed font-normal max-w-xl"
             >
-              From advanced prosthetic limbs to specialized braces and support systems, we design solutions that restore movement, improve function and support a better quality of life.
+              From advanced prosthetic limbs to specialized braces and support systems, we design solutions that restore movement, improve function and support a better quality of life. Tap below to explore detailed systems.
             </motion.p>
           </div>
         </div>
@@ -58,13 +62,22 @@ export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = () => 
         {/* 2 Editorial Cards in ONE ROW (grid-cols-2) */}
         <div className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 lg:gap-7">
           {/* Card 01: PROSTHETICS */}
-          <motion.a
-            href="#prosthetics"
+          <motion.div
+            role="button"
+            tabIndex={0}
+            onClick={() => onOpenSolution?.("prosthetics")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpenSolution?.("prosthetics");
+              }
+            }}
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="group relative rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-3.5 sm:p-5 md:p-7 lg:p-8 flex flex-col justify-end md:justify-between min-h-[220px] sm:min-h-[270px] md:min-h-0 md:h-[245px] lg:h-[260px] shadow-2xl hover:border-[#00E5D0]/40 transition-all duration-500 cursor-pointer"
+            className="group relative rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-3.5 sm:p-5 md:p-7 lg:p-8 flex flex-col justify-end md:justify-between min-h-[220px] sm:min-h-[270px] md:min-h-0 md:h-[245px] lg:h-[260px] shadow-2xl hover:border-[#00E5D0]/50 transition-all duration-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00E5D0]"
+            aria-label="View Prosthetics Showcase"
           >
             {/* Background Image */}
             <div className="absolute inset-0 z-0 overflow-hidden">
@@ -82,7 +95,7 @@ export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = () => 
             <div className="relative z-20 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-4">
               <div className="space-y-1 sm:space-y-1.5 max-w-full md:max-w-[65%]">
                 <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#00E5D0] block">
-                  Category 01
+                  Category 01 • Tap to View
                 </span>
                 <h3 className="font-display font-bold uppercase text-sm sm:text-lg md:text-2xl text-[#F1EFE8] group-hover:text-[#00E5D0] transition-colors tracking-tight leading-tight">
                   PROSTHETICS
@@ -97,16 +110,25 @@ export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = () => 
                 <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
               </div>
             </div>
-          </motion.a>
+          </motion.div>
 
           {/* Card 02: ORTHOTICS */}
-          <motion.a
-            href="#specialized-care"
+          <motion.div
+            role="button"
+            tabIndex={0}
+            onClick={() => onOpenSolution?.("orthotics")}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpenSolution?.("orthotics");
+              }
+            }}
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="group relative rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-3.5 sm:p-5 md:p-7 lg:p-8 flex flex-col justify-end md:justify-between min-h-[220px] sm:min-h-[270px] md:min-h-0 md:h-[245px] lg:h-[260px] shadow-2xl hover:border-[#00E5D0]/40 transition-all duration-500 cursor-pointer"
+            className="group relative rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-3.5 sm:p-5 md:p-7 lg:p-8 flex flex-col justify-end md:justify-between min-h-[220px] sm:min-h-[270px] md:min-h-0 md:h-[245px] lg:h-[260px] shadow-2xl hover:border-[#00E5D0]/50 transition-all duration-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00E5D0]"
+            aria-label="View Orthotics Showcase"
           >
             {/* Background Image */}
             <div className="absolute inset-0 z-0 overflow-hidden">
@@ -124,7 +146,7 @@ export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = () => 
             <div className="relative z-20 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-4">
               <div className="space-y-1 sm:space-y-1.5 max-w-full md:max-w-[65%]">
                 <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#00E5D0] block">
-                  Category 02
+                  Category 02 • Tap to View
                 </span>
                 <h3 className="font-display font-bold uppercase text-sm sm:text-lg md:text-2xl text-[#F1EFE8] group-hover:text-[#00E5D0] transition-colors tracking-tight leading-tight">
                   ORTHOTICS
@@ -139,7 +161,7 @@ export const SolutionsOverviewSection: React.FC<SolutionsOverviewProps> = () => 
                 <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
               </div>
             </div>
-          </motion.a>
+          </motion.div>
         </div>
       </div>
     </section>

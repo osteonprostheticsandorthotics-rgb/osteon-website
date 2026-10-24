@@ -1,0 +1,692 @@
+"use client";
+
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, User, ChevronDown, Check } from "lucide-react";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type Department =
+  | "Clinical Leadership"
+  | "Clinical Team"
+  | "Workshop & Fabrication"
+  | "Operations & Accounts";
+
+type FilterCategory =
+  | "ALL TEAM"
+  | "CLINICAL LEADERSHIP"
+  | "CLINICAL TEAM"
+  | "WORKSHOP & FABRICATION"
+  | "OPERATIONS & ACCOUNTS";
+
+interface TeamMember {
+  id: number;
+  name: string;
+  designation: string;
+  department: Department;
+  photo?: string;
+}
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const TEAM_MEMBERS: TeamMember[] = [
+  { id: 1,  name: "Dr. R. Balamurugan", designation: "Clinical & Technical Director",    department: "Clinical Leadership"      },
+  { id: 2,  name: "Joseph Littu",       designation: "Senior Prosthetist & Orthotist",   department: "Clinical Team"            },
+  { id: 3,  name: "Vishnu",             designation: "Prosthetist & Orthotist",           department: "Clinical Team"            },
+  { id: 4,  name: "Ameera",             designation: "Certified P&O Professional",        department: "Clinical Team",          photo: "/images/team/Ameera.jpeg" },
+  { id: 5,  name: "Yeshu Kumar",        designation: "Senior Technician",                 department: "Workshop & Fabrication", photo: "/images/team/yeshu-kumar.jpeg" },
+  { id: 6,  name: "Bineesh",            designation: "Senior Technician",                 department: "Workshop & Fabrication", photo: "/images/team/Bineesh.jpeg" },
+  { id: 7,  name: "Vyshak",             designation: "Assistant Technician",              department: "Workshop & Fabrication", photo: "/images/team/Vyshak.jpeg" },
+  { id: 8,  name: "Godson",             designation: "Sales & Operations",                department: "Operations & Accounts"    },
+  { id: 9,  name: "Neenu",              designation: "Administrative Executive",          department: "Operations & Accounts",  photo: "/images/team/Neenu.jpeg" },
+  { id: 10, name: "Aneena",             designation: "Accounts",                          department: "Operations & Accounts",  photo: "/images/team/Aneena.jpeg" },
+];
+
+const FILTER_CATEGORIES: FilterCategory[] = [
+  "ALL TEAM",
+  "CLINICAL LEADERSHIP",
+  "CLINICAL TEAM",
+  "WORKSHOP & FABRICATION",
+  "OPERATIONS & ACCOUNTS",
+];
+
+const DEPT_TO_FILTER: Record<Department, FilterCategory> = {
+  "Clinical Leadership":    "CLINICAL LEADERSHIP",
+  "Clinical Team":          "CLINICAL TEAM",
+  "Workshop & Fabrication": "WORKSHOP & FABRICATION",
+  "Operations & Accounts":  "OPERATIONS & ACCOUNTS",
+};
+
+const DEPT_ACCENT: Record<Department, string> = {
+  "Clinical Leadership":    "#00E5D0",
+  "Clinical Team":          "#00C8B8",
+  "Workshop & Fabrication": "#00ADA0",
+  "Operations & Accounts":  "#009590",
+};
+
+// ─── Responsive breakpoint ────────────────────────────────────────────────────
+// visibleRange: how many positions each side to render (1 = ±1, 2 = ±2, 3 = ±3)
+
+function useVisibleRange() {
+  const [range, setRange] = useState(3);
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w < 640)  setRange(1);
+      else if (w < 1024) setRange(2);
+      else               setRange(3);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return range;
+}
+
+// ─── Card position styles (pixel-based from stage centre) ─────────────────────
+
+interface CardStyle {
+  x: number;        // px offset from centre
+  scale: number;
+  rotateY: number;  // degrees
+  z: number;        // translateZ px
+  opacity: number;
+  zIndex: number;
+}
+
+/**
+ * Compute the 3D style for a given position.
+ * `spread` is the half-width of the stage in px.
+ * On mobile (range=1) we use a compact layout.
+ */
+function getCardStyle(position: number, spread: number, range: number): CardStyle {
+  const abs = Math.abs(position);
+  const dir = position >= 0 ? 1 : -1;
+
+  if (range === 1) {
+    // Mobile: dominant centre + peek
+    switch (abs) {
+      case 0: return { x: 0,          scale: 1,    rotateY:  0,           z:   0,  opacity: 1,    zIndex: 12 };
+      case 1: return { x: dir * spread * 0.72, scale: 0.84, rotateY: dir * -12, z: -80,  opacity: 0.45, zIndex: 7  };
+      default:return { x: dir * spread * 1.5,  scale: 0.7,  rotateY: dir * -20, z: -160, opacity: 0,    zIndex: 1  };
+    }
+  }
+
+  if (range === 2) {
+    // Tablet: 5 cards
+    switch (abs) {
+      case 0: return { x: 0,                   scale: 1,    rotateY:  0,           z:    0, opacity: 1,    zIndex: 12 };
+      case 1: return { x: dir * spread * 0.40, scale: 0.88, rotateY: dir * -15,    z:  -80, opacity: 0.80, zIndex: 10 };
+      case 2: return { x: dir * spread * 0.78, scale: 0.72, rotateY: dir * -26,    z: -180, opacity: 0.50, zIndex: 7  };
+      default:return { x: dir * spread * 1.20, scale: 0.58, rotateY: dir * -34,    z: -280, opacity: 0,    zIndex: 1  };
+    }
+  }
+
+  // Desktop: 7 cards (±3)
+  // Target offsets: ±280, ±520, ±720 scaled to the actual container half-width
+  // Reference container half-width for tuning: 720px (1440px total)
+  const ref = 720;
+  switch (abs) {
+    case 0: return { x: 0,                          scale: 1,    rotateY:  0,        z:    0, opacity: 1,    zIndex: 12 };
+    case 1: return { x: dir * (spread * 280 / ref), scale: 0.90, rotateY: dir * -15, z:  -90, opacity: 0.85, zIndex: 10 };
+    case 2: return { x: dir * (spread * 520 / ref), scale: 0.78, rotateY: dir * -25, z: -190, opacity: 0.60, zIndex: 7  };
+    case 3: return { x: dir * (spread * 720 / ref), scale: 0.65, rotateY: dir * -30, z: -290, opacity: 0.35, zIndex: 4  };
+    default:return { x: dir * (spread * 900 / ref), scale: 0.50, rotateY: dir * -38, z: -380, opacity: 0,    zIndex: 1  };
+  }
+}
+
+// ─── Placeholder Portrait ─────────────────────────────────────────────────────
+
+function PlaceholderPortrait({ name, department }: { name: string; department: Department }) {
+  const initials = name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+  const accent   = DEPT_ACCENT[department];
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-start pt-10 relative overflow-hidden">
+      {/* Grid */}
+      <div
+        className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage: `linear-gradient(${accent}55 1px, transparent 1px), linear-gradient(90deg, ${accent}55 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
+        }}
+      />
+      {/* Radial glow */}
+      <div
+        className="absolute inset-0 opacity-[0.08]"
+        style={{ background: `radial-gradient(ellipse 70% 60% at 50% 36%, ${accent}, transparent)` }}
+      />
+      {/* Icon */}
+      <div className="relative z-10 flex flex-col items-center gap-3">
+        <div
+          className="w-20 h-20 rounded-full flex items-center justify-center border"
+          style={{ borderColor: `${accent}40`, background: `${accent}0E` }}
+        >
+          <User className="w-10 h-10" style={{ color: `${accent}80` }} />
+        </div>
+        <span
+          className="text-[10px] font-mono uppercase tracking-[0.28em] opacity-25"
+          style={{ color: accent }}
+        >
+          {initials}
+        </span>
+      </div>
+      {/* Fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0A0D0F] to-transparent pointer-events-none" />
+    </div>
+  );
+}
+
+// ─── Individual Team Card ─────────────────────────────────────────────────────
+
+interface CardProps {
+  member: TeamMember;
+  position: number;
+  spread: number;
+  visibleRange: number;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+function TeamCard({ member, position, spread, visibleRange, isActive, onClick }: CardProps) {
+  const s      = getCardStyle(position, spread, visibleRange);
+  const accent = DEPT_ACCENT[member.department];
+
+  return (
+    <motion.div
+      onClick={!isActive ? onClick : undefined}
+      animate={{
+        x:       s.x,
+        scale:   s.scale,
+        rotateY: s.rotateY,
+        z:       s.z,
+        opacity: s.opacity,
+      }}
+      transition={{ type: "spring", stiffness: 180, damping: 25, mass: 0.8 }}
+      style={{
+        position:        "absolute",
+        zIndex:          s.zIndex,
+        cursor:          isActive ? "default" : "pointer",
+        transformOrigin: "center center",
+        willChange:      "transform, opacity",
+      }}
+      /* Active card: 300px; base for inactive transforms */
+      className="w-[200px] sm:w-[240px] md:w-[270px] lg:w-[290px] xl:w-[308px]"
+    >
+      <div
+        className={`relative rounded-2xl overflow-hidden border transition-colors duration-300 ${
+          isActive
+            ? "border-white/[0.16] shadow-[0_28px_80px_rgba(0,0,0,0.75),0_0_50px_rgba(0,229,208,0.06)]"
+            : "border-white/[0.06]"
+        }`}
+        style={{ background: isActive ? "#0A0D0F" : "#080A0C" }}
+      >
+        {/* ── Portrait area ── */}
+        <div className="relative aspect-[3/3.6] w-full overflow-hidden bg-[#060808]">
+          {member.photo ? (
+            <img
+              src={member.photo}
+              alt={`Portrait of ${member.name}`}
+              className="w-full h-full object-cover object-top"
+            />
+          ) : (
+            <PlaceholderPortrait name={member.name} department={member.department} />
+          )}
+
+          {/* Bottom scrim */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0D0F] via-[#0A0D0F]/5 to-transparent pointer-events-none" />
+
+          {/* Department badge */}
+          <div className="absolute top-3 left-3 z-20">
+            <span
+              className="px-2.5 py-[5px] rounded-full text-[9px] font-mono uppercase tracking-[0.16em] border backdrop-blur-sm"
+              style={{ color: accent, borderColor: `${accent}30`, background: `${accent}12` }}
+            >
+              {member.department}
+            </span>
+          </div>
+
+          {/* Active pulse dot */}
+          {isActive && (
+            <div className="absolute top-3 right-3 z-20">
+              <motion.div
+                animate={{ scale: [1, 1.4, 1], opacity: [0.8, 1, 0.8] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-2 h-2 rounded-full"
+                style={{ background: accent }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* ── Info area ── */}
+        <div className="px-4 pt-3 pb-4">
+          <div className="w-7 h-[2px] rounded-full mb-2.5 opacity-80" style={{ background: accent }} />
+          <h3
+            className={`font-display font-bold uppercase leading-[1.1] tracking-[-0.02em] mb-1 transition-colors duration-300 ${
+              isActive ? "text-[#F1EFE8]" : "text-[#F1EFE8]/60"
+            }`}
+            style={{ fontSize: "clamp(12px, 1vw, 16px)" }}
+          >
+            {member.name}
+          </h3>
+          <p
+            className={`text-[11px] leading-snug transition-colors duration-300 ${
+              isActive ? "text-[#A5AAAB]" : "text-[#A5AAAB]/50"
+            }`}
+          >
+            {member.designation}
+          </p>
+        </div>
+
+        {/* Active accent bar */}
+        {isActive && (
+          <div
+            className="absolute bottom-0 left-0 right-0 h-[2px]"
+            style={{ background: `linear-gradient(90deg, transparent, ${accent}CC, transparent)` }}
+          />
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Main Section ─────────────────────────────────────────────────────────────
+
+export function OurTeamSection() {
+  const [activeFilter, setActiveFilter] = useState<FilterCategory>("ALL TEAM");
+  const [activeIndex,  setActiveIndex]  = useState(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef   = useRef<HTMLDivElement>(null);
+  const touchStartX   = useRef<number>(0);
+  const stageRef      = useRef<HTMLDivElement>(null);
+  const [spread, setSpread] = useState(720); // half-width of stage in px
+  const visibleRange  = useVisibleRange();
+
+  // Close mobile dropdown on outside click or escape
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsDropdownOpen(false);
+    };
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isDropdownOpen]);
+
+  // Compute counts for each category
+  const categoryCounts = useMemo(() => {
+    const counts: Record<FilterCategory, number> = {
+      "ALL TEAM": TEAM_MEMBERS.length,
+      "CLINICAL LEADERSHIP": 0,
+      "CLINICAL TEAM": 0,
+      "WORKSHOP & FABRICATION": 0,
+      "OPERATIONS & ACCOUNTS": 0,
+    };
+    TEAM_MEMBERS.forEach((m) => {
+      const cat = DEPT_TO_FILTER[m.department];
+      if (counts[cat] !== undefined) counts[cat]++;
+    });
+    return counts;
+  }, []);
+
+  // Measure stage half-width
+  useEffect(() => {
+    const measure = () => {
+      if (stageRef.current) {
+        setSpread(stageRef.current.offsetWidth / 2);
+      }
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (stageRef.current) ro.observe(stageRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  const filteredMembers = useMemo(() => {
+    if (activeFilter === "ALL TEAM") return TEAM_MEMBERS;
+    return TEAM_MEMBERS.filter((m) => DEPT_TO_FILTER[m.department] === activeFilter);
+  }, [activeFilter]);
+
+  const [prevFilter, setPrevFilter] = useState(activeFilter);
+  if (prevFilter !== activeFilter) {
+    setPrevFilter(activeFilter);
+    setActiveIndex(0);
+  }
+
+  const totalMembers = filteredMembers.length;
+
+  const goNext = useCallback(() => setActiveIndex((i) => (i + 1) % totalMembers), [totalMembers]);
+  const goPrev = useCallback(() => setActiveIndex((i) => (i - 1 + totalMembers) % totalMembers), [totalMembers]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") goNext();
+      else if (e.key === "ArrowLeft") goPrev();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [goNext, goPrev]);
+
+  const onPointerDown = (e: React.PointerEvent) => { touchStartX.current = e.clientX; };
+  const onPointerUp   = (e: React.PointerEvent) => {
+    const delta = touchStartX.current - e.clientX;
+    if (Math.abs(delta) > 48) {
+      if (delta > 0) {
+        goNext();
+      } else {
+        goPrev();
+      }
+    }
+  };
+
+  // Relative positions with wrap-around
+  const cardEntries = filteredMembers.map((member, idx) => {
+    let pos = idx - activeIndex;
+    const half = Math.floor(totalMembers / 2);
+    if (pos >  half) pos -= totalMembers;
+    if (pos < -half) pos += totalMembers;
+    return { member, pos, idx };
+  });
+
+  const activeMember = filteredMembers[activeIndex];
+
+  return (
+    <section
+      id="our-team"
+      className="relative w-full py-10 sm:py-14 lg:py-20 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      aria-label="Our Team"
+    >
+      {/* Atmospheric glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-56 left-1/2 -translate-x-1/2 w-[900px] h-[600px] opacity-[0.04] blur-3xl rounded-full"
+        style={{ background: "radial-gradient(ellipse, #00E5D0, transparent 70%)" }}
+      />
+
+      {/* ── Header + filters inside max-width wrapper ── */}
+      <div className="relative z-20 max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-8 sm:mb-12">
+          <div className="space-y-3 sm:space-y-4">
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+              className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#8E9B9D]"
+            >
+              02 — OUR TEAM
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.82, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display font-bold uppercase leading-[0.95] tracking-[-0.03em] text-[#F1EFE8]"
+              style={{ fontSize: "clamp(22px, 3.6vw, 48px)" }}
+            >
+              THE PEOPLE
+              <br />
+              BEHIND <span className="text-[#00E5D0]">YOUR CARE.</span>
+            </motion.h2>
+          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65, delay: 0.15 }}
+            className="text-sm sm:text-base text-[#A5AAAB] leading-relaxed max-w-xs sm:max-w-sm"
+          >
+            Clinicians, technicians, and specialists — dedicated to restoring
+            mobility and independence.
+          </motion.p>
+        </div>
+
+        {/* ── Mobile Filter Dropdown Menu (sm:hidden) ── */}
+        <div ref={dropdownRef} className="relative sm:hidden mb-8 z-30">
+          <div className="flex items-center justify-between mb-2 px-1">
+            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#8E9B9D]">
+              Filter Department
+            </span>
+            <span className="text-[10px] font-mono text-[#00E5D0] tracking-wider">
+              {filteredMembers.length} {filteredMembers.length === 1 ? "MEMBER" : "MEMBERS"}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
+            aria-expanded={isDropdownOpen}
+            aria-haspopup="listbox"
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl bg-[#080A0C] border transition-all duration-200 text-left ${
+              isDropdownOpen
+                ? "border-[#00E5D0]/60 shadow-[0_0_20px_rgba(0,229,208,0.12)]"
+                : "border-white/[0.12] hover:border-white/[0.22]"
+            }`}
+          >
+            <div className="flex items-center gap-2.5 min-w-0 pr-2">
+              <span className="w-2 h-2 rounded-full bg-[#00E5D0] shadow-[0_0_8px_#00E5D0] shrink-0" />
+              <span className="text-xs font-mono uppercase tracking-[0.14em] text-[#F1EFE8] truncate">
+                {activeFilter}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <ChevronDown
+                className={`w-4 h-4 text-[#00E5D0] transition-transform duration-300 ${
+                  isDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </div>
+          </button>
+
+          <AnimatePresence>
+            {isDropdownOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="absolute left-0 right-0 top-full mt-2 z-50 rounded-xl bg-[#0A0D0F]/95 backdrop-blur-xl border border-white/[0.14] shadow-[0_16px_40px_rgba(0,0,0,0.92)] p-1.5 overflow-hidden"
+                role="listbox"
+              >
+                {FILTER_CATEGORIES.map((cat) => {
+                  const isSelected = activeFilter === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      role="option"
+                      aria-selected={isSelected}
+                      onClick={() => {
+                        setActiveFilter(cat);
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-mono uppercase tracking-[0.13em] transition-all duration-200 text-left ${
+                        isSelected
+                          ? "bg-[#00E5D0]/[0.12] text-[#00E5D0] border border-[#00E5D0]/30"
+                          : "text-[#A5AAAB] hover:text-[#F1EFE8] hover:bg-white/[0.04] border border-transparent"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                        {isSelected ? (
+                          <Check className="w-3.5 h-3.5 text-[#00E5D0] shrink-0" />
+                        ) : (
+                          <span className="w-3.5 h-3.5 shrink-0" />
+                        )}
+                        <span className="truncate">{cat}</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-[#8E9B9D] shrink-0 ml-2">
+                        {categoryCounts[cat]}
+                      </span>
+                    </button>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* ── Desktop & Tablet Filter Tabs (hidden on mobile: hidden sm:flex) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, delay: 0.1 }}
+          className="hidden sm:flex flex-wrap gap-2 sm:gap-2.5 mb-10 sm:mb-12"
+        >
+          {FILTER_CATEGORIES.map((cat) => {
+            const isSelected = activeFilter === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveFilter(cat)}
+                className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.17em] border transition-all duration-300 min-h-[36px] whitespace-nowrap ${
+                  isSelected
+                    ? "border-[#00E5D0]/45 bg-[#00E5D0]/[0.09] text-[#00E5D0]"
+                    : "border-white/[0.08] bg-white/[0.025] text-[#A5AAAB] hover:border-white/[0.14] hover:text-[#F1EFE8]"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </motion.div>
+      </div>
+
+      {/* ── Full-width carousel stage ── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        className="relative w-full"
+      >
+        {/*
+          The stage uses the full section width with padding so cards reach
+          toward both edges. overflow-visible lets side cards extend naturally;
+          the section's own overflow-hidden provides the final clip.
+        */}
+        <div
+          ref={stageRef}
+          className="relative w-full flex items-center justify-center touch-pan-y"
+          style={{
+            height:            "clamp(340px, 40vw, 480px)",
+            perspective:       "1600px",
+            perspectiveOrigin: "50% 44%",
+            overflow:          "visible",
+          }}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          onPointerLeave={onPointerUp}
+          role="region"
+          aria-label={`Team carousel — ${activeMember?.name ?? ""}`}
+        >
+          {cardEntries
+            .filter(({ pos }) => Math.abs(pos) <= visibleRange)
+            .map(({ member, pos, idx }) => (
+              <TeamCard
+                key={`${activeFilter}-${member.id}`}
+                member={member}
+                position={pos}
+                spread={spread}
+                visibleRange={visibleRange}
+                isActive={pos === 0}
+                onClick={() => setActiveIndex(idx)}
+              />
+            ))}
+        </div>
+
+        {/* ── Navigation ── */}
+        <div className="flex items-center justify-center gap-5 mt-8 sm:mt-10">
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.93 }}
+            onClick={goPrev}
+            disabled={totalMembers <= 1}
+            aria-label="Previous team member"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-white/[0.1] bg-white/[0.03] flex items-center justify-center text-[#A5AAAB] hover:border-[#00E5D0]/40 hover:text-[#00E5D0] hover:bg-[#00E5D0]/[0.06] transition-all duration-300 disabled:opacity-25 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </motion.button>
+
+          <div className="flex items-center gap-1.5" role="tablist" aria-label="Team member navigation">
+            {filteredMembers.map((m, i) => {
+              const active = i === activeIndex;
+              return (
+                <button
+                  key={i}
+                  role="tab"
+                  aria-selected={active}
+                  aria-label={m.name}
+                  onClick={() => setActiveIndex(i)}
+                  className="flex items-center justify-center py-2"
+                >
+                  <motion.div
+                    animate={{ width: active ? 22 : 5, opacity: active ? 1 : 0.28 }}
+                    transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                    className="h-1.5 rounded-full bg-[#00E5D0]"
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.93 }}
+            onClick={goNext}
+            disabled={totalMembers <= 1}
+            aria-label="Next team member"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-white/[0.1] bg-white/[0.03] flex items-center justify-center text-[#A5AAAB] hover:border-[#00E5D0]/40 hover:text-[#00E5D0] hover:bg-[#00E5D0]/[0.06] transition-all duration-300 disabled:opacity-25 disabled:cursor-not-allowed"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </motion.button>
+        </div>
+
+        {/* ── Active member strip (desktop & tablet only, hidden on mobile) ── */}
+        <AnimatePresence mode="wait">
+          {activeMember && (
+            <motion.div
+              key={`strip-${activeMember.id}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              className="hidden sm:block mt-7 sm:mt-9 text-center space-y-1"
+            >
+              <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#8E9B9D]">
+                {activeIndex + 1} / {totalMembers}
+              </p>
+              <p
+                className="font-display font-bold uppercase text-[#F1EFE8] tracking-[-0.01em]"
+                style={{ fontSize: "clamp(16px, 1.8vw, 24px)" }}
+              >
+                {activeMember.name}
+              </p>
+              <p className="text-[13px] text-[#A5AAAB]">{activeMember.designation}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Bottom spacer */}
+      <div className="h-10 sm:h-14" />
+    </section>
+  );
+}

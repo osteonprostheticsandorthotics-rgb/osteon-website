@@ -6,26 +6,30 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 import { HeroSection } from "@/components/sections/01_Hero";
+import { OurTeamSection } from "@/components/sections/02b_OurTeam";
 import { HumanStorySection } from "@/components/sections/02_HumanStory";
 import { SolutionsOverviewSection } from "@/components/sections/02_SolutionsOverview";
-import { ProstheticsSection } from "@/components/sections/03_Prosthetics";
 import { PatientJourneySection } from "@/components/sections/08_PatientJourney";
 import { SpecializedCareSection } from "@/components/sections/05_SpecializedCare";
 import { FinalCTASection } from "@/components/sections/11_FinalCTA";
 
 import { ConsultationModal } from "@/components/modals/ConsultationModal";
+import { SolutionsModal, SolutionType } from "@/components/modals/SolutionsModal";
 
 export default function Home() {
   const [consultationOpen, setConsultationOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<string>("Prosthetics");
+  const [solutionsModalOpen, setSolutionsModalOpen] = useState(false);
+  const [activeSolutionType, setActiveSolutionType] = useState<SolutionType>("prosthetics");
+  const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(0);
   const [activeSectionId, setActiveSectionId] = useState("hero");
 
   useEffect(() => {
     const sectionIds = [
       "hero",
       "about",
+      "our-team",
       "solutions",
-      "prosthetics",
       "process",
       "specialized-care",
       "final-cta",
@@ -61,6 +65,12 @@ export default function Home() {
     setConsultationOpen(true);
   };
 
+  const handleOpenSolution = (type: SolutionType, categoryIdx: number = 0) => {
+    setActiveSolutionType(type);
+    setActiveCategoryIdx(categoryIdx);
+    setSolutionsModalOpen(true);
+  };
+
   return (
     <SmoothScroll>
       <main className="relative bg-[#050607] text-[#F1EFE8] min-h-screen overflow-x-hidden selection:bg-[#00E5D0] selection:text-[#050607]">
@@ -80,17 +90,16 @@ export default function Home() {
           onOpenConsultation={() => openConsultation("Clinical Evaluation")}
         />
 
-        {/* 02 — OUR SOLUTIONS (Prosthetics & Orthotics 2 Large Editorial Cards) */}
+        {/* 02 — OUR TEAM (Premium 3D Individual Team Member Carousel) */}
+        <OurTeamSection />
+
+        {/* 02 — OUR SOLUTIONS (Prosthetics & Orthotics Interactive Flex Accordion Gallery) */}
         <SolutionsOverviewSection
-          onOpenConsultation={() => openConsultation("Prosthetics & Orthotics")}
+          onOpenConsultation={(service?: string) => openConsultation(service || "Prosthetics & Orthotics")}
+          onOpenSolution={handleOpenSolution}
         />
 
-        {/* 03 — PROSTHETICS (Interactive Lower & Upper Extremity Showcase) */}
-        <ProstheticsSection
-          onOpenConsultation={() => openConsultation("Prosthetics Fitting")}
-        />
-
-        {/* 04 — THE PROCESS (Designed Around You 5-Stage Connected Storyline) */}
+        {/* 03 — THE PROCESS (Designed Around You 5-Stage Connected Storyline) */}
         <PatientJourneySection
           onOpenConsultation={() => openConsultation("Process & Fitting")}
         />
@@ -107,13 +116,25 @@ export default function Home() {
         />
 
         {/* 07 — FOOTER (4-Column Architecture + Verified Contact + Developer Watermark) */}
-        <Footer onOpenConsultation={() => openConsultation("General Consultation")} />
+        <Footer
+          onOpenConsultation={() => openConsultation("General Consultation")}
+          onOpenSolution={handleOpenSolution}
+        />
 
         {/* Interactive Modals */}
         <ConsultationModal
           isOpen={consultationOpen}
           onClose={() => setConsultationOpen(false)}
           initialService={selectedService}
+        />
+
+        {/* Detailed Solutions Showcase Modal (Prosthetics & Orthotics) */}
+        <SolutionsModal
+          isOpen={solutionsModalOpen}
+          onClose={() => setSolutionsModalOpen(false)}
+          initialType={activeSolutionType}
+          initialCategoryIdx={activeCategoryIdx}
+          onOpenConsultation={(service) => openConsultation(service || "Clinical Consultation")}
         />
       </main>
     </SmoothScroll>

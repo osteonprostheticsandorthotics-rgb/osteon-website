@@ -6,9 +6,10 @@ import { Logo } from "@/components/ui/Logo";
 
 interface FooterProps {
   onOpenConsultation: () => void;
+  onOpenSolution?: (type: "prosthetics" | "orthotics") => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenConsultation, onOpenSolution }) => {
   const [openAccordion, setOpenAccordion] = React.useState<string | null>(null);
 
   const toggleAccordion = (id: string) => {
@@ -91,11 +92,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
               </button>
               {openAccordion === "prosthetics" && (
                 <ul className="px-4 pb-4 space-y-2 text-xs font-mono text-[#A5AAAB] border-t border-white/[0.04] pt-3">
-                  <li><a href="#prosthetics" className="block py-1 hover:text-[#00E5D0]">Lower Extremity (TT &amp; TF)</a></li>
-                  <li><a href="#prosthetics" className="block py-1 hover:text-[#00E5D0]">Upper Extremity (TR &amp; TH)</a></li>
-                  <li><a href="#prosthetics" className="block py-1 hover:text-[#00E5D0]">Silicone Restorations</a></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">Lower Extremity (TT &amp; TF)</button></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">Upper Extremity (TR &amp; TH)</button></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">Silicone Restorations</button></li>
                   <li><a href="#process" className="block py-1 hover:text-[#00E5D0]">Carbon Socket Sculpting</a></li>
-                  <li><a href="#solutions" className="block py-1 hover:text-[#00E5D0]">Bionic &amp; Mechanical Limbs</a></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">Bionic &amp; Mechanical Limbs</button></li>
                 </ul>
               )}
             </div>
@@ -111,10 +112,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
               </button>
               {openAccordion === "orthotics" && (
                 <ul className="px-4 pb-4 space-y-2 text-xs font-mono text-[#A5AAAB] border-t border-white/[0.04] pt-3">
-                  <li><a href="#solutions" className="block py-1 hover:text-[#00E5D0]">Carbon Energy-Return AFOs</a></li>
-                  <li><a href="#solutions" className="block py-1 hover:text-[#00E5D0]">KAFO Knee-Ankle Braces</a></li>
-                  <li><a href="#specialized-care" className="block py-1 hover:text-[#00E5D0]">Unloader Knee Braces</a></li>
-                  <li><a href="#solutions" className="block py-1 hover:text-[#00E5D0]">Upper Limb Orthoses</a></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">Carbon Energy-Return AFOs</button></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">KAFO Knee-Ankle Braces</button></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">Unloader Knee Braces</button></li>
+                  <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="block py-1 hover:text-[#00E5D0] text-left cursor-pointer">Upper Limb Orthoses</button></li>
                   <li><a href="#specialized-care" className="block py-1 hover:text-[#00E5D0]">Boston Brace (Scoliosis)</a></li>
                 </ul>
               )}
@@ -202,11 +203,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
               Prosthetics
             </span>
             <ul className="space-y-2.5 text-[#A5AAAB]">
-              <li><a href="#prosthetics" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Lower Extremity (TT &amp; TF)</a></li>
-              <li><a href="#prosthetics" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Upper Extremity (TR &amp; TH)</a></li>
-              <li><a href="#prosthetics" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Silicone Restorations</a></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">Lower Extremity (TT &amp; TF)</button></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">Upper Extremity (TR &amp; TH)</button></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">Silicone Restorations</button></li>
               <li><a href="#process" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Carbon Socket Sculpting</a></li>
-              <li><a href="#solutions" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Bionic &amp; Mechanical Limbs</a></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("prosthetics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">Bionic &amp; Mechanical Limbs</button></li>
             </ul>
           </div>
 
@@ -216,10 +217,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
               Orthotics
             </span>
             <ul className="space-y-2.5 text-[#A5AAAB]">
-              <li><a href="#solutions" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Carbon Energy-Return AFOs</a></li>
-              <li><a href="#solutions" className="hover:text-[#F1EFE8] transition-colors block py-0.5">KAFO Knee-Ankle Braces</a></li>
-              <li><a href="#specialized-care" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Unloader Knee Braces</a></li>
-              <li><a href="#solutions" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Upper Limb Orthoses</a></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">Carbon Energy-Return AFOs</button></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">KAFO Knee-Ankle Braces</button></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">Unloader Knee Braces</button></li>
+              <li><button type="button" onClick={() => onOpenSolution?.("orthotics")} className="hover:text-[#F1EFE8] transition-colors block py-0.5 text-left cursor-pointer">Upper Limb Orthoses</button></li>
               <li><a href="#specialized-care" className="hover:text-[#F1EFE8] transition-colors block py-0.5">Boston Brace (Scoliosis)</a></li>
             </ul>
           </div>
