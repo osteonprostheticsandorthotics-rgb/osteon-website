@@ -48,12 +48,25 @@ export const metadata: Metadata = {
       { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "OSTEON",
+  },
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true,
+  },
 };
 
 export const viewport: Viewport = {
   themeColor: "#050607",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

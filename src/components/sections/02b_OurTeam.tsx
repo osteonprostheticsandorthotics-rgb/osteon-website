@@ -5,10 +5,9 @@ import React, {
   useEffect,
   useCallback,
   useRef,
-  useMemo,
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, User, ChevronDown, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, User } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -17,13 +16,6 @@ type Department =
   | "Clinical Team"
   | "Workshop & Fabrication"
   | "Operations & Accounts";
-
-type FilterCategory =
-  | "ALL TEAM"
-  | "CLINICAL LEADERSHIP"
-  | "CLINICAL TEAM"
-  | "WORKSHOP & FABRICATION"
-  | "OPERATIONS & ACCOUNTS";
 
 interface TeamMember {
   id: number;
@@ -47,21 +39,6 @@ const TEAM_MEMBERS: TeamMember[] = [
   { id: 9,  name: "Neenu",              designation: "Administrative Executive",          department: "Operations & Accounts",  photo: "/images/team/Neenu.jpeg" },
   { id: 10, name: "Aneena",             designation: "Accounts",                          department: "Operations & Accounts",  photo: "/images/team/Aneena.jpeg" },
 ];
-
-const FILTER_CATEGORIES: FilterCategory[] = [
-  "ALL TEAM",
-  "CLINICAL LEADERSHIP",
-  "CLINICAL TEAM",
-  "WORKSHOP & FABRICATION",
-  "OPERATIONS & ACCOUNTS",
-];
-
-const DEPT_TO_FILTER: Record<Department, FilterCategory> = {
-  "Clinical Leadership":    "CLINICAL LEADERSHIP",
-  "Clinical Team":          "CLINICAL TEAM",
-  "Workshop & Fabrication": "WORKSHOP & FABRICATION",
-  "Operations & Accounts":  "OPERATIONS & ACCOUNTS",
-};
 
 const DEPT_ACCENT: Record<Department, string> = {
   "Clinical Leadership":    "#00E5D0",
@@ -147,7 +124,7 @@ function PlaceholderPortrait({ name, department }: { name: string; department: D
   const initials = name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
   const accent   = DEPT_ACCENT[department];
   return (
-    <div className="w-full h-full flex flex-col items-center justify-start pt-10 relative overflow-hidden">
+    <div className="w-full h-full flex flex-col items-center justify-start pt-6 sm:pt-10 relative overflow-hidden">
       {/* Grid */}
       <div
         className="absolute inset-0 opacity-[0.04]"
@@ -162,15 +139,15 @@ function PlaceholderPortrait({ name, department }: { name: string; department: D
         style={{ background: `radial-gradient(ellipse 70% 60% at 50% 36%, ${accent}, transparent)` }}
       />
       {/* Icon */}
-      <div className="relative z-10 flex flex-col items-center gap-3">
+      <div className="relative z-10 flex flex-col items-center gap-2 sm:gap-3">
         <div
-          className="w-20 h-20 rounded-full flex items-center justify-center border"
+          className="w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center border"
           style={{ borderColor: `${accent}40`, background: `${accent}0E` }}
         >
-          <User className="w-10 h-10" style={{ color: `${accent}80` }} />
+          <User className="w-7 h-7 sm:w-10 sm:h-10" style={{ color: `${accent}80` }} />
         </div>
         <span
-          className="text-[10px] font-mono uppercase tracking-[0.28em] opacity-25"
+          className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.28em] opacity-25"
           style={{ color: accent }}
         >
           {initials}
@@ -213,13 +190,18 @@ function TeamCard({ member, position, spread, visibleRange, isActive, onClick }:
         zIndex:          s.zIndex,
         cursor:          isActive ? "default" : "pointer",
         transformOrigin: "center center",
+        WebkitTransformOrigin: "center center",
         willChange:      "transform, opacity",
+        WebkitBackfaceVisibility: "hidden",
+        backfaceVisibility: "hidden",
+        WebkitTransformStyle: "preserve-3d",
+        transformStyle: "preserve-3d",
       }}
-      /* Active card: 300px; base for inactive transforms */
-      className="w-[200px] sm:w-[240px] md:w-[270px] lg:w-[290px] xl:w-[308px]"
+      /* Active card: scales nicely across mobile & desktop */
+      className="w-[160px] sm:w-[210px] md:w-[250px] lg:w-[280px] xl:w-[298px]"
     >
       <div
-        className={`relative rounded-2xl overflow-hidden border transition-colors duration-300 ${
+        className={`relative rounded-xl sm:rounded-2xl overflow-hidden border transition-colors duration-300 ${
           isActive
             ? "border-white/[0.16] shadow-[0_28px_80px_rgba(0,0,0,0.75),0_0_50px_rgba(0,229,208,0.06)]"
             : "border-white/[0.06]"
@@ -227,56 +209,39 @@ function TeamCard({ member, position, spread, visibleRange, isActive, onClick }:
         style={{ background: isActive ? "#0A0D0F" : "#080A0C" }}
       >
         {/* ── Portrait area ── */}
-        <div className="relative aspect-[3/3.6] w-full overflow-hidden bg-[#060808]">
+        <div className="relative aspect-[3/3.3] sm:aspect-[3/3.6] w-full overflow-hidden bg-[#060808]">
           {member.photo ? (
-            <img
-              src={member.photo}
-              alt={`Portrait of ${member.name}`}
-              className="w-full h-full object-cover object-top"
-            />
+            <picture>
+              <source srcSet={member.photo.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+              <img
+                src={member.photo}
+                alt={`Portrait of ${member.name}`}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover object-top"
+              />
+            </picture>
           ) : (
             <PlaceholderPortrait name={member.name} department={member.department} />
           )}
 
           {/* Bottom scrim */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0D0F] via-[#0A0D0F]/5 to-transparent pointer-events-none" />
-
-          {/* Department badge */}
-          <div className="absolute top-3 left-3 z-20">
-            <span
-              className="px-2.5 py-[5px] rounded-full text-[9px] font-mono uppercase tracking-[0.16em] border backdrop-blur-sm"
-              style={{ color: accent, borderColor: `${accent}30`, background: `${accent}12` }}
-            >
-              {member.department}
-            </span>
-          </div>
-
-          {/* Active pulse dot */}
-          {isActive && (
-            <div className="absolute top-3 right-3 z-20">
-              <motion.div
-                animate={{ scale: [1, 1.4, 1], opacity: [0.8, 1, 0.8] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-                className="w-2 h-2 rounded-full"
-                style={{ background: accent }}
-              />
-            </div>
-          )}
         </div>
 
         {/* ── Info area ── */}
-        <div className="px-4 pt-3 pb-4">
-          <div className="w-7 h-[2px] rounded-full mb-2.5 opacity-80" style={{ background: accent }} />
+        <div className="px-3 sm:px-4 pt-2 sm:pt-3 pb-3 sm:pb-4">
+          <div className="w-5 sm:w-7 h-[2px] rounded-full mb-1.5 sm:mb-2.5 opacity-80" style={{ background: accent }} />
           <h3
-            className={`font-display font-bold uppercase leading-[1.1] tracking-[-0.02em] mb-1 transition-colors duration-300 ${
+            className={`font-display font-bold uppercase leading-[1.1] tracking-[-0.02em] mb-0.5 sm:mb-1 transition-colors duration-300 ${
               isActive ? "text-[#F1EFE8]" : "text-[#F1EFE8]/60"
             }`}
-            style={{ fontSize: "clamp(12px, 1vw, 16px)" }}
+            style={{ fontSize: "clamp(11px, 0.95vw, 15px)" }}
           >
             {member.name}
           </h3>
           <p
-            className={`text-[11px] leading-snug transition-colors duration-300 ${
+            className={`text-[9.5px] sm:text-[11px] leading-snug transition-colors duration-300 ${
               isActive ? "text-[#A5AAAB]" : "text-[#A5AAAB]/50"
             }`}
           >
@@ -299,52 +264,11 @@ function TeamCard({ member, position, spread, visibleRange, isActive, onClick }:
 // ─── Main Section ─────────────────────────────────────────────────────────────
 
 export function OurTeamSection() {
-  const [activeFilter, setActiveFilter] = useState<FilterCategory>("ALL TEAM");
-  const [activeIndex,  setActiveIndex]  = useState(0);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef   = useRef<HTMLDivElement>(null);
-  const touchStartX   = useRef<number>(0);
-  const stageRef      = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartX = useRef<number>(0);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [spread, setSpread] = useState(720); // half-width of stage in px
-  const visibleRange  = useVisibleRange();
-
-  // Close mobile dropdown on outside click or escape
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsDropdownOpen(false);
-    };
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("touchstart", handleClickOutside);
-      document.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isDropdownOpen]);
-
-  // Compute counts for each category
-  const categoryCounts = useMemo(() => {
-    const counts: Record<FilterCategory, number> = {
-      "ALL TEAM": TEAM_MEMBERS.length,
-      "CLINICAL LEADERSHIP": 0,
-      "CLINICAL TEAM": 0,
-      "WORKSHOP & FABRICATION": 0,
-      "OPERATIONS & ACCOUNTS": 0,
-    };
-    TEAM_MEMBERS.forEach((m) => {
-      const cat = DEPT_TO_FILTER[m.department];
-      if (counts[cat] !== undefined) counts[cat]++;
-    });
-    return counts;
-  }, []);
+  const visibleRange = useVisibleRange();
 
   // Measure stage half-width
   useEffect(() => {
@@ -359,17 +283,7 @@ export function OurTeamSection() {
     return () => ro.disconnect();
   }, []);
 
-  const filteredMembers = useMemo(() => {
-    if (activeFilter === "ALL TEAM") return TEAM_MEMBERS;
-    return TEAM_MEMBERS.filter((m) => DEPT_TO_FILTER[m.department] === activeFilter);
-  }, [activeFilter]);
-
-  const [prevFilter, setPrevFilter] = useState(activeFilter);
-  if (prevFilter !== activeFilter) {
-    setPrevFilter(activeFilter);
-    setActiveIndex(0);
-  }
-
+  const filteredMembers = TEAM_MEMBERS;
   const totalMembers = filteredMembers.length;
 
   const goNext = useCallback(() => setActiveIndex((i) => (i + 1) % totalMembers), [totalMembers]);
@@ -410,7 +324,7 @@ export function OurTeamSection() {
   return (
     <section
       id="our-team"
-      className="relative w-full py-10 sm:py-14 lg:py-20 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      className="relative w-full py-10 sm:py-14 lg:py-20 bg-[#050607] overflow-hidden border-t border-white/[0.07] scroll-mt-24"
       aria-label="Our Team"
     >
       {/* Atmospheric glow */}
@@ -421,7 +335,7 @@ export function OurTeamSection() {
       />
 
       {/* ── Header + filters inside max-width wrapper ── */}
-      <div className="relative z-20 max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16">
+      <div className="relative z-20 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-8 sm:mb-12">
           <div className="space-y-3 sm:space-y-4">
             <motion.p
@@ -457,116 +371,6 @@ export function OurTeamSection() {
             mobility and independence.
           </motion.p>
         </div>
-
-        {/* ── Mobile Filter Dropdown Menu (sm:hidden) ── */}
-        <div ref={dropdownRef} className="relative sm:hidden mb-8 z-30">
-          <div className="flex items-center justify-between mb-2 px-1">
-            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#8E9B9D]">
-              Filter Department
-            </span>
-            <span className="text-[10px] font-mono text-[#00E5D0] tracking-wider">
-              {filteredMembers.length} {filteredMembers.length === 1 ? "MEMBER" : "MEMBERS"}
-            </span>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setIsDropdownOpen((prev) => !prev)}
-            aria-expanded={isDropdownOpen}
-            aria-haspopup="listbox"
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl bg-[#080A0C] border transition-all duration-200 text-left ${
-              isDropdownOpen
-                ? "border-[#00E5D0]/60 shadow-[0_0_20px_rgba(0,229,208,0.12)]"
-                : "border-white/[0.12] hover:border-white/[0.22]"
-            }`}
-          >
-            <div className="flex items-center gap-2.5 min-w-0 pr-2">
-              <span className="w-2 h-2 rounded-full bg-[#00E5D0] shadow-[0_0_8px_#00E5D0] shrink-0" />
-              <span className="text-xs font-mono uppercase tracking-[0.14em] text-[#F1EFE8] truncate">
-                {activeFilter}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <ChevronDown
-                className={`w-4 h-4 text-[#00E5D0] transition-transform duration-300 ${
-                  isDropdownOpen ? "rotate-180" : ""
-                }`}
-              />
-            </div>
-          </button>
-
-          <AnimatePresence>
-            {isDropdownOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -6, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -6, scale: 0.98 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
-                className="absolute left-0 right-0 top-full mt-2 z-50 rounded-xl bg-[#0A0D0F]/95 backdrop-blur-xl border border-white/[0.14] shadow-[0_16px_40px_rgba(0,0,0,0.92)] p-1.5 overflow-hidden"
-                role="listbox"
-              >
-                {FILTER_CATEGORIES.map((cat) => {
-                  const isSelected = activeFilter === cat;
-                  return (
-                    <button
-                      key={cat}
-                      type="button"
-                      role="option"
-                      aria-selected={isSelected}
-                      onClick={() => {
-                        setActiveFilter(cat);
-                        setIsDropdownOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-mono uppercase tracking-[0.13em] transition-all duration-200 text-left ${
-                        isSelected
-                          ? "bg-[#00E5D0]/[0.12] text-[#00E5D0] border border-[#00E5D0]/30"
-                          : "text-[#A5AAAB] hover:text-[#F1EFE8] hover:bg-white/[0.04] border border-transparent"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                        {isSelected ? (
-                          <Check className="w-3.5 h-3.5 text-[#00E5D0] shrink-0" />
-                        ) : (
-                          <span className="w-3.5 h-3.5 shrink-0" />
-                        )}
-                        <span className="truncate">{cat}</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-[#8E9B9D] shrink-0 ml-2">
-                        {categoryCounts[cat]}
-                      </span>
-                    </button>
-                  );
-                })}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* ── Desktop & Tablet Filter Tabs (hidden on mobile: hidden sm:flex) ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, delay: 0.1 }}
-          className="hidden sm:flex flex-wrap gap-2 sm:gap-2.5 mb-10 sm:mb-12"
-        >
-          {FILTER_CATEGORIES.map((cat) => {
-            const isSelected = activeFilter === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.17em] border transition-all duration-300 min-h-[36px] whitespace-nowrap ${
-                  isSelected
-                    ? "border-[#00E5D0]/45 bg-[#00E5D0]/[0.09] text-[#00E5D0]"
-                    : "border-white/[0.08] bg-white/[0.025] text-[#A5AAAB] hover:border-white/[0.14] hover:text-[#F1EFE8]"
-                }`}
-              >
-                {cat}
-              </button>
-            );
-          })}
-        </motion.div>
       </div>
 
       {/* ── Full-width carousel stage ── */}
@@ -586,9 +390,11 @@ export function OurTeamSection() {
           ref={stageRef}
           className="relative w-full flex items-center justify-center touch-pan-y"
           style={{
-            height:            "clamp(340px, 40vw, 480px)",
+            height:            "clamp(280px, 34vw, 440px)",
             perspective:       "1600px",
+            WebkitPerspective: "1600px",
             perspectiveOrigin: "50% 44%",
+            WebkitPerspectiveOrigin: "50% 44%",
             overflow:          "visible",
           }}
           onPointerDown={onPointerDown}
@@ -601,7 +407,7 @@ export function OurTeamSection() {
             .filter(({ pos }) => Math.abs(pos) <= visibleRange)
             .map(({ member, pos, idx }) => (
               <TeamCard
-                key={`${activeFilter}-${member.id}`}
+                key={member.id}
                 member={member}
                 position={pos}
                 spread={spread}

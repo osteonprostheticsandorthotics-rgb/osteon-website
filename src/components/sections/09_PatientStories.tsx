@@ -53,11 +53,16 @@ export const PatientStoriesSection: React.FC<PatientStoriesProps> = ({ onOpenCon
               {/* Card Header & Image */}
               <div className="space-y-5">
                 <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#111518] border border-white/[0.06]">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover object-top filter brightness-[0.92] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
+                  <picture>
+                    <source srcSet={item.image.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-top filter brightness-[0.92] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0D0F]/70 via-transparent to-transparent pointer-events-none" />
                 </div>
 

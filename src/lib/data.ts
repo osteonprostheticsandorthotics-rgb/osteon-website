@@ -1,9 +1,47 @@
-/**
- * OSTEON PROSTHETICS AND ORTHOTICS — OFFICIAL VERIFIED BROCHURE DATA
- * Source of Truth: osteon.pdf (Official Company Brochure)
- * STRICT NO-FABRICATION RULE: All content is extracted directly from the verified brochure.
+﻿/**
+ * ============================================================
+ *  OSTEON PROSTHETICS AND ORTHOTICS -- MASTER DATA FILE
+ * ============================================================
+ *  Source of Truth: osteon.pdf (Official Company Brochure)
+ *  STRICT NO-FABRICATION RULE: All content is extracted
+ *  directly from the verified brochure.
+ *
+ *  TABLE OF CONTENTS
+ *  ---------------------------------------------------------
+ *  1. COMPANY INFO           (line ~60)   Name, tagline, about,
+ *                                         vision, mission, address, contact
+ *
+ *  2. PROSTHETICS DATA       (line ~135)  PROSTHETIC_CATEGORIES[]
+ *     2a. Lower Extremity                 Partial-foot to Hemipelvectomy (7 levels)
+ *     2b. Upper Extremity                 Partial-hand to Forequarter (7 levels)
+ *     2c. Silicone Prostheses             Lower limb / Upper limb / Facial
+ *
+ *  3. ORTHOTICS DATA         (line ~550)  ORTHOTIC_CATEGORIES[]
+ *     3a. Foot Orthoses (FO)
+ *     3b. Ankle-Foot Orthoses (AFO)
+ *     3c. Knee Orthoses (KO / KAFO)
+ *     3d. Hip Orthoses (HO / HKAFO)
+ *     3e. Spinal Orthoses & Scoliosis Braces
+ *     3f. Upper-Limb Orthoses
+ *
+ *  4. SCOLIOSIS DETAILS      (line ~855)  Boston Brace info & 4-stage progression
+ *
+ *  5. PEDIATRIC SOLUTIONS    (line ~920)  Cranial helmet, Pavlik, Denis Browne, etc.
+ *
+ *  6. CARE COMMITMENTS       (line ~975)  Why patients trust us / Lifelong care
+ *
+ *  7. TRUST PILLARS          (line ~1015) 4 core clinical values (numbered cards)
+ *
+ *  8. CLINICAL PROCESS STEPS (line ~1060) 5-stage patient journey
+ *                                         (used in the Patient Journey section)
+ * ============================================================
  */
 
+// ============================================================
+// SECTION 1 -- COMPANY INFO
+// Edit here: clinic name, tagline, about text, vision, mission,
+//            address details, phone numbers, email, website
+// ============================================================
 export interface CompanyInfo {
   name: string;
   fullName: string;
@@ -53,10 +91,34 @@ export const COMPANY_INFO: CompanyInfo = {
     phones: ["+91 984 611 6481", "+91 984 611 6411"],
     primaryPhone: "+91 984 611 6481",
     secondaryPhone: "+91 984 611 6411",
-    email: "support@osteonprosthetics.com",
+    email: "osteonprostheticsandorthotics@gmail.com",
     website: "www.osteonprosthetics.com"
   }
 };
+
+// ============================================================
+// SECTION 2 -- PROSTHETICS DATA
+// Each entry in PROSTHETIC_CATEGORIES[] powers the
+// Prosthetics modal / Solutions page cards.
+//
+//   id           -> used in URL / modal routing
+//   name         -> heading shown to user
+//   subType      -> subtitle under the heading
+//   tagline      -> short descriptor line
+//   heroImage    -> main card image (/public/images/...)
+//   description  -> paragraph text in modal
+//   levels[]     -> individual amputation level rows
+//     .category        label (e.g. "Transtibial (BK)")
+//     .use             short clinical indication text
+//     .options         materials/options listed
+//     .image           card image for that level
+//     .anatomicalTarget badge label
+//     .keyHighlights[] bullet points shown in modal
+//   siliconeSections[] -> used only for the Silicone category
+//   components[] -> breakdown cards ("What's inside")
+//   features[]   -> bullet list in the specs panel
+//   specs[]      -> label/value pairs in the specs table
+// ============================================================
 
 export interface ProstheticLevel {
   category: string;
@@ -513,6 +575,25 @@ export const PROSTHETIC_CATEGORIES: ProstheticCategory[] = [
   }
 ];
 
+// ============================================================
+// SECTION 3 -- ORTHOTICS DATA
+// Each entry in ORTHOTIC_CATEGORIES[] powers the
+// Orthotics section cards and modal.
+//
+//   id           -> used in routing / modal
+//   title        -> full display name (e.g. "Ankle-Foot Orthoses (AFO)")
+//   category     -> short uppercase label on card badge
+//   tag          -> "01 / SOLUTIONS" style tag
+//   image        -> card hero image (/public/images/...)
+//   description  -> one-line summary shown on the card
+//   items[]      -> individual orthotic products in this category
+//     .name           product name
+//     .description    clinical description paragraph
+//     .image          product image
+//     .clinicalTag    badge text
+//   keyBenefit   -> highlighted bottom-line benefit sentence
+// ============================================================
+
 export interface OrthoticItem {
   name: string;
   description: string;
@@ -533,240 +614,310 @@ export interface OrthoticCategory {
 
 export const ORTHOTIC_CATEGORIES: OrthoticCategory[] = [
   {
-    id: "premium-carbon-fibre",
-    title: "PREMIUM CARBON FIBRE ORTHOTICS",
-    category: "CARBON FIBRE",
+    id: "foot-orthoses-fo",
+    title: "Foot Orthoses (FO)",
+    category: "FOOT (FO)",
     tag: "01 / SOLUTIONS",
-    image: "/images/carbon-fibre-afo.jpg",
-    description:
-      "Premium carbon fibre orthotics engineered with high-performance carbon fibre, providing superior strength, elasticity, and energy return. They enhance stability, alignment, and overall mobility with a dynamic response that aids natural movement patterns.",
-    items: [
-      {
-        name: "Dynamic Energy Return",
-        description: "Provides a dynamic response aiding natural movement patterns and reducing effort in daily routines.",
-        image: "/images/carbon-fibre-afo.jpg",
-        clinicalTag: "Dynamic Gait Response"
-      },
-      {
-        name: "Lightweight & Long-Term Reliability",
-        description: "Lightweight construction ensures the device remains reliable over the long term.",
-        image: "/images/tech-composite-matrix.jpg",
-        clinicalTag: "Composite Durability"
-      },
-      {
-        name: "Complex Conditions Support",
-        description: "Suitable for individuals with lower-limb conditions involving the nervous system, muscles, or complex medical challenges.",
-        image: "/images/lower-extremity-kafo.jpg",
-        clinicalTag: "Neurological Stability"
-      }
-    ],
-    keyBenefit: "Superior strength, elasticity, and energy return for efficient gait and independence."
-  },
-  {
-    id: "lower-extremity-supports",
-    title: "LOWER EXTREMITY ORTHOTICS & SUPPORTS",
-    category: "LOWER LIMB",
-    tag: "02 / SOLUTIONS",
-    image: "/images/lower-extremity-kafo.jpg",
-    description:
-      "Supportive leg braces designed to provide stability and proper alignment, helping people move safely, making walking and standing more comfortable, and giving greater confidence.",
-    items: [
-      {
-        name: "AFO (Ankle-Foot Orthosis)",
-        description: "Supports the ankle and foot to improve walking stability. Helps manage foot drop and promote smoother movement.",
-        image: "/images/products/orthotic-afo.jpg",
-        clinicalTag: "Foot Drop & Gait Stability"
-      },
-      {
-        name: "KAFO (Knee-Ankle-Foot Orthosis)",
-        description: "Provides support to the knee, ankle, and foot for better control and balance. Helps reduce knee instability during walking.",
-        image: "/images/products/orthotic-kafo.jpg",
-        clinicalTag: "Knee Stance Control"
-      },
-      {
-        name: "HKAFO (Hip-Knee-Ankle-Foot Orthosis)",
-        description: "Supports the hip, knee, ankle, and foot for improved posture and mobility. Offers stronger stability for complex conditions.",
-        image: "/images/products/orthotic-hkafo.jpg",
-        clinicalTag: "Pelvic & Hip Alignment"
-      },
-      {
-        name: "THKAFO (Trunk-Hip-Knee-Ankle-Foot Orthosis)",
-        description: "Provides full lower-limb and trunk support for maximum stability, improving standing balance and assisted walking.",
-        image: "/images/products/orthotic-thkafo.jpg",
-        clinicalTag: "Full Trunk Stability"
-      }
-    ],
-    keyBenefit: "Comprehensive lower-limb stability and alignment from foot to trunk."
-  },
-  {
-    id: "foot-ankle",
-    title: "FOOT & ANKLE ORTHOTICS",
-    category: "FOOT & ANKLE",
-    tag: "03 / SOLUTIONS",
     image: "/images/foot-ankle-crow-walker.jpg",
     description:
-      "Foot and ankle orthotics designed to improve support, alignment, and stability during walking and standing, reducing pain and making daily movement more comfortable.",
+      "Orthoses designed to support, align, or redistribute pressure across the foot.",
     items: [
       {
-        name: "Insole",
-        description: "Provides cushioned support and helps distribute pressure evenly across the foot, reducing strain during daily activities.",
+        name: "Custom foot orthoses and insoles",
+        description:
+          "Precision-molded total-contact foot orthoses designed to support arches, absorb shock, and optimize plantar pressure distribution.",
         image: "/images/products/orthotic-insole.jpg",
-        clinicalTag: "Plantar Pressure Offload"
+        clinicalTag: "Biomechanical Custom Insole"
       },
       {
-        name: "University of California Biomechanics Laboratory (UCBL)",
-        description: "Controls foot alignment and provides strong arch and heel support, improving stability and reducing inward rolling.",
+        name: "Flat-foot and high-arch orthoses",
+        description:
+          "Targeted arch-correcting orthoses providing anatomical support and realignment for pes planus (flat foot) and pes cavus (high arch).",
+        image: "/images/products/insole-ucbl-system.jpg",
+        clinicalTag: "Arch Alignment & Strain Relief"
+      },
+      {
+        name: "Metatarsal pads and forefoot orthoses",
+        description:
+          "Anatomical metatarsal domes and forefoot supports that offload pressure from painful metatarsal heads and relieve forefoot stress.",
+        image: "/images/foot-ankle-crow-walker.jpg",
+        clinicalTag: "Metatarsal Offloading"
+      },
+      {
+        name: "Diabetic and pressure-relieving insoles",
+        description:
+          "Multi-layered, friction-reducing diabetic footbeds engineered to alleviate peak pressures and protect sensitive neuropathic skin.",
+        image: "/images/products/orthotic-insole.jpg",
+        clinicalTag: "Diabetic Ulcer Prevention"
+      },
+      {
+        name: "UCBL",
+        description:
+          "University of California Biomechanics Laboratory deep-heel-cup orthosis providing triplanar control over the subtalar joint and foot arch.",
         image: "/images/products/orthotic-ucbl.jpg",
-        clinicalTag: "Deep Heel-Cup Triplanar Control"
-      },
-      {
-        name: "Supramalleolar Orthosis (SMO)",
-        description: "Provides gentle ankle support while improving foot positioning and balance. Lightweight and ideal for walking control.",
-        image: "/images/products/orthotic-smo.jpg",
-        clinicalTag: "Coronal Plane Balance"
-      },
-      {
-        name: "Charcot Restraint Orthotic Walker (CROW)",
-        description: "Offers maximum support and protection for the foot and ankle, reducing pressure and helping in safe healing.",
-        image: "/images/products/orthotic-crow.jpg",
-        clinicalTag: "Complete Neuropathic Offloading"
+        clinicalTag: "Triplanar Hindfoot Control"
       }
     ],
-    keyBenefit: "Even pressure distribution, arch support, and safe healing protection."
+    keyBenefit: "Even pressure redistribution, arch realignment, and plantar wound protection."
   },
   {
-    id: "knee-braces",
-    title: "KNEE BRACES & UNLOADER ONE",
-    category: "KNEE",
-    tag: "04 / SOLUTIONS",
+    id: "ankle-foot-orthoses-afo",
+    title: "Ankle-Foot Orthoses (AFO)",
+    category: "ANKLE-FOOT (AFO)",
+    tag: "02 / SOLUTIONS",
+    image: "/images/carbon-fibre-afo.jpg",
+    description:
+      "Support the ankle and foot and help control foot position during standing and walking.",
+    items: [
+      {
+        name: "Solid AFO",
+        description:
+          "Rigid one-piece thermoplastic or carbon ankle-foot orthosis providing full ankle immobilization and maximum stability for severe foot drop.",
+        image: "/images/products/orthotic-afo.jpg",
+        clinicalTag: "Rigid Ankle Lock & Stability"
+      },
+      {
+        name: "Articulated or hinged AFO",
+        description:
+          "Jointed ankle-foot orthosis permitting controlled, natural ankle motion while resisting unwanted plantarflexion or inversion.",
+        image: "/images/carbon-fibre-afo.jpg",
+        clinicalTag: "Articulated Motion Control"
+      },
+      {
+        name: "Ground-reaction AFO",
+        description:
+          "Specialized anterior-shell orthosis utilizing ground reaction forces during stance phase to prevent knee buckling and assist knee extension.",
+        image: "/images/carbon-fibre-afo.jpg",
+        clinicalTag: "Knee Extension Ground Force"
+      },
+      {
+        name: "Supramalleolar orthosis (SMO)",
+        description:
+          "Low-profile orthosis terminating just above the malleoli to stabilize the hindfoot and midfoot while allowing free ankle dorsiflexion.",
+        image: "/images/products/orthotic-smo.jpg",
+        clinicalTag: "Subtalar & Coronal Control"
+      }
+    ],
+    keyBenefit: "Dynamic foot-drop clearance, gait progression, and subtalar joint stabilization."
+  },
+  {
+    id: "knee-orthoses-ko-kafo",
+    title: "Knee Orthoses (KO) and Knee-Ankle-Foot Orthoses (KAFO)",
+    category: "KNEE & KAFO",
+    tag: "03 / SOLUTIONS",
     image: "/images/unloader-knee-brace.jpg",
     description:
-      "Comprehensive knee solutions including the clinically proven Unloader One OA knee brace using dual Dynamic Force Straps (DFS) with 3-Point Leverage System, ACL/PCL ligament braces, and Össur Rebound rehabilitative braces.",
+      "Support, stabilize, and align the knee joint and lower limb during standing, walking, and rehabilitation.",
     items: [
       {
-        name: "Unloader One OA Knee Brace",
-        description: "Uses dual Dynamic Force Straps (DFS) with a 3-Point Leverage System to reduce pressure on sensitive bony surfaces and relieve pain.",
-        image: "/images/products/orthotic-unloader-one.jpg",
-        clinicalTag: "Dual DFS 3-Point Leverage"
-      },
-      {
-        name: "OA (Osteoarthritis) Brace",
-        description: "Reduces pressure on the affected side of the knee and helps ease pain while walking.",
-        image: "/images/unloader-knee-brace.jpg",
-        clinicalTag: "Unicompartmental Decompression"
-      },
-      {
-        name: "ACL Brace",
-        description: "Provides support for the knee after injury or surgery, improving stability and protecting the joint.",
+        name: "Functional and ligament knee braces",
+        description:
+          "Rigid-frame 4-point leverage braces safeguarding ACL, PCL, and collateral ligaments against rotary instability and hyperextension.",
         image: "/images/products/orthotic-ligament-brace.jpg",
-        clinicalTag: "Anterior Cruciate Protection"
+        clinicalTag: "Ligament & ACL Protection"
       },
       {
-        name: "PCL Brace",
-        description: "Supports the knee and helps control backward movement of the tibia, promoting safer walking and recovery.",
-        image: "/images/products/ligament-rebound-system.jpg",
-        clinicalTag: "Posterior Drawer Control"
+        name: "Unloader knee orthoses",
+        description:
+          "Clinically proven 3-point dynamic leverage braces designed to decompress affected osteoarthritic compartments and relieve chronic knee pain.",
+        image: "/images/unloader-knee-brace.jpg",
+        clinicalTag: "OA Joint Decompression"
       },
       {
-        name: "Össur Rebound Rehabilitative Braces",
-        description: "Premium-quality post-operative knee and elbow braces engineered to be durable, versatile, adjustable, and easy to apply.",
+        name: "Post-operative knee orthoses",
+        description:
+          "Adjustable range-of-motion (ROM) dial-lock braces providing controlled flexion/extension settings for post-surgical joint healing.",
         image: "/images/products/orthotic-rebound-brace.jpg",
-        clinicalTag: "Post-Op Motion Control"
+        clinicalTag: "Post-Op ROM Motion Control"
+      },
+      {
+        name: "KAFO with locking knee joint",
+        description:
+          "Structural knee-ankle-foot orthosis with drop-lock or pawl-lock knee hinges offering reliable stability for quadriceps weakness.",
+        image: "/images/products/orthotic-kafo.jpg",
+        clinicalTag: "Positive Knee Joint Lock"
+      },
+      {
+        name: "Stance-control KAFO",
+        description:
+          "Advanced dynamic KAFO joint that locks securely during weight-bearing stance phase and unlocks freely during swing phase for natural walking.",
+        image: "/images/lower-extremity-kafo.jpg",
+        clinicalTag: "Dynamic Free-Swing Stance Control"
       }
     ],
-    keyBenefit: "Clinically proven 3-point leverage joint decompression and ligament stabilization."
+    keyBenefit: "Joint unweighting, multi-ligament stabilization, and secure stance-phase mobility."
   },
   {
-    id: "upper-extremity-orthotics",
-    title: "UPPER EXTREMITY ORTHOTICS",
-    category: "UPPER LIMB",
+    id: "hip-orthoses-ho-hkafo",
+    title: "Hip Orthoses (HO) and Hip-Knee-Ankle-Foot Orthoses (HKAFO)",
+    category: "HIP & HKAFO",
+    tag: "04 / SOLUTIONS",
+    image: "/images/products/orthotic-hkafo.jpg",
+    description:
+      "Comprehensive pelvic and lower-limb stabilization to control hip movement and facilitate upright mobility.",
+    items: [
+      {
+        name: "Hip abduction orthosis",
+        description:
+          "Rigid pelvic band and thigh cuff with adjustable multi-axis hip joint to prevent hip dislocation and control abduction angle post-surgery.",
+        image: "/images/products/orthotic-hkafo.jpg",
+        clinicalTag: "Post-Surgical Dislocation Prevention"
+      },
+      {
+        name: "Hip stabilisation orthosis",
+        description:
+          "Pelvic girdle and proximal thigh orthosis offering positional stabilization, rotational control, and soft tissue compression.",
+        image: "/images/products/hkafo-thkafo-system.jpg",
+        clinicalTag: "Pelvic & Rotational Alignment"
+      },
+      {
+        name: "HKAFO",
+        description:
+          "Full lower-limb orthotic system extending from pelvis to foot, coordinating hip, knee, and ankle joints for complex neurological conditions.",
+        image: "/images/products/orthotic-hkafo.jpg",
+        clinicalTag: "Full Lower-Limb Alignment"
+      },
+      {
+        name: "Reciprocating gait orthosis (RGO)",
+        description:
+          "Specialized bilateral HKAFO connected by reciprocal cables that translate hip extension on one side into hip flexion on the opposite side.",
+        image: "/images/products/orthotic-thkafo.jpg",
+        clinicalTag: "Reciprocating Gait Coupling"
+      }
+    ],
+    keyBenefit: "Pelvic control, dislocation protection, and reciprocal stepping for complex lower-limb needs."
+  },
+  {
+    id: "spinal-orthoses",
+    title: "Spinal Orthoses",
+    category: "SPINE & SCOLIOSIS",
     tag: "05 / SOLUTIONS",
+    image: "/images/boston-brace-scoliosis.jpg",
+    description:
+      "Spinal stabilization, immobilization, and curvature correction across cervical, thoracic, and lumbar regions.",
+    items: [
+      {
+        name: "Cervical orthoses (CO)",
+        description:
+          "Precision cervical collars providing rigid immobilization for cervical spine trauma, stable fractures, and severe radiculopathy.",
+        image: "/images/products/orthotic-miami-j.jpg",
+        clinicalTag: "Cervical Immobilization"
+      },
+      {
+        name: "Cervicothoracic orthoses (CTO)",
+        description:
+          "Extended cervical orthosis with sternal and thoracic attachments providing increased stabilization for junctional spine injuries.",
+        image: "/images/cervical-miami-j-tlso.jpg",
+        clinicalTag: "Cervicothoracic Junction Support"
+      },
+      {
+        name: "Thoracolumbosacral orthoses (TLSO)",
+        description:
+          "Custom-molded full torso orthosis delivering rigid triplanar immobilization for fractures, spinal fusions, and post-surgical protection.",
+        image: "/images/products/orthotic-miami-tlso.jpg",
+        clinicalTag: "Rigid Multi-Plane Torso Lock"
+      },
+      {
+        name: "Lumbosacral orthoses (LSO)",
+        description:
+          "Rigid lumbar brace providing targeted intracavitary pressure and motion restriction for lower lumbar disc injuries and spondylolisthesis.",
+        image: "/images/products/miami-cervical-tlso.jpg",
+        clinicalTag: "Lumbar Disc Decompression"
+      },
+      {
+        name: "Thoracolumbar orthoses (TLO)",
+        description:
+          "Specialized thoracic and lumbar hyperextension brace designed to unload vertebral compression fractures and correct kyphotic posture.",
+        image: "/images/products/orthotic-miami-tlso.jpg",
+        clinicalTag: "Thoracolumbar Unloading"
+      },
+      {
+        name: "Scoliosis braces",
+        description:
+          "Custom-fabricated 3D Boston Brace engineered to apply gentle, continuous corrective pressure to arrest spinal curvature progression during growth.",
+        image: "/images/boston-brace-scoliosis.jpg",
+        clinicalTag: "3D Scoliosis Curve Arrest"
+      }
+    ],
+    keyBenefit: "Rigid spinal immobilization, fracture healing, and non-surgical 3D scoliosis correction."
+  },
+  {
+    id: "upper-limb-orthoses",
+    title: "Upper-Limb Orthoses",
+    category: "UPPER LIMB",
+    tag: "06 / SOLUTIONS",
     image: "/images/upper-limb-orthotics.jpg",
     description:
-      "Support for hand, wrist, elbow, and shoulder to improve function, reduce pain, stabilize joints, improve movement control, and support recovery in daily activities.",
+      "Support, immobilize, or enhance function for the shoulder, arm, wrist, and hand.",
     items: [
       {
-        name: "Finger Orthoses",
-        description: "Supports injured or weak fingers and helps maintain proper alignment.",
-        image: "/images/products/silicone-finger.jpg",
-        clinicalTag: "Phalangeal Alignment"
+        name: "Shoulder orthoses",
+        description:
+          "Supportive abduction braces and stabilizers for rotator cuff injuries, glenohumeral subluxation, and post-traumatic recovery.",
+        image: "/images/products/orthotic-elbow-shoulder.jpg",
+        clinicalTag: "Shoulder Subluxation & Rotator Cuff"
       },
       {
-        name: "Cock-up Splint",
-        description: "Provides support and positioning to improve hand function and comfort.",
-        image: "/images/products/orthotic-wrist-hand.jpg",
-        clinicalTag: "Functional Wrist Positioning"
+        name: "Elbow orthoses",
+        description:
+          "Hinged and static elbow braces providing range-of-motion restriction, tendonitis relief, and contracture management.",
+        image: "/images/products/orthotic-elbow-shoulder.jpg",
+        clinicalTag: "Elbow ROM Control"
       },
       {
-        name: "Wrist & Hand Orthoses (WHO)",
-        description: "Stabilizes the wrist and hand to reduce pain and improve control.",
+        name: "Wrist-hand orthoses (WHO)",
+        description:
+          "Anatomically contoured wrist and hand orthoses stabilizing carpal joints for carpal tunnel syndrome, arthritis, and post-fracture healing.",
         image: "/images/upper-limb-orthotics.jpg",
-        clinicalTag: "Carpal & Palmar Stabilization"
+        clinicalTag: "Carpal & Wrist Stabilization"
       },
       {
-        name: "Thumb Orthoses",
-        description: "Supports the thumb joint and reduces pain during gripping and pinching.",
+        name: "Hand orthoses",
+        description:
+          "Functional palmar and thumb spica splints maintaining optimal joint positioning and supporting daily gripping tasks.",
         image: "/images/products/orthotic-wrist-hand.jpg",
-        clinicalTag: "CMC & MCP Joint Relief"
+        clinicalTag: "Functional Palm & Thumb Positioning"
       },
       {
-        name: "Elbow Orthoses",
-        description: "Provides support and controlled movement for the elbow joint.",
-        image: "/images/products/orthotic-elbow-shoulder.jpg",
-        clinicalTag: "Range-of-Motion Control"
+        name: "Finger orthoses",
+        description:
+          "Targeted finger splints for Boutonnière, Swan Neck deformities, mallet finger, and interphalangeal joint stabilization.",
+        image: "/images/products/silicone-finger.jpg",
+        clinicalTag: "Interphalangeal Correction"
       },
       {
-        name: "Shoulder Orthoses",
-        description: "Stabilizes the shoulder and supports proper positioning.",
-        image: "/images/products/orthotic-elbow-shoulder.jpg",
-        clinicalTag: "Glenohumeral Subluxation Support"
+        name: "Shoulder-elbow-wrist-hand orthoses (SEWHO)",
+        description:
+          "Comprehensive kinetic chain orthosis providing complete multi-joint alignment from the shoulder girdle to fingertips.",
+        image: "/images/products/upper-limb-splints.jpg",
+        clinicalTag: "Full Arm Kinetic Chain Support"
+      },
+      {
+        name: "Elbow-wrist-hand orthoses (EWHO)",
+        description:
+          "Multi-joint arm orthosis designed for post-burn rehabilitation, severe spasticity control, and contracture prevention.",
+        image: "/images/products/upper-limb-splints.jpg",
+        clinicalTag: "Multi-Joint Contracture Control"
       }
     ],
-    keyBenefit: "Joint stabilization, positioning, and functional grip assistance."
-  },
-  {
-    id: "cervical-spine-supports",
-    title: "BACK, NECK & CERVICAL SUPPORTS",
-    category: "SPINE & CERVICAL",
-    tag: "06 / SOLUTIONS",
-    image: "/images/cervical-miami-j-tlso.jpg",
-    description:
-      "Advanced back, neck, and cervical support technologies including Miami J Cervical Collars, Philadelphia collars, Miami Lumbar Posteo, Miami JTO Thoracic Extensions, and Miami TLSO 456/464 systems.",
-    items: [
-      {
-        name: "Miami J Cervical Collar & Miami J Select",
-        description: "Scientifically designed for superior cervical immobilization for post-trauma, stable fractures, and spondylosis.",
-        image: "/images/products/orthotic-miami-j.jpg",
-        clinicalTag: "Bioengineered Cervical Immobilization"
-      },
-      {
-        name: "Philadelphia Collars",
-        description: "Tracheotomy and adjustable collars for post-trauma, herniated cervical discs, and post-operative immobilization.",
-        image: "/images/cervical-miami-j-tlso.jpg",
-        clinicalTag: "Tracheotomy & Disc Decompression"
-      },
-      {
-        name: "Miami Lumbar Posteo",
-        description: "Relieves back pain caused by stable vertebral compression fractures (VCF).",
-        image: "/images/products/miami-cervical-tlso.jpg",
-        clinicalTag: "Vertebral Compression Relief"
-      },
-      {
-        name: "Miami JTO Thoracic Extension",
-        description: "Provides increased stability over collar alone for lower and upper cervical spine disruptions.",
-        image: "/images/products/orthotic-miami-j.jpg",
-        clinicalTag: "Cervicothoracic Joint Extension"
-      },
-      {
-        name: "Miami TLSO 456 & 464",
-        description: "Lumbar belt with added rigid panels and TLSO attachment for post-surgical immobilization, herniated discs, and compression fractures.",
-        image: "/images/products/orthotic-miami-tlso.jpg",
-        clinicalTag: "Rigid Multi-Plane Spinal Lock"
-      }
-    ],
-    keyBenefit: "Superior scientific cervical immobilization and rigid spinal stabilization."
+    keyBenefit: "Joint stabilization, contracture prevention, and functional recovery of the upper extremity."
   }
 ];
+
+// ============================================================
+// SECTION 4 -- SCOLIOSIS DETAILS
+// Used exclusively by the Scoliosis section (06_Scoliosis.tsx).
+//
+//   title            -> "BOSTON BRACE"
+//   tagline          -> displayed under the title
+//   description      -> main paragraph
+//   features[]       -> bullet list of brace features
+//   benefits[]       -> bullet list of patient benefits
+//   progressionSteps[] -> 4-stage visual journey
+//     .stage    "01", "02", etc.
+//     .title    stage name
+//     .points[] bullet points for that stage
+// ============================================================
 
 export interface ScoliosisInfo {
   title: string;
@@ -840,6 +991,19 @@ export const SCOLIOSIS_DETAILS: ScoliosisInfo = {
   ]
 };
 
+// ============================================================
+// SECTION 5 -- PEDIATRIC SOLUTIONS
+// Used by the Osteon Kids section (07_OsteonKids.tsx).
+// Each card represents one pediatric device/programme.
+//
+//   id          -> routing key
+//   title       -> device name (ALL CAPS)
+//   subtitle    -> optional extra line (e.g. DDH note)
+//   tagline     -> short descriptor
+//   description -> one-paragraph summary
+//   image       -> card image (/public/images/...)
+// ============================================================
+
 export interface PediatricSolution {
   id: string;
   title: string;
@@ -893,6 +1057,19 @@ export const PEDIATRIC_SOLUTIONS: PediatricSolution[] = [
   }
 ];
 
+// ============================================================
+// SECTION 6 -- CARE COMMITMENTS
+// Used in the "Why patients trust us" carousel/panel.
+// Each card is a commitment pillar with a quote + description.
+//
+//   id          -> key
+//   title       -> heading (e.g. "WHY PATIENTS TRUST US")
+//   subtitle    -> sub-heading
+//   quote       -> large italic pull-quote
+//   description -> supporting paragraph
+//   image       -> background or side image
+// ============================================================
+
 export interface CareCommitment {
   id: string;
   title: string;
@@ -935,6 +1112,17 @@ export const CARE_COMMITMENTS: CareCommitment[] = [
   }
 ];
 
+// ============================================================
+// SECTION 7 -- TRUST PILLARS
+// The 4 numbered value cards shown in the Trust & Credibility
+// section (10_TrustCredibility.tsx).
+//
+//   id          -> key
+//   number      -> "01", "02", "03", "04"
+//   title       -> pillar name (ALL CAPS)
+//   description -> 2-3 sentence description
+// ============================================================
+
 export interface TrustPillar {
   id: string;
   number: string;
@@ -973,6 +1161,22 @@ export const TRUST_PILLARS: TrustPillar[] = [
   }
 ];
 
+// ============================================================
+// SECTION 8 -- CLINICAL PROCESS STEPS
+// The 5-step animated timeline in the Patient Journey section
+// (08_PatientJourney.tsx). Each step is one stage card.
+//
+//   step        -> "01" to "05"
+//   title       -> stage name (ALL CAPS)
+//   subtitle    -> secondary heading
+//   tag         -> small pill label (e.g. "Intake & Evaluation")
+//   badge       -> "STAGE 01 - CLINICAL INTAKE" style label
+//   image       -> side image (/public/images/...)
+//   description -> paragraph
+//   highlights[] -> 3 bullet points
+//   metric      -> { label, value } stat shown as a badge
+// ============================================================
+
 export interface ClinicalProcessStep {
   step: string;
   title: string;
@@ -1008,7 +1212,7 @@ export const CLINICAL_PROCESS_STEPS: ClinicalProcessStep[] = [
     subtitle: "Medical Expertise & Evaluation",
     tag: "Biomechanical Analysis",
     badge: "STAGE 02 • BIOMECHANICAL EVALUATION",
-    image: "/images/tech-gait-kinematics.jpg",
+    image: "/images/process-step-2.jpg",
     description:
       "Evaluating individual anatomy, residual limb morphology, and functional needs to plan solutions precisely tailored to each individual patient of any age.",
     highlights: [
@@ -1024,7 +1228,7 @@ export const CLINICAL_PROCESS_STEPS: ClinicalProcessStep[] = [
     subtitle: "Innovative Technology & Materials",
     tag: "Custom Fabrication",
     badge: "STAGE 03 • COMPOSITE CRAFTSMANSHIP",
-    image: "/images/socket-engineering.jpg",
+    image: "/images/process-step-3.jpg",
     description:
       "Crafting custom carbon fibre sockets, custom-molded interfaces, and specialized braces using high-performance, medical-grade materials and aerospace-grade layups.",
     highlights: [
@@ -1040,7 +1244,7 @@ export const CLINICAL_PROCESS_STEPS: ClinicalProcessStep[] = [
     subtitle: "Optimal Alignment & Performance",
     tag: "Gait Alignment",
     badge: "STAGE 04 • DYNAMIC TUNING",
-    image: "/images/prosthetics-lower.jpg",
+    image: "/images/process-step-4.jpg",
     description:
       "Carefully fitting each device to ensure it feels natural, provides lasting comfort, eliminates pressure hotspots, and restores complete freedom of movement.",
     highlights: [
@@ -1056,7 +1260,7 @@ export const CLINICAL_PROCESS_STEPS: ClinicalProcessStep[] = [
     subtitle: "Adjustments, Upgrades & Repairs",
     tag: "Continuous Care",
     badge: "STAGE 05 • LIFELONG PARTNERSHIP",
-    image: "/images/about-runner-hero.jpg",
+    image: "/images/process-step-5.jpg",
     description:
       "Regular check-ups to fine-tune fit, alignment, and comfort as your body adapts over time, with dedicated service minimizing downtime and maximizing mobility.",
     highlights: [

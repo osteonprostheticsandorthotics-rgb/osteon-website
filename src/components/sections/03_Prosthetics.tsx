@@ -66,11 +66,16 @@ export const ProstheticsSection: React.FC<ProstheticsSectionProps> = () => {
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="relative aspect-[4/5] sm:aspect-[16/11] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group"
             >
-              <img
-                src={currentCategory.heroImage}
-                alt={currentCategory.name}
-                className="w-full h-full object-cover object-center filter brightness-[0.95] contrast-[1.05]"
-              />
+              <picture>
+                <source srcSet={currentCategory.heroImage.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                <img
+                  src={currentCategory.heroImage}
+                  alt={currentCategory.name}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover object-center filter brightness-[0.95] contrast-[1.05]"
+                />
+              </picture>
               <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/60 via-transparent to-transparent pointer-events-none" />
             </motion.div>
           </AnimatePresence>
@@ -149,11 +154,16 @@ export const ProstheticsSection: React.FC<ProstheticsSectionProps> = () => {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="relative aspect-[4/3] sm:aspect-[16/11] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group"
               >
-                <img
-                  src={currentCategory.heroImage}
-                  alt={currentCategory.name}
-                  className="w-full h-full object-cover object-center filter brightness-[0.95] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
+                <picture>
+                  <source srcSet={currentCategory.heroImage.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                  <img
+                    src={currentCategory.heroImage}
+                    alt={currentCategory.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center filter brightness-[0.95] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/40 via-transparent to-transparent pointer-events-none" />
               </motion.div>
             </AnimatePresence>

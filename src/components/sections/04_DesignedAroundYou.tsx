@@ -66,11 +66,16 @@ export const DesignedAroundYouSection: React.FC = () => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-7 relative aspect-[4/3] sm:aspect-[16/11] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group"
           >
-            <img
-              src="/images/socket-engineering.jpg"
-              alt="Custom carbon fibre socket sculpting, pylon alignment, and precision prosthetic fabrication"
-              className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05] group-hover:scale-105 transition-transform duration-1000 ease-out"
-            />
+            <picture>
+              <source srcSet="/images/socket-engineering.webp" type="image/webp" />
+              <img
+                src="/images/socket-engineering.jpg"
+                alt="Custom carbon fibre socket sculpting, pylon alignment, and precision prosthetic fabrication"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05] group-hover:scale-105 transition-transform duration-1000 ease-out"
+              />
+            </picture>
             <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/40 via-transparent to-transparent pointer-events-none" />
           </motion.div>
 

@@ -117,7 +117,8 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
   return (
     <AnimatePresence>
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto overscroll-contain"
+        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto overscroll-contain no-scrollbar"
+        style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
         data-lenis-prevent="true"
       >
         {/* Backdrop with Photographic Scenery & Ambient Glow */}
@@ -130,11 +131,16 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
         >
           {/* Subtle blurred scenic layer behind the card */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-            <img
-              src="/images/final-cta-dawn.jpg"
-              alt="Mountain golden hour backdrop"
-              className="w-full h-full object-cover filter blur-md scale-105"
-            />
+            <picture>
+              <source srcSet="/images/final-cta-dawn.webp" type="image/webp" />
+              <img
+                src="/images/final-cta-dawn.jpg"
+                alt="Mountain golden hour backdrop"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover filter blur-md scale-105"
+              />
+            </picture>
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-transparent to-[#050607]/80 pointer-events-none" />
         </motion.div>
@@ -144,40 +150,41 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 w-full max-w-xl my-auto p-[1px] rounded-[28px] sm:rounded-[34px] bg-gradient-to-br from-[#00E5D0]/60 via-white/15 to-[#A78BFA]/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]"
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full max-w-lg my-auto p-[1px] rounded-[24px] sm:rounded-[30px] bg-gradient-to-br from-[#00E5D0]/60 via-white/15 to-[#A78BFA]/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)] shrink-0"
         >
-          <div className="relative rounded-[27px] sm:rounded-[33px] bg-[#0A0D10]/85 backdrop-blur-2xl p-6 sm:p-9 md:p-10 overflow-hidden">
+          <div className="relative rounded-[23px] sm:rounded-[29px] bg-[#0A0D10]/92 backdrop-blur-2xl p-5 sm:p-6 overflow-hidden">
             {/* Ambient Inner Lights */}
             <div className="absolute -top-24 -left-24 w-60 h-60 bg-[#00E5D0]/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-[#A78BFA]/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Close Button */}
+            {/* Close Button top-right */}
             <button
+              type="button"
               onClick={handleModalClose}
-              className="absolute top-5 right-5 sm:top-7 sm:right-7 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors cursor-pointer z-20"
+              className="absolute right-4 top-4 sm:right-6 sm:top-6 z-20 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/80 hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
               aria-label="Close modal"
             >
-              <X className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+              <X className="w-4 h-4" />
             </button>
 
             {!isSubmitted ? (
-              <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-                {/* Centered Heading */}
-                <div className="text-center space-y-1 pb-1">
-                  <h3 className="font-display text-2xl sm:text-3xl font-semibold text-[#F1EFE8] tracking-tight">
+              <form onSubmit={handleSubmit} className="space-y-3.5 relative z-10">
+                {/* Centered Header */}
+                <div className="text-center pb-2 pt-1 px-8">
+                  <h3 className="font-display text-2xl sm:text-[28px] font-bold text-[#F1EFE8] tracking-tight">
                     Make your Booking
                   </h3>
-                  <p className="text-xs text-[#8E9B9D] font-normal">
+                  <p className="text-xs sm:text-[13px] text-[#8E9B9D] mt-1 font-normal">
                     Schedule a consultation with our clinical team in Cochin
                   </p>
                 </div>
 
-                {/* Focused Input Grid (Only Name, Phone, Email, Preferred Date, and Note) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
+                {/* Form Input Grid (2-columns on both mobile and desktop) */}
+                <div className="grid grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-2.5 sm:gap-y-3">
                   {/* Name */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                       Name
                     </label>
                     <input
@@ -186,13 +193,13 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                       placeholder="Enter your name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner"
                     />
                   </div>
 
                   {/* Phone Number */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                       Phone Number
                     </label>
                     <input
@@ -201,13 +208,13 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                       placeholder="Enter phone number"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner"
                     />
                   </div>
 
                   {/* Email */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                       Email
                     </label>
                     <input
@@ -216,13 +223,13 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                       placeholder="Enter your Email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner"
                     />
                   </div>
 
                   {/* Preferred Date */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                       Preferred Date
                     </label>
                     <div className="relative">
@@ -232,15 +239,15 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                         min={getTodayDate()}
                         value={formData.preferredDate}
                         onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                        className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 pr-10 text-xs sm:text-sm text-[#F1EFE8] focus:outline-none transition-all shadow-inner scheme-dark"
+                        className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 pr-7 sm:pr-8 text-[10px] sm:text-[11px] text-[#A5AAAB] focus:text-[#F1EFE8] focus:outline-none transition-all shadow-inner scheme-dark [&::-webkit-datetime-edit]:text-[10px] sm:[&::-webkit-datetime-edit]:text-[11px] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-7 sm:[&::-webkit-calendar-picker-indicator]:w-8"
                       />
-                      <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" />
+                      <Calendar className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#8E9B9D] pointer-events-none" />
                     </div>
                   </div>
 
-                  {/* Option to Add a Note (Full Width) */}
-                  <div className="space-y-1.5 sm:col-span-2">
-                    <label className="block text-xs font-medium text-[#F1EFE8]">
+                  {/* Add a Note (Full Width Curved Square Box) */}
+                  <div className="space-y-1 col-span-2">
+                    <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                       Add a Note
                     </label>
                     <textarea
@@ -248,7 +255,8 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                       placeholder="Share any specific requirements or notes (optional)..."
                       value={formData.note}
                       onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                      className="w-full rounded-2xl bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner resize-none"
+                      style={{ borderRadius: "18px" }}
+                      className="w-full appearance-none rounded-[18px] bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] p-2.5 sm:p-3 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner resize-none h-[60px] sm:h-[68px]"
                     />
                   </div>
                 </div>
@@ -269,13 +277,13 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
 
                 {/* Error Banner */}
                 {errorMessage && (
-                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 font-sans">
+                  <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 font-sans">
                     {errorMessage}
                   </div>
                 )}
 
                 {/* Terms Checkbox */}
-                <div className="pt-1">
+                <div className="pt-0.5">
                   <label className="inline-flex items-center gap-2.5 cursor-pointer select-none group text-xs text-[#A5AAAB]">
                     <input
                       type="checkbox"
@@ -283,32 +291,33 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                       checked={acceptedTerms}
                       onChange={(e) => setAcceptedTerms(e.target.checked)}
                       className="sr-only"
+                      data-lpignore="true"
                     />
                     <div
-                      className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
+                      className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all shrink-0 ${
                         acceptedTerms
                           ? "bg-[#00E5D0] border-[#00E5D0]"
-                          : "border-white/30 group-hover:border-white/60 bg-white/5"
+                          : "border-white/35 group-hover:border-white/60 bg-white/5"
                       }`}
                     >
-                      {acceptedTerms && <Check className="w-3 h-3 text-[#050607] stroke-[3]" />}
+                      {acceptedTerms && <Check className="w-2.5 h-2.5 text-[#050607] stroke-[3]" />}
                     </div>
                     <span>I accept all terms and conditions.</span>
                   </label>
                 </div>
 
-                {/* Submit Action Pill Button */}
-                <div className="pt-2">
+                {/* Submit Action Pill Button (Book Now) */}
+                <div className="pt-1 flex justify-start">
                   <button
                     type="submit"
                     disabled={!acceptedTerms || isSubmitting}
-                    className={`inline-flex items-center justify-center gap-2 px-8 py-2.5 sm:py-3 rounded-full border border-white/30 text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.15)] active:scale-[0.98] ${
+                    className={`inline-flex items-center justify-center px-8 py-2.5 rounded-full border text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 active:scale-[0.98] ${
                       !acceptedTerms || isSubmitting
-                        ? "opacity-50 cursor-not-allowed bg-white/[0.04] text-[#8E9B9D]"
-                        : "hover:border-[#00E5D0] bg-white/[0.04] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] hover:shadow-[0_0_25px_rgba(0,229,208,0.4)] cursor-pointer"
+                        ? "opacity-50 cursor-not-allowed bg-white/[0.04] border-white/20 text-[#8E9B9D]"
+                        : "border-[#00E5D0]/40 bg-[#00E5D0]/10 hover:bg-[#00E5D0] text-[#00E5D0] hover:text-[#050607] shadow-[0_0_20px_rgba(0,229,208,0.15)] hover:shadow-[0_0_25px_rgba(0,229,208,0.4)] cursor-pointer"
                     }`}
                   >
-                    <span>{isSubmitting ? "Securing Appointment..." : "Book Now"}</span>
+                    <span>{isSubmitting ? "Booking..." : "Book Now"}</span>
                   </button>
                 </div>
               </form>
@@ -316,27 +325,37 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-4 sm:py-6 space-y-5"
+                className="text-center py-3 sm:py-5 space-y-4 relative z-10"
               >
-                <div className="w-16 h-16 rounded-full bg-[#00E5D0]/10 border border-[#00E5D0] flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(0,229,208,0.3)]">
-                  <ShieldCheck className="w-8 h-8 text-[#00E5D0]" />
+                {/* Close Button on Success State */}
+                <button
+                  type="button"
+                  onClick={handleModalClose}
+                  className="absolute top-0 right-0 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/80 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+
+                <div className="w-14 h-14 rounded-full bg-[#00E5D0]/10 border border-[#00E5D0] flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(0,229,208,0.3)]">
+                  <ShieldCheck className="w-7 h-7 text-[#00E5D0]" />
                 </div>
 
-                <div className="space-y-1.5">
-                  <span className="text-xs uppercase tracking-[0.22em] text-[#00E5D0] font-mono">
+                <div className="space-y-1">
+                  <span className="text-[11px] uppercase tracking-[0.22em] text-[#00E5D0] font-mono">
                     Consultation Confirmed
                   </span>
-                  <h4 className="font-display text-2xl sm:text-3xl font-bold text-[#F1EFE8]">
+                  <h4 className="font-display text-xl sm:text-2xl font-bold text-[#F1EFE8]">
                     We look forward to meeting you.
                   </h4>
-                  <p className="text-xs sm:text-sm text-[#8E9B9D] max-w-md mx-auto leading-relaxed">
+                  <p className="text-xs text-[#8E9B9D] max-w-sm mx-auto leading-relaxed">
                     Our clinical team will review your details and reach out within 4 business hours to finalize your appointment schedule.
                   </p>
                 </div>
 
                 {/* Summary Pill Card */}
-                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 text-left max-w-md mx-auto space-y-2.5 text-xs">
-                  <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 text-left max-w-sm mx-auto space-y-2 text-xs">
+                  <div className="flex justify-between items-center pb-1.5 border-b border-white/5">
                     <span className="text-[#8E9B9D]">Booking Reference:</span>
                     <span className="font-mono text-[#00E5D0] font-bold">{bookingRef}</span>
                   </div>
@@ -357,9 +376,9 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                     <span className="text-[#F1EFE8] font-medium">{formData.preferredDate}</span>
                   </div>
                   {formData.note && (
-                    <div className="pt-2 border-t border-white/5">
-                      <span className="text-[#8E9B9D] block mb-1">Note:</span>
-                      <p className="text-[#F1EFE8] italic bg-white/[0.02] p-2 rounded-lg border border-white/5">
+                    <div className="pt-1.5 border-t border-white/5">
+                      <span className="text-[#8E9B9D] block mb-0.5">Note:</span>
+                      <p className="text-[#F1EFE8] italic bg-white/[0.02] p-1.5 rounded border border-white/5">
                         {formData.note}
                       </p>
                     </div>
@@ -369,7 +388,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
                 <button
                   type="button"
                   onClick={handleModalClose}
-                  className="px-8 py-3 rounded-full border border-[#00E5D0] bg-[#00E5D0] text-[#050607] font-semibold text-xs tracking-wider uppercase hover:bg-[#00E5D0]/90 transition-all duration-300 shadow-[0_0_25px_rgba(0,229,208,0.35)] cursor-pointer"
+                  className="px-6 py-2.5 rounded-full border border-[#00E5D0] bg-[#00E5D0] text-[#050607] font-semibold text-xs tracking-wider uppercase hover:bg-[#00E5D0]/90 transition-all duration-300 shadow-[0_0_25px_rgba(0,229,208,0.35)] cursor-pointer"
                 >
                   Return to Website
                 </button>

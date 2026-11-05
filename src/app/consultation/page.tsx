@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Check, ShieldCheck } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { ArrowLeft, Calendar, Check, ShieldCheck, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import confetti from "canvas-confetti";
 
-export default function ConsultationPage() {
+function ConsultationForm() {
+  const searchParams = useSearchParams();
+  const selectedService = searchParams.get("service") || "Clinical Consultation";
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -47,7 +50,7 @@ export default function ConsultationPage() {
           email: formData.email,
           preferredDate: formData.preferredDate,
           note: formData.note,
-          service: "Clinical Consultation",
+          service: selectedService,
           hp_clinical_token: honeypot,
         }),
       });
@@ -79,53 +82,55 @@ export default function ConsultationPage() {
   };
 
   return (
-    <main className="relative min-h-screen w-full bg-[#050607] text-[#F1EFE8] flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 overflow-x-hidden">
+    <main className="relative min-h-screen w-full bg-[#050607] text-[#F1EFE8] flex items-center justify-center p-3.5 sm:p-6 py-6 sm:py-8 overflow-x-hidden">
       {/* Full-bleed Photographic Golden Hour Mountain Landscape Backdrop */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <img
-          src="/images/final-cta-dawn.jpg"
-          alt="Scenic golden hour mountain landscape"
-          className="w-full h-full object-cover object-center filter brightness-[0.45] contrast-[1.1] scale-105"
-        />
+        <picture>
+          <source srcSet="/images/final-cta-dawn.webp" type="image/webp" />
+          <img
+            src="/images/final-cta-dawn.jpg"
+            alt="Scenic golden hour mountain landscape"
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover object-center filter brightness-[0.45] contrast-[1.1] scale-105"
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-[#050607]/40 to-[#050607]/80" />
       </div>
 
-      {/* Top Floating Navigation Header */}
-      <header className="relative z-20 w-full max-w-4xl mx-auto flex items-center justify-between pb-6 sm:pb-8">
-        <Logo size="md" />
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono uppercase tracking-wider text-[#A5AAAB] hover:text-[#F1EFE8] transition-all"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Home</span>
-        </Link>
-      </header>
-
-      {/* Glassmorphic Form Card with Dual-Tone Gradient Outline */}
-      <div className="relative z-10 w-full max-w-xl p-[1px] rounded-[28px] sm:rounded-[34px] bg-gradient-to-br from-[#00E5D0]/60 via-white/15 to-[#A78BFA]/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]">
-        <div className="relative rounded-[27px] sm:rounded-[33px] bg-[#0A0D10]/85 backdrop-blur-2xl p-6 sm:p-9 md:p-10 overflow-hidden">
+      {/* Glassmorphic Form Card with Dual-Tone Gradient Outline - Exactly matching reference */}
+      <div className="relative z-10 w-full max-w-lg p-[1px] rounded-[24px] sm:rounded-[30px] bg-gradient-to-br from-[#00E5D0]/60 via-white/15 to-[#A78BFA]/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]">
+        <div className="relative rounded-[23px] sm:rounded-[29px] bg-[#0A0D10]/92 backdrop-blur-2xl p-4 sm:p-6 overflow-hidden">
           {/* Ambient Inner Glows */}
           <div className="absolute -top-24 -left-24 w-60 h-60 bg-[#00E5D0]/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-[#A78BFA]/10 rounded-full blur-3xl pointer-events-none" />
 
+          {/* Close Button top-right (Returns to Home) */}
+          <Link
+            href="/"
+            className="absolute right-3.5 top-3.5 sm:right-5 sm:top-5 z-20 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white/80 hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-95"
+            aria-label="Close and return to home"
+          >
+            <X className="w-4 h-4" />
+          </Link>
+
           {!isSubmitted ? (
-            <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
+            <form onSubmit={handleSubmit} className="space-y-3.5 relative z-10">
               {/* Centered Heading */}
-              <div className="text-center space-y-1 pb-1">
-                <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[#F1EFE8] tracking-tight">
+              <div className="text-center pb-2 pt-1 px-6 sm:px-8">
+                <h1 className="font-display text-2xl sm:text-[28px] font-bold text-[#F1EFE8] tracking-tight">
                   Make your Booking
                 </h1>
-                <p className="text-xs text-[#8E9B9D] font-normal">
+                <p className="text-xs sm:text-[13px] text-[#8E9B9D] mt-1 font-normal">
                   Schedule a consultation with our clinical team in Cochin
                 </p>
               </div>
 
-              {/* 2-Column Responsive Input Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
+              {/* 2-Column Responsive Input Grid (Both Mobile & Desktop) */}
+              <div className="grid grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-2.5 sm:gap-y-3">
                 {/* Name */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-[#F1EFE8]">
+                <div className="space-y-1">
+                  <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                     Name
                   </label>
                   <input
@@ -134,13 +139,13 @@ export default function ConsultationPage() {
                     placeholder="Enter your name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                    className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner"
                   />
                 </div>
 
                 {/* Phone Number */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-[#F1EFE8]">
+                <div className="space-y-1">
+                  <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                     Phone Number
                   </label>
                   <input
@@ -149,13 +154,13 @@ export default function ConsultationPage() {
                     placeholder="Enter phone number"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                    className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner"
                   />
                 </div>
 
                 {/* Email */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-[#F1EFE8]">
+                <div className="space-y-1">
+                  <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                     Email
                   </label>
                   <input
@@ -164,13 +169,13 @@ export default function ConsultationPage() {
                     placeholder="Enter your Email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner"
+                    className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner"
                   />
                 </div>
 
                 {/* Preferred Date */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-[#F1EFE8]">
+                <div className="space-y-1">
+                  <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                     Preferred Date
                   </label>
                   <div className="relative">
@@ -180,15 +185,15 @@ export default function ConsultationPage() {
                       min={getTodayDate()}
                       value={formData.preferredDate}
                       onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 pr-10 text-xs sm:text-sm text-[#F1EFE8] focus:outline-none transition-all shadow-inner scheme-dark"
+                      className="w-full rounded-full bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-3 sm:px-3.5 py-1.5 sm:py-2 pr-7 sm:pr-8 text-[10px] sm:text-[11px] text-[#A5AAAB] focus:text-[#F1EFE8] focus:outline-none transition-all shadow-inner scheme-dark [&::-webkit-datetime-edit]:text-[10px] sm:[&::-webkit-datetime-edit]:text-[11px] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-7 sm:[&::-webkit-calendar-picker-indicator]:w-8"
                     />
-                    <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" />
+                    <Calendar className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#8E9B9D] pointer-events-none" />
                   </div>
                 </div>
 
-                {/* Option to Add a Note (Full Width) */}
-                <div className="space-y-1.5 sm:col-span-2">
-                  <label className="block text-xs font-medium text-[#F1EFE8]">
+                {/* Option to Add a Note (Full Width Curved Square Box) */}
+                <div className="space-y-1 col-span-2">
+                  <label className="block text-[10px] sm:text-[11px] font-medium text-[#F1EFE8]/90">
                     Add a Note
                   </label>
                   <textarea
@@ -196,7 +201,8 @@ export default function ConsultationPage() {
                     placeholder="Share any specific requirements or notes (optional)..."
                     value={formData.note}
                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                    className="w-full rounded-2xl bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] px-4.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-[#F1EFE8] placeholder:text-[#8E9B9D]/60 focus:outline-none transition-all shadow-inner resize-none"
+                    style={{ borderRadius: "18px" }}
+                    className="w-full appearance-none rounded-[18px] bg-white/[0.04] hover:bg-white/[0.06] focus:bg-[#0E1316] border border-white/20 focus:border-[#00E5D0] p-2.5 sm:p-3 text-[10px] sm:text-xs placeholder:text-[10px] sm:placeholder:text-xs text-[#F1EFE8] placeholder:text-[#8E9B9D]/50 focus:outline-none transition-all shadow-inner resize-none h-[60px] sm:h-[68px]"
                   />
                 </div>
               </div>
@@ -217,14 +223,14 @@ export default function ConsultationPage() {
 
               {/* Error Banner */}
               {errorMessage && (
-                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 font-sans">
+                <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 font-sans">
                   {errorMessage}
                 </div>
               )}
 
               {/* Terms Checkbox */}
-              <div className="pt-1">
-                <label className="inline-flex items-center gap-2.5 cursor-pointer select-none group text-xs text-[#A5AAAB]">
+              <div className="pt-0.5">
+                <label className="inline-flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none group text-[11px] sm:text-xs text-[#A5AAAB]">
                   <input
                     type="checkbox"
                     required
@@ -233,30 +239,30 @@ export default function ConsultationPage() {
                     className="sr-only"
                   />
                   <div
-                    className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
+                    className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full border flex items-center justify-center transition-all shrink-0 ${
                       acceptedTerms
                         ? "bg-[#00E5D0] border-[#00E5D0]"
-                        : "border-white/30 group-hover:border-white/60 bg-white/5"
+                        : "border-white/35 group-hover:border-white/60 bg-white/5"
                     }`}
                   >
-                    {acceptedTerms && <Check className="w-3 h-3 text-[#050607] stroke-[3]" />}
+                    {acceptedTerms && <Check className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-[#050607] stroke-[3]" />}
                   </div>
                   <span>I accept all terms and conditions.</span>
                 </label>
               </div>
 
-              {/* Submit Action Pill Button */}
-              <div className="pt-2">
+              {/* Submit Action Pill Button (Book Now) */}
+              <div className="pt-1 flex justify-start">
                 <button
                   type="submit"
                   disabled={!acceptedTerms || isSubmitting}
-                  className={`inline-flex items-center justify-center gap-2 px-8 py-2.5 sm:py-3 rounded-full border border-white/30 text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 shadow-[0_0_20px_rgba(0,229,208,0.15)] active:scale-[0.98] ${
+                  className={`inline-flex items-center justify-center px-7 sm:px-8 py-2 sm:py-2.5 rounded-full border text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 active:scale-[0.98] ${
                     !acceptedTerms || isSubmitting
-                      ? "opacity-50 cursor-not-allowed bg-white/[0.04] text-[#8E9B9D]"
-                      : "hover:border-[#00E5D0] bg-white/[0.04] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] hover:shadow-[0_0_25px_rgba(0,229,208,0.4)] cursor-pointer"
+                      ? "opacity-50 cursor-not-allowed bg-white/[0.04] border-white/20 text-[#8E9B9D]"
+                      : "border-[#00E5D0]/40 bg-[#00E5D0]/10 hover:bg-[#00E5D0] text-[#00E5D0] hover:text-[#050607] shadow-[0_0_20px_rgba(0,229,208,0.15)] hover:shadow-[0_0_25px_rgba(0,229,208,0.4)] cursor-pointer"
                   }`}
                 >
-                  <span>{isSubmitting ? "Securing Appointment..." : "Book Now"}</span>
+                  <span>{isSubmitting ? "Booking..." : "Book Now"}</span>
                 </button>
               </div>
             </form>
@@ -321,5 +327,13 @@ export default function ConsultationPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function ConsultationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#050607]" />}>
+      <ConsultationForm />
+    </Suspense>
   );
 }

@@ -36,6 +36,19 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* iOS Safe Area Support for notch/island/home bar across all iOS versions */
+:root {
+  --safe-top: constant(safe-area-inset-top);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: constant(safe-area-inset-bottom);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: constant(safe-area-inset-left);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: constant(safe-area-inset-right);
+  --safe-right: env(safe-area-inset-right, 0px);
 }
 
 html {
@@ -44,6 +57,8 @@ html {
   font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
   scroll-behavior: smooth;
   color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -53,6 +68,12 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
+  /* Prevent elastic scroll background flash on iOS */
+  overscroll-behavior: none;
+  /* Ensure text rendering is crisp on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Subtle Film Grain Texture Overlay (barely noticeable, prevents flat AI look) */
@@ -142,6 +163,23 @@ body::before {
   -webkit-backdrop-filter: blur(16px);
 }
 
+/* Dedicated Backdrop Blur with WebKit prefixes for iOS Safari 9-15.7 */
+.backdrop-blur-none { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.backdrop-blur-sm { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.backdrop-blur-md { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.backdrop-blur-lg { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.backdrop-blur-xl { -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
+.backdrop-blur-2xl { -webkit-backdrop-filter: blur(40px); backdrop-filter: blur(40px); }
+.backdrop-blur-3xl { -webkit-backdrop-filter: blur(64px); backdrop-filter: blur(64px); }
+
+/* Graceful solid-dark background fallback when backdrop-filter is unsupported on older Android/iOS */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .subtle-glass,
+  [class*="backdrop-blur"] {
+    background-color: rgba(10, 13, 16, 0.95) !important;
+  }
+}
+
 /* Hide scrollbars cleanly for mobile carousels */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -151,14 +189,70 @@ body::before {
   scrollbar-width: none;
 }
 
-/* Touch Snap Scroll Utilities */
+/* Touch Snap Scroll Utilities for iOS & Android */
 .snap-x-mandatory {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
-.snap-center-card {
+.snap-center-card,
+.snap-center {
   scroll-snap-align: center;
   scroll-snap-stop: always;
 }
 
+/* Prevent iOS default inner shadow and appearance artifacts */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}
 
+/* On mobile touch devices only, ensure minimum 16px font-size on focus to prevent iOS Safari auto-zoom */
+@media screen and (max-width: 768px) {
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  textarea:focus {
+    font-size: 16px;
+  }
+}
+
+/* Buttons and interactive elements: ensure optimal touch interaction */
+button, a, [role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* iOS momentum scroll for all scrollable regions */
+.overflow-y-auto, .overflow-x-auto, .overflow-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hardware accelerated 3D transforms for smooth cards on iOS & Android GPUs */
+.preserve-3d {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Legacy iOS (<15) & Legacy Android (<Chrome 88) aspect-ratio compatibility */
+@supports not (aspect-ratio: 1 / 1) {
+  .aspect-\[16\/10\] { min-height: 200px; }
+  .aspect-\[16\/9\], .aspect-video { min-height: 200px; }
+  .aspect-\[16\/11\] { min-height: 220px; }
+  .aspect-\[4\/3\] { min-height: 240px; }
+  .aspect-\[3\/4\] { min-height: 280px; }
+  .aspect-\[4\/5\] { min-height: 280px; }
+  .aspect-\[3\/3\.6\] { min-height: 260px; }
+  .aspect-\[4\/4\.9\] { min-height: 280px; }
+  .aspect-\[9\/19\] { min-height: 380px; }
+  .aspect-square { min-height: 100px; }
+}

@@ -131,15 +131,20 @@ export const ProductAccordionGallery: React.FC<ProductAccordionGalleryProps> = (
             >
               {/* 1. LAYERED BACKGROUND: High-Resolution Photographic Scrim */}
               <div className="absolute inset-0 z-0 overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className={`w-full h-full object-cover object-center transition-all duration-1000 ease-out ${
-                    isExpanded
-                      ? "scale-105 filter brightness-[0.7] contrast-[1.08]"
-                      : "scale-100 filter brightness-[0.35] contrast-[0.98] group-hover:brightness-[0.45]"
-                  }`}
-                />
+                <picture>
+                  <source srcSet={item.image.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                    className={`w-full h-full object-cover object-center transition-all duration-1000 ease-out ${
+                      isExpanded
+                        ? "scale-105 filter brightness-[0.7] contrast-[1.08]"
+                        : "scale-100 filter brightness-[0.35] contrast-[0.98] group-hover:brightness-[0.45]"
+                    }`}
+                  />
+                </picture>
                 {/* Darkening Scrims */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-[#050607]/80 to-[#050607]/40 pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#050607]/90 via-[#050607]/60 to-transparent pointer-events-none" />

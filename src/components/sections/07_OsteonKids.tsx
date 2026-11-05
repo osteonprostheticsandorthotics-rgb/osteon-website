@@ -63,11 +63,16 @@ export const OsteonKidsSection: React.FC<OsteonKidsProps> = ({ onOpenConsultatio
             >
               {/* Image Container */}
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#111518]">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.9] contrast-[1.04]"
-                />
+                <picture>
+                  <source srcSet={item.image.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.9] contrast-[1.04]"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A0D0F] via-transparent to-transparent pointer-events-none" />
                 <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#050607]/80 backdrop-blur-md text-[10px] font-mono font-bold uppercase tracking-widest text-[#00E5D0] border border-white/[0.08]">
                   OSTEON KIDS

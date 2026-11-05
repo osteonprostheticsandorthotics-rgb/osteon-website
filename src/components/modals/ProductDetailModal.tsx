@@ -74,11 +74,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
               {/* Product Visual */}
               <div className="md:col-span-5 relative aspect-square rounded-2xl overflow-hidden border border-white/10 bg-[#11191A]">
-                <img
-                  src={product.heroImage}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
+                <picture>
+                  <source srcSet={product.heroImage.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                  <img
+                    src={product.heroImage}
+                    alt={product.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4">
                   <span className="text-[10px] uppercase font-mono tracking-widest text-[#00E5D0]">

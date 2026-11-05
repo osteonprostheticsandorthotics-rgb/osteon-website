@@ -59,11 +59,16 @@ export const ScoliosisSection: React.FC<ScoliosisProps> = ({ onOpenConsultation 
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-7 relative aspect-[4/3] sm:aspect-[16/11] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl"
           >
-            <img
-              src="/images/scoliosis-spine.jpg"
-              alt="Anatomical spinal alignment visualization and 3D derotation map"
-              className="w-full h-full object-cover object-center filter brightness-[0.95] contrast-[1.05]"
-            />
+            <picture>
+              <source srcSet="/images/scoliosis-spine.webp" type="image/webp" />
+              <img
+                src="/images/scoliosis-spine.jpg"
+                alt="Anatomical spinal alignment visualization and 3D derotation map"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover object-center filter brightness-[0.95] contrast-[1.05]"
+              />
+            </picture>
           </motion.div>
 
           {/* Right Column: Restrained Clinical Features */}
@@ -71,11 +76,16 @@ export const ScoliosisSection: React.FC<ScoliosisProps> = ({ onOpenConsultation 
             {/* Feature 1: Boston Brace 3D */}
             <div className="p-6 rounded-2xl bg-[#0A0D0F] border border-white/[0.08] flex gap-5 items-center group">
               <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#111518] shrink-0 border border-white/[0.06]">
-                <img
-                  src="/images/boston-brace-scoliosis.jpg"
-                  alt="Boston Brace 3D thermoformed orthosis"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                <picture>
+                  <source srcSet="/images/boston-brace-scoliosis.webp" type="image/webp" />
+                  <img
+                    src="/images/boston-brace-scoliosis.jpg"
+                    alt="Boston Brace 3D thermoformed orthosis"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </picture>
               </div>
               <div className="space-y-1">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] font-bold">
@@ -93,11 +103,16 @@ export const ScoliosisSection: React.FC<ScoliosisProps> = ({ onOpenConsultation 
             {/* Feature 2: Discreet Daily Life */}
             <div className="p-6 rounded-2xl bg-[#0A0D0F] border border-white/[0.08] flex gap-5 items-center group">
               <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#111518] shrink-0 border border-white/[0.06]">
-                <img
-                  src="/images/brochure/page_17_img_1_52.jpeg"
-                  alt="Clinical Boston Brace alignment and discreet under-clothing fit"
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                />
+                <picture>
+                  <source srcSet="/images/brochure/page_17_img_1_52.webp" type="image/webp" />
+                  <img
+                    src="/images/brochure/page_17_img_1_52.jpeg"
+                    alt="Clinical Boston Brace alignment and discreet under-clothing fit"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  />
+                </picture>
               </div>
               <div className="space-y-1">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] font-bold">

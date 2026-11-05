@@ -61,11 +61,16 @@ export const TechnologySection: React.FC<TechnologySectionProps> = ({ onOpenCons
           >
             <div className="space-y-4">
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#111518] border border-white/[0.06]">
-                <img
-                  src="/images/tech-composite-matrix.jpg"
-                  alt="High-performance carbon fibre orthotic engineering"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+                <picture>
+                  <source srcSet="/images/tech-composite-matrix.webp" type="image/webp" />
+                  <img
+                    src="/images/tech-composite-matrix.jpg"
+                    alt="High-performance carbon fibre orthotic engineering"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </picture>
               </div>
               <div className="space-y-1.5">
                 <span className="text-xs font-mono text-[#00E5D0] tracking-wider block font-semibold">
@@ -91,11 +96,16 @@ export const TechnologySection: React.FC<TechnologySectionProps> = ({ onOpenCons
           >
             <div className="space-y-4">
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#111518] border border-white/[0.06]">
-                <img
-                  src="/images/bionic-arm-prosthesis.jpg"
-                  alt="Myoelectric electrode sensors and bionic hand prosthesis"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+                <picture>
+                  <source srcSet="/images/bionic-arm-prosthesis.webp" type="image/webp" />
+                  <img
+                    src="/images/bionic-arm-prosthesis.jpg"
+                    alt="Myoelectric electrode sensors and bionic hand prosthesis"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </picture>
               </div>
               <div className="space-y-1.5">
                 <span className="text-xs font-mono text-[#00E5D0] tracking-wider block font-semibold">
@@ -121,11 +131,16 @@ export const TechnologySection: React.FC<TechnologySectionProps> = ({ onOpenCons
           >
             <div className="space-y-4">
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#111518] border border-white/[0.06]">
-                <img
-                  src="/images/socket-engineering.jpg"
-                  alt="Custom carbon fibre socket sculpting"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+                <picture>
+                  <source srcSet="/images/socket-engineering.webp" type="image/webp" />
+                  <img
+                    src="/images/socket-engineering.jpg"
+                    alt="Custom carbon fibre socket sculpting"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </picture>
               </div>
               <div className="space-y-1.5">
                 <span className="text-xs font-mono text-[#00E5D0] tracking-wider block font-semibold">
@@ -151,11 +166,16 @@ export const TechnologySection: React.FC<TechnologySectionProps> = ({ onOpenCons
           >
             <div className="space-y-4">
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#111518] border border-white/[0.06]">
-                <img
-                  src="/images/tech-gait-kinematics.jpg"
-                  alt="Dynamic cadence and gait biomechanics"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+                <picture>
+                  <source srcSet="/images/tech-gait-kinematics.webp" type="image/webp" />
+                  <img
+                    src="/images/tech-gait-kinematics.jpg"
+                    alt="Dynamic cadence and gait biomechanics"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </picture>
               </div>
               <div className="space-y-1.5">
                 <span className="text-xs font-mono text-[#00E5D0] tracking-wider block font-semibold">

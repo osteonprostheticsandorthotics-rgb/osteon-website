@@ -12,7 +12,7 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
   return (
     <section
       id="about"
-      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07] scroll-mt-24"
     >
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
         {/* Asymmetrical 12-Column Grid */}
@@ -81,15 +81,17 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="w-[88%] aspect-[4/5] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl relative"
               >
-                <img
-                  src="/images/about-clinician-hero.jpg"
-                  alt="Osteon clinician with precision prosthetic device"
-                  className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05]"
-                />
+                <picture>
+                  <source srcSet="/images/about-clinician-hero.webp" type="image/webp" />
+                  <img
+                    src="/images/about-clinician-hero.jpg"
+                    alt="Osteon clinician with precision prosthetic device"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05]"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-[#050607]/80 backdrop-blur-md text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-[#00E5D0] border border-white/[0.08]">
-                  Precision Craftsmanship
-                </span>
               </motion.div>
 
               {/* Overlapping Secondary Images Strip */}
@@ -102,11 +104,16 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
                   transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                   className="w-[40%] aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.12] bg-[#0A0D0F] shadow-2xl relative"
                 >
-                  <img
-                    src="/images/about-carbon-hero.jpg"
-                    alt="Carbon fiber matrix composite weave engineering"
-                    className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.1]"
-                  />
+                  <picture>
+                    <source srcSet="/images/about-carbon-hero.webp" type="image/webp" />
+                    <img
+                      src="/images/about-carbon-hero.jpg"
+                      alt="Carbon fiber matrix composite weave engineering"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.1]"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
                 </motion.div>
 
@@ -118,11 +125,16 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
                   transition={{ duration: 0.8, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
                   className="w-[54%] aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.12] bg-[#0A0D0F] shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
                 >
-                  <img
-                    src="/images/about-runner-hero.jpg"
-                    alt="Human potential in motion - athlete with prosthetic limb"
-                    className="w-full h-full object-cover object-center filter brightness-[0.96] contrast-[1.05]"
-                  />
+                  <picture>
+                    <source srcSet="/images/about-runner-hero.webp" type="image/webp" />
+                    <img
+                      src="/images/about-runner-hero.jpg"
+                      alt="Human potential in motion - athlete with prosthetic limb"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center filter brightness-[0.96] contrast-[1.05]"
+                    />
+                  </picture>
                 </motion.div>
               </div>
             </div>
@@ -138,11 +150,16 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
                 className="w-[33%] self-end translate-y-12"
               >
                 <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group">
-                  <img
-                    src="/images/about-runner-hero.jpg"
-                    alt="Human potential in motion - athlete with prosthetic limb walking on street"
-                    className="w-full h-full object-cover object-center filter brightness-[0.96] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
+                  <picture>
+                    <source srcSet="/images/about-runner-hero.webp" type="image/webp" />
+                    <img
+                      src="/images/about-runner-hero.jpg"
+                      alt="Human potential in motion - athlete with prosthetic limb walking on street"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center filter brightness-[0.96] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
                 </div>
               </motion.div>
@@ -156,11 +173,16 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
                 className="w-[45%] self-start"
               >
                 <div className="relative aspect-[4/4.9] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group">
-                  <img
-                    src="/images/about-clinician-hero.jpg"
-                    alt="Osteon clinician in workshop fitting precision prosthetic device"
-                    className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
+                  <picture>
+                    <source srcSet="/images/about-clinician-hero.webp" type="image/webp" />
+                    <img
+                      src="/images/about-clinician-hero.jpg"
+                      alt="Osteon clinician in workshop fitting precision prosthetic device"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[1.05] group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
                 </div>
               </motion.div>
@@ -174,11 +196,16 @@ export const HumanStorySection: React.FC<HumanStoryProps> = ({ onOpenConsultatio
                 className="w-[22%] self-start flex flex-col justify-between gap-4"
               >
                 <div className="relative aspect-[9/19] rounded-3xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-2xl group">
-                  <img
-                    src="/images/about-carbon-hero.jpg"
-                    alt="Carbon fiber matrix composite weave engineering"
-                    className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.1] group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
+                  <picture>
+                    <source srcSet="/images/about-carbon-hero.webp" type="image/webp" />
+                    <img
+                      src="/images/about-carbon-hero.jpg"
+                      alt="Carbon fiber matrix composite weave engineering"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.1] group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 pointer-events-none" />
                 </div>
 

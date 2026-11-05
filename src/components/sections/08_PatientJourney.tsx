@@ -7,13 +7,10 @@ import {
   useSpring,
   useMotionValueEvent,
 } from "framer-motion";
-import {
-  ArrowRight,
-  Check,
-} from "lucide-react";
+import { Check } from "lucide-react";
 
 interface PatientJourneyProps {
-  onOpenConsultation: () => void;
+  onOpenConsultation?: () => void;
 }
 
 const CLINICAL_STAGES = [
@@ -31,7 +28,7 @@ const CLINICAL_STAGES = [
     title: "Anatomical Assessment",
     description:
       "High-precision 3D limb capture and gait analysis to map residual anatomy, range of motion, and dynamic load tolerance.",
-    image: "/images/tech-gait-kinematics.jpg",
+    image: "/images/process-step-2.jpg",
   },
   {
     step: "03",
@@ -39,7 +36,7 @@ const CLINICAL_STAGES = [
     title: "Precision Tailoring & Design",
     description:
       "Sculpting custom carbon fibre sockets and articulated orthotic braces calibrated specifically to your body weight and activity level.",
-    image: "/images/socket-engineering.jpg",
+    image: "/images/process-step-3.jpg",
   },
   {
     step: "04",
@@ -47,7 +44,7 @@ const CLINICAL_STAGES = [
     title: "Fitting & Gait Tuning",
     description:
       "Dynamic test-walking sessions to fine-tune alignment, relieve pressure hotspots, and restore a natural walking cadence.",
-    image: "/images/prosthetics-lower.jpg",
+    image: "/images/process-step-4.jpg",
   },
   {
     step: "05",
@@ -55,13 +52,11 @@ const CLINICAL_STAGES = [
     title: "Ongoing Clinical Support",
     description:
       "Scheduled check-ups, socket relining, and routine adjustments to ensure lasting comfort and peak performance as your body adapts.",
-    image: "/images/about-runner-hero.jpg",
+    image: "/images/process-step-5.jpg",
   },
 ];
 
-export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
-  onOpenConsultation,
-}) => {
+export const PatientJourneySection: React.FC<PatientJourneyProps> = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeStage, setActiveStage] = useState(0);
 
@@ -129,9 +124,9 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
   return (
     <section
       id="process"
-      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07] scroll-mt-24"
     >
-      <div className="max-w-[1440px] mx-auto px-4 xs:px-6 sm:px-10 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 relative z-10">
         {/* ========================================================================= */}
         {/* SECTION HEADER (LEFT-ALIGNED EDITORIAL GRID) */}
         {/* ========================================================================= */}
@@ -284,7 +279,6 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                         <div className="w-full flex justify-end pr-8">
                           <CompactVisualPreview
                             stage={stage}
-                            isPassed={isPassed}
                           />
                         </div>
                       )}
@@ -315,7 +309,6 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                         <div className="w-full flex justify-start pl-8">
                           <CompactVisualPreview
                             stage={stage}
-                            isPassed={isPassed}
                           />
                         </div>
                       )}
@@ -323,9 +316,9 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                   </div>
 
                   {/* MOBILE & TABLET IMMERSIVE STORYTELLING VIEW (< lg) */}
-                  <div className="lg:hidden pl-11 sm:pl-16 relative py-6 sm:py-8">
+                  <div className="lg:hidden pl-9 sm:pl-14 relative py-3 sm:py-5">
                     {/* Mobile Left Rail Node */}
-                    <div className="absolute left-4 sm:left-6 -translate-x-1/2 top-8 z-20">
+                    <div className="absolute left-4 sm:left-6 -translate-x-1/2 top-5 z-20">
                       <CheckpointNode
                         step={stage.step}
                         isPassed={isPassed}
@@ -337,11 +330,11 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
 
                     {/* Substantial Mobile Storytelling Card */}
                     <motion.div
-                      initial={{ opacity: 0, y: 24 }}
+                      initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-60px" }}
-                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                      className={`rounded-2xl border transition-all duration-500 overflow-hidden space-y-4 p-5 sm:p-6 shadow-2xl ${
+                      viewport={{ once: true, margin: "-40px" }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      className={`rounded-xl sm:rounded-2xl border transition-all duration-500 overflow-hidden space-y-2.5 sm:space-y-3.5 p-3.5 sm:p-5 shadow-xl ${
                         isCurrent
                           ? "bg-[#090C0E] border-[#00E5D0]/50 shadow-[0_10px_35px_rgba(0,229,208,0.12)]"
                           : isPassed
@@ -350,22 +343,27 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
                       }`}
                     >
                       {/* Stage Headline */}
-                      <h3 className="font-display font-bold uppercase text-xl sm:text-2xl text-[#F1EFE8] leading-tight">
+                      <h3 className="font-display font-bold uppercase text-base sm:text-xl text-[#F1EFE8] leading-tight tracking-tight">
                         {stage.title}
                       </h3>
 
-                      {/* Large Clinical Photography Frame */}
-                      <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl overflow-hidden border border-white/[0.08] bg-[#050607]">
-                        <img
-                          src={stage.image}
-                          alt={stage.title}
-                          className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
-                        />
+                      {/* Clinical Photography Frame */}
+                      <div className="relative aspect-[16/9] w-full rounded-lg sm:rounded-xl overflow-hidden border border-white/[0.08] bg-[#050607]">
+                        <picture>
+                          <source srcSet={stage.image.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                          <img
+                            src={stage.image}
+                            alt={stage.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+                          />
+                        </picture>
                         <div className="absolute inset-0 bg-gradient-to-t from-[#050607]/80 via-transparent to-transparent pointer-events-none" />
                       </div>
 
                       {/* Narrative Description */}
-                      <p className="text-xs sm:text-sm text-[#A5AAAB] leading-relaxed font-normal">
+                      <p className="text-[11px] sm:text-xs text-[#A5AAAB] leading-relaxed font-normal">
                         {stage.description}
                       </p>
                     </motion.div>
@@ -375,37 +373,6 @@ export const PatientJourneySection: React.FC<PatientJourneyProps> = ({
             })}
           </div>
         </div>
-
-        {/* ========================================================================= */}
-        {/* COMPACT BOTTOM CONSULTATION TOUCHPOINT */}
-        {/* ========================================================================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-12 sm:mt-16 p-7 sm:p-9 md:p-10 rounded-2xl sm:rounded-3xl bg-[#080B0D] border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8 max-w-3xl mx-auto text-center sm:text-left w-full shadow-2xl"
-        >
-          <div className="space-y-2 sm:space-y-2.5 w-full sm:w-auto">
-            <div className="text-[11px] sm:text-xs font-mono text-[#00E5D0] uppercase tracking-[0.2em] font-semibold">
-              BEGIN YOUR JOURNEY
-            </div>
-            <h3 className="font-display font-bold uppercase text-xl sm:text-2xl md:text-3xl text-[#F1EFE8] leading-tight tracking-tight">
-              Book an Initial Clinical Evaluation
-            </h3>
-            <p className="text-sm sm:text-base text-[#CBD5E1] max-w-lg font-normal leading-relaxed mx-auto sm:mx-0">
-              Meet with our prosthetic and orthotic specialists to map your personalized care pathway.
-            </p>
-          </div>
-
-          <button
-            onClick={onOpenConsultation}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-3.5 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 shrink-0 cursor-pointer min-h-[50px] group shadow-sm hover:shadow-[0_0_20px_rgba(0,229,208,0.3)]"
-          >
-            <span>Start Consultation</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
-        </motion.div>
       </div>
     </section>
   );
@@ -518,12 +485,10 @@ const CompactStageCard: React.FC<CompactStageCardProps> = ({
 // =========================================================================
 interface CompactVisualPreviewProps {
   stage: (typeof CLINICAL_STAGES)[0];
-  isPassed: boolean;
 }
 
 const CompactVisualPreview: React.FC<CompactVisualPreviewProps> = ({
   stage,
-  isPassed,
 }) => {
   return (
     <motion.div
@@ -533,11 +498,17 @@ const CompactVisualPreview: React.FC<CompactVisualPreviewProps> = ({
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="max-w-[320px] w-full aspect-[16/10] rounded-xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] shadow-lg group relative"
     >
-      <img
-        src={stage.image}
-        alt={stage.title}
-        className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.05] group-hover:scale-105 transition-transform duration-500 ease-out"
-      />
+      <picture>
+        <source srcSet={stage.image.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+        <img
+          src={stage.image}
+          alt={stage.title}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-center filter brightness-[0.9] contrast-[1.05] group-hover:scale-105 transition-transform duration-500 ease-out"
+        />
+      </picture>
     </motion.div>
   );
 };
+

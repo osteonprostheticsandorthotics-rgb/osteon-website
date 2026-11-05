@@ -16,9 +16,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
-    // React/DOM hydration safety: strictly enforce muted on DOM instance before play
+    // React/DOM hydration safety: strictly enforce muted and playsinline attributes
     video.defaultMuted = true;
     video.muted = true;
+    video.setAttribute("playsinline", "true");
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("x5-playsinline", "true");
 
     const startPlayback = () => {
       const playPromise = video.play();
@@ -47,7 +50,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section
       id="hero"
-      className="relative w-full min-h-[100svh] flex flex-col justify-center overflow-hidden bg-[#050607]"
+      className="relative w-full min-h-screen min-h-[100svh] min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-[#050607] scroll-mt-24"
     >
       {/* Cinematic Fullscreen Background Video */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
@@ -58,7 +61,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           loop
           muted
           playsInline
-          preload="auto"
+          {...({
+            "webkit-playsinline": "true",
+            "x5-playsinline": "true",
+            "x5-video-player-type": "h5-page",
+          } as Record<string, string>)}
+          preload="metadata"
           poster="/images/socket-engineering.jpg"
           className="w-full h-full object-cover object-center filter brightness-[0.99] contrast-[1.08] opacity-85"
         >
@@ -75,7 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* Main Hero Content Composition */}
-      <div className="relative z-20 max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-12 w-full pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 flex-1 flex flex-col justify-center">
+      <div className="relative z-20 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 w-full pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24 flex-1 flex flex-col justify-center">
         <div className="max-w-3xl">
           {/* Subtle Category Kicker */}
           <motion.div

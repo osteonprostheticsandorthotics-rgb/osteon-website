@@ -27,11 +27,16 @@ export const Logo: React.FC<LogoProps> = ({
       aria-label="OSTEON Home"
     >
       <div className={`relative ${sizeStyles[size]} w-auto aspect-[1000/340] transition-transform duration-300 group-hover:scale-[1.02]`}>
-        <img
-          src="/osteon-logo.png"
-          alt="OSTEON Prosthetics & Orthotics"
-          className="h-full w-auto object-contain brightness-[1.12] contrast-[1.05]"
-        />
+        <picture>
+          <source srcSet="/osteon-logo.webp" type="image/webp" />
+          <img
+            src="/osteon-logo.png"
+            alt="OSTEON Prosthetics & Orthotics"
+            decoding="async"
+            fetchPriority="high"
+            className="h-full w-auto object-contain brightness-[1.12] contrast-[1.05]"
+          />
+        </picture>
       </div>
     </Link>
   );

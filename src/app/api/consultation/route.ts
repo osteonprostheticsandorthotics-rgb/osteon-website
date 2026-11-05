@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sendClinicIntakeEmail, sendPatientConfirmationEmail } from "@/lib/email";
 
 // ─── Rate Limiter (Sliding Window per IP) ────────────────────────────────────
 interface RateLimitRecord {
@@ -153,18 +154,45 @@ export async function POST(req: NextRequest) {
     const bookingRef = `OST-${Math.floor(100000 + Math.random() * 900000)}`;
     const timestamp = new Date().toISOString();
 
-    // 6. Clinical Intake Log
-    // In production, dispatch email to support@osteonprosthetics.com via SMTP or Resend
-    console.log(`[OSTEON INTAKE] New booking #${bookingRef}:`, {
+    const bookingData = {
+      reference: bookingRef,
       name,
       phone,
       email,
       preferredDate,
       service,
-      noteLength: note.length,
+      note,
+      clientIp,
+      timestamp,
+    };
+
+    // 6. Dispatch Automated Clinical Intake & Patient Confirmation via Gmail SMTP
+    console.log(`[OSTEON INTAKE] Processing booking #${bookingRef}:`, {
+      name,
+      phone,
+      email,
+      preferredDate,
+      service,
       clientIp,
       timestamp,
     });
+
+    const [clinicResult, patientResult] = await Promise.allSettled([
+      sendClinicIntakeEmail(bookingData),
+      sendPatientConfirmationEmail(bookingData),
+    ]);
+
+    if (clinicResult.status === "fulfilled" && clinicResult.value.success) {
+      console.log(`[OSTEON SMTP] Clinic notification dispatched successfully: ${clinicResult.value.messageId}`);
+    } else {
+      console.error(`[OSTEON SMTP] Failed to dispatch clinic notification:`, clinicResult.status === "fulfilled" ? clinicResult.value.error : clinicResult.reason);
+    }
+
+    if (patientResult.status === "fulfilled" && patientResult.value.success) {
+      console.log(`[OSTEON SMTP] Patient confirmation dispatched successfully: ${patientResult.value.messageId}`);
+    } else {
+      console.error(`[OSTEON SMTP] Failed to dispatch patient confirmation:`, patientResult.status === "fulfilled" ? patientResult.value.error : patientResult.reason);
+    }
 
     return NextResponse.json({
       success: true,
@@ -174,9 +202,10 @@ export async function POST(req: NextRequest) {
         service,
         preferredDate,
       },
-      message: "Consultation request successfully received by the Osteon clinical team.",
+      message: "Consultation request successfully received and confirmed via email.",
     });
-  } catch {
+  } catch (err) {
+    console.error("[OSTEON API] Unhandled consultation booking error:", err);
     return NextResponse.json(
       { error: "An unexpected error occurred while processing your request. Please call our clinic." },
       { status: 500 }

@@ -2,14 +2,15 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 interface SpecializedCareProps {
-  onOpenConsultation: () => void;
+  onOpenConsultation: (serviceName?: string) => void;
+  onOpenSolution?: (type: "prosthetics" | "orthotics") => void;
 }
 
 export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
   onOpenConsultation,
+  onOpenSolution,
 }) => {
   const specializedCards = [
     {
@@ -17,28 +18,38 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
       title: "SCOLIOSIS CARE",
       subtitle: "Boston braces and spinal solutions.",
       image: "/images/boston-brace-scoliosis.jpg",
-      href: "#scoliosis",
+      serviceName: "Orthotics: Scoliosis Braces",
     },
     {
       id: "pediatric",
       title: "PEDIATRIC SOLUTIONS",
       subtitle: "Supporting growing lives.",
       image: "/images/pediatric-solutions.jpg",
-      href: "#kids",
+      serviceName: "Pediatric Orthotics & Care",
     },
     {
       id: "custom-orthotics",
       title: "CUSTOM ORTHOTICS",
       subtitle: "Precision support for everyday life.",
       image: "/images/carbon-fibre-afo.jpg",
-      href: "#orthotics",
+      serviceName: "Orthotics: Custom Orthotics",
     },
   ];
+
+  const handleCardClick = (card: (typeof specializedCards)[0]) => {
+    if (card.id === "scoliosis" || card.id === "custom-orthotics") {
+      if (onOpenSolution) {
+        onOpenSolution("orthotics");
+        return;
+      }
+    }
+    onOpenConsultation(card.serviceName);
+  };
 
   return (
     <section
       id="specialized-care"
-      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07]"
+      className="relative w-full py-16 sm:py-20 md:py-24 bg-[#050607] overflow-hidden border-t border-white/[0.07] scroll-mt-24"
     >
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
         {/* Section Header */}
@@ -68,20 +79,10 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
             </motion.h2>
           </div>
 
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5">
             <p className="text-sm sm:text-base text-[#A5AAAB] leading-relaxed font-normal">
               From growing children to adults with complex needs, we provide specialized orthotic solutions for scoliosis care, pediatric conditions and more.
             </p>
-
-            <div>
-              <button
-                onClick={onOpenConsultation}
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/[0.04] hover:bg-[#00E5D0] border border-white/[0.1] hover:border-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs font-mono uppercase tracking-[0.16em] transition-all duration-300 min-h-[44px] group"
-              >
-                <span>Explore all solutions</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-            </div>
           </div>
         </div>        {/* MOBILE TOUCH-FIRST HORIZONTAL SNAP CAROUSEL (< md) */}
         <div className="block md:hidden">
@@ -93,16 +94,21 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                onClick={onOpenConsultation}
+                onClick={() => handleCardClick(card)}
                 className="w-[72vw] max-w-[280px] shrink-0 snap-center rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-4.5 sm:p-5 flex flex-col justify-between min-h-[300px] shadow-2xl relative cursor-pointer active:scale-[0.99] transition-transform"
               >
                 {/* Background Photography */}
                 <div className="absolute inset-0 z-0 overflow-hidden">
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.08]"
-                  />
+                  <picture>
+                    <source srcSet={card.image.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.08]"
+                    />
+                  </picture>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-[#050607]/45 to-transparent z-10" />
                 </div>
 
@@ -142,16 +148,21 @@ export const SpecializedCareSection: React.FC<SpecializedCareProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: idx * 0.15 }}
-              onClick={onOpenConsultation}
+              onClick={() => handleCardClick(card)}
               className="group relative rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0D0F] p-5 sm:p-6 flex flex-col justify-between min-h-[310px] sm:min-h-[330px] shadow-2xl hover:border-[#00E5D0]/40 transition-all duration-500 cursor-pointer"
             >
               {/* Card Background Image with Subtle Vignette */}
               <div className="absolute inset-0 z-0 overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.08] group-hover:scale-105 transition-transform duration-1000 ease-out"
-                />
+                <picture>
+                  <source srcSet={card.image.replace(/\.(jpeg|jpg|png)$/i, '.webp')} type="image/webp" />
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.08] group-hover:scale-105 transition-transform duration-1000 ease-out"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-[#050607]/40 to-[#050607]/70 z-10" />
               </div>
 

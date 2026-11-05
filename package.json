@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -14,7 +14,8 @@
     "framer-motion": "^14.0.0",
     "lenis": "^1.3.26",
     "lucide-react": "^1.51.0",
-    "next": "16.3.8",
+    "next": "^16.4.4",
+    "nodemailer": "^10.3.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "tailwind-merge": "^3.7.0"
@@ -23,11 +24,21 @@
     "@tailwindcss/postcss": "^4",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.8",
+    "eslint-config-next": "^16.4.4",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "> 0.2%",
+    "not dead",
+    "iOS >= 12",
+    "Safari >= 12",
+    "Android >= 6",
+    "Chrome >= 60",
+    "Samsung >= 10"
+  ]
 }

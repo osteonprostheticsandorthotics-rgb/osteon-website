@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -16,7 +17,18 @@ import { FinalCTASection } from "@/components/sections/11_FinalCTA";
 import { ConsultationModal } from "@/components/modals/ConsultationModal";
 import { SolutionsModal, SolutionType } from "@/components/modals/SolutionsModal";
 
+const SECTION_IDS = [
+  "hero",
+  "about",
+  "our-team",
+  "solutions",
+  "process",
+  "specialized-care",
+  "final-cta",
+];
+
 export default function Home() {
+  const router = useRouter();
   const [consultationOpen, setConsultationOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<string>("Prosthetics");
   const [solutionsModalOpen, setSolutionsModalOpen] = useState(false);
@@ -24,45 +36,159 @@ export default function Home() {
   const [activeCategoryIdx, setActiveCategoryIdx] = useState<number>(0);
   const [activeSectionId, setActiveSectionId] = useState("hero");
 
+  const isClickScrollingRef = useRef(false);
+  const clickScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleSectionNavigate = (sectionId: string) => {
+    setActiveSectionId(sectionId);
+    isClickScrollingRef.current = true;
+    if (clickScrollTimeoutRef.current) {
+      clearTimeout(clickScrollTimeoutRef.current);
+    }
+    clickScrollTimeoutRef.current = setTimeout(() => {
+      isClickScrollingRef.current = false;
+    }, 1200);
+  };
+
   useEffect(() => {
-    const sectionIds = [
-      "hero",
-      "about",
-      "our-team",
-      "solutions",
-      "process",
-      "specialized-care",
-      "final-cta",
-    ];
+    let rafId: number | null = null;
 
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -40% 0px",
-      threshold: 0.1,
-    };
+    const determineActiveSection = () => {
+      if (isClickScrollingRef.current) return;
 
-    const handleIntersect: IntersectionObserverCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          setActiveSectionId(id);
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // 1. Extreme top: definitely Hero
+      if (scrollY < 80) {
+        setActiveSectionId("hero");
+        return;
+      }
+
+      // 2. Extreme bottom: definitely Final CTA / Contact
+      if (scrollY + windowHeight >= documentHeight - 60) {
+        setActiveSectionId("final-cta");
+        return;
+      }
+
+      // 3. Focal evaluation: reading focal line (200-240px below viewport top, beneath 76px header)
+      const focalPoint = scrollY + Math.min(windowHeight * 0.35, 240);
+
+      let activeCandidate: string | null = null;
+      let maxVisibleHeight = 0;
+      let fallbackCandidate: string | null = null;
+
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+
+        const rect = el.getBoundingClientRect();
+        const elTop = rect.top + scrollY;
+        const elBottom = elTop + rect.height;
+
+        // Check if focalPoint is inside this section
+        if (elTop <= focalPoint && elBottom > focalPoint) {
+          activeCandidate = id;
+          break;
         }
-      });
+
+        // Calculate visible overlap within the viewport [scrollY + 76, scrollY + windowHeight]
+        const visibleTop = Math.max(elTop, scrollY + 76);
+        const visibleBottom = Math.min(elBottom, scrollY + windowHeight);
+        const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+
+        if (visibleHeight > maxVisibleHeight) {
+          maxVisibleHeight = visibleHeight;
+          fallbackCandidate = id;
+        }
+      }
+
+      const determined = activeCandidate || fallbackCandidate;
+      if (determined) {
+        setActiveSectionId((prev) => (prev !== determined ? determined : prev));
+      }
     };
 
-    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+    const handleScroll = () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(determineActiveSection);
+    };
 
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+    // Initial evaluation
+    determineActiveSection();
 
-    return () => observer.disconnect();
+    // Check URL hash on initial load and handle hash changes (direct URL changes / reload / back-forward)
+    const handleHash = () => {
+      if (typeof window !== "undefined" && window.location.hash) {
+        const hashId = window.location.hash.replace("#", "");
+        if (SECTION_IDS.includes(hashId)) {
+          setActiveSectionId(hashId);
+          isClickScrollingRef.current = true;
+          setTimeout(() => {
+            const targetEl = document.getElementById(hashId);
+            if (targetEl) {
+              const lenis = (
+                window as unknown as {
+                  __lenis?: {
+                    scrollTo: (el: HTMLElement | string, options?: { offset?: number; immediate?: boolean }) => void;
+                  };
+                }
+              ).__lenis;
+              if (lenis && typeof lenis.scrollTo === "function") {
+                lenis.scrollTo(targetEl, { offset: -76, immediate: true });
+              } else {
+                targetEl.scrollIntoView();
+              }
+            }
+            setTimeout(() => {
+              isClickScrollingRef.current = false;
+            }, 400);
+          }, 150);
+        }
+      }
+    };
+
+    handleHash();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    window.addEventListener("hashchange", handleHash);
+
+    // Synchronize directly with Lenis scroll event if initialized
+    const lenis = (
+      window as unknown as {
+        __lenis?: {
+          on: (event: string, cb: () => void) => void;
+          off: (event: string, cb: () => void) => void;
+        };
+      }
+    ).__lenis;
+
+    if (lenis && typeof lenis.on === "function") {
+      lenis.on("scroll", handleScroll);
+    }
+
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("hashchange", handleHash);
+      if (lenis && typeof lenis.off === "function") {
+        lenis.off("scroll", handleScroll);
+      }
+      if (clickScrollTimeoutRef.current) {
+        clearTimeout(clickScrollTimeoutRef.current);
+      }
+    };
   }, []);
 
   const openConsultation = (serviceName: string = "General Consultation") => {
-    setSelectedService(serviceName);
-    setConsultationOpen(true);
+    if (serviceName && serviceName !== "General Consultation") {
+      router.push(`/consultation?service=${encodeURIComponent(serviceName)}`);
+    } else {
+      router.push("/consultation");
+    }
   };
 
   const handleOpenSolution = (type: SolutionType, categoryIdx: number = 0) => {
@@ -78,6 +204,7 @@ export default function Home() {
         <Navbar
           onOpenConsultation={() => openConsultation("General Consultation")}
           activeSection={activeSectionId}
+          onNavigate={handleSectionNavigate}
         />
 
         {/* 01 — HERO (Cinematic fullscreen video + oversized typography) */}
@@ -106,7 +233,8 @@ export default function Home() {
 
         {/* 05 — SPECIALIZED CARE (Scoliosis, Pediatric, and Custom Orthotics) */}
         <SpecializedCareSection
-          onOpenConsultation={() => openConsultation("Specialized Care")}
+          onOpenConsultation={(service?: string) => openConsultation(service || "Specialized Care")}
+          onOpenSolution={handleOpenSolution}
         />
 
         {/* 06 — YOUR JOURNEY (More Than a Device Cinematic Closing) */}
@@ -140,4 +268,3 @@ export default function Home() {
     </SmoothScroll>
   );
 }
-

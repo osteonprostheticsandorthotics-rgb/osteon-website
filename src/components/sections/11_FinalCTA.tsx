@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
@@ -15,15 +16,20 @@ export const FinalCTASection: React.FC<FinalCTAProps> = ({
   return (
     <section
       id="final-cta"
-      className="relative w-full min-h-[85svh] sm:min-h-[90svh] py-20 sm:py-24 md:py-28 bg-[#050607] flex items-center overflow-hidden border-t border-white/[0.07]"
+      className="relative w-full min-h-[85vh] min-h-[85svh] sm:min-h-[90vh] sm:min-h-[90svh] py-20 sm:py-24 md:py-28 bg-[#050607] flex items-center overflow-hidden border-t border-white/[0.07] scroll-mt-24"
     >
       {/* Cinematic Full-Bleed Background Imagery */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img
-          src="/images/final-cta-dawn.jpg"
-          alt="Person with prosthetic limb standing on scenic mountain overlook at golden hour"
-          className="w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.15]"
-        />
+        <picture>
+          <source srcSet="/images/final-cta-dawn.webp" type="image/webp" />
+          <img
+            src="/images/final-cta-dawn.jpg"
+            alt="Person with prosthetic limb standing on scenic mountain overlook at golden hour"
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.15]"
+          />
+        </picture>
         {/* Cinematic Vignettes */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#050607]/90 via-[#050607]/60 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-transparent to-[#050607]/70" />
@@ -74,13 +80,13 @@ export const FinalCTASection: React.FC<FinalCTAProps> = ({
             transition={{ duration: 0.8, delay: 0.35 }}
             className="pt-4"
           >
-            <button
-              onClick={onOpenConsultation}
+            <Link
+              href="/consultation"
               className="inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:py-4 rounded-full border border-[#00E5D0]/40 hover:border-[#00E5D0] bg-white/[0.03] hover:bg-[#00E5D0] text-[#F1EFE8] hover:text-[#050607] text-xs sm:text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 min-h-[46px] sm:min-h-[48px] group cursor-pointer w-full sm:w-auto active:scale-[0.98]"
             >
               <span>Get in touch</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
+            </Link>
           </motion.div>
         </div>
       </div>
